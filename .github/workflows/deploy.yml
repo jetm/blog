@@ -9,7 +9,7 @@ on:
       hugoVersion:
         description: "Hugo Version"
         required: false
-        default: "0.140.1"
+        default: "0.154.2"
 
 # Allow one concurrent deployment
 concurrency:
@@ -31,7 +31,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      HUGO_VERSION: ${{ github.event.inputs.hugoVersion || '0.140.1' }}
+      HUGO_VERSION: ${{ github.event.inputs.hugoVersion || '0.154.2' }}
     steps:
       - name: Install Hugo CLI
         run: |
