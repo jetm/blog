@@ -1,0 +1,70 @@
+baseURL: "https://example.org/"
+languageCode: "en-us"
+title: "My New Hugo Site"
+theme: "PaperMod"
+
+# Build configuration
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+
+# Output formats
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
+
+# PaperMod theme parameters
+params:
+  # Environment
+  env: production
+
+  # Dark mode toggle
+  defaultTheme: auto
+  disableThemeToggle: false
+
+  # Reading time
+  ShowReadingTime: true
+
+  # Table of Contents
+  ShowToc: true
+  TocOpen: false
+
+  # Share buttons
+  ShowShareButtons: true
+  ShareButtons:
+    - linkedin
+    - twitter
+    - reddit
+    - facebook
+
+  # Post metadata
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowCodeCopyButtons: true
+  ShowWordCount: true
+
+  # Home page
+  homeInfoParams:
+    Title: "Welcome"
+    Content: "Welcome to my blog"
+
+  # Social icons (customize as needed)
+  socialIcons: []
+
+# Menu configuration
+menu:
+  main:
+    - identifier: archives
+      name: Archives
+      url: /archives/
+      weight: 5
+    - identifier: tags
+      name: Tags
+      url: /tags/
+      weight: 10
+    - identifier: search
+      name: Search
+      url: /search/
+      weight: 15
