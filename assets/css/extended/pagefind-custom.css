@@ -1,0 +1,7 @@
+:root {
+    --pagefind-ui-primary: var(--primary);
+    --pagefind-ui-text: var(--content);
+    --pagefind-ui-background: var(--theme);
+    --pagefind-ui-border: var(--border);
+    --pagefind-ui-border-radius: var(--radius);
+}
