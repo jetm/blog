@@ -30,7 +30,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         element: "#search",
         showSubResults: true,
         translations: {
-            placeholder: "Search..."
+            placeholder: "{{ .Params.placeholder | default "Search..." }}"
         }
     });
 });
