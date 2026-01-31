@@ -1,0 +1,46 @@
+{{- /* Prism.js CSS Resources for Syntax Highlighting */ -}}
+
+{{- /* Tomorrow Theme */ -}}
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/prismjs-tomorrow-theme@0.0.1/prism-tomorrow.css"
+      crossorigin="anonymous"
+      integrity="sha384-F/Gq7LPCE2rSYfLw1CG3AcEb65PNwbLYB5TlXiQIQWrYvjbq2b3+vXjyLNz8Hfj2">
+
+{{- /* Toolbar Plugin CSS */ -}}
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/plugins/toolbar/prism-toolbar.min.css"
+      crossorigin="anonymous"
+      integrity="sha384-PwJhzM9R+waB0oyNsZmhZbYQWqFx/+QPpTvm/BggjvnDDf/M8Q9Hq/xyYoF9e5f9">
+
+{{- /* Line Numbers Plugin CSS */ -}}
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/plugins/line-numbers/prism-line-numbers.min.css"
+      crossorigin="anonymous"
+      integrity="sha384-COFYBLKaDYEtaVAqMoXIavUw7lJ2sO/+3JRSN8Ohr5u9B+2ynz6iZvmDaRj3A6ve">
+
+{{- /* Fallback styles for when JavaScript is disabled */ -}}
+<noscript>
+<style>
+pre[class*="language-"],
+code[class*="language-"] {
+    font-family: 'Fira Code', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', monospace;
+    font-size: 0.9em;
+    line-height: 1.5;
+    background: var(--code-block-bg, #1d1f21);
+    color: var(--primary, #c5c8c6);
+    padding: 1em;
+    margin: 0.5em 0;
+    overflow: auto;
+    border-radius: 0.3em;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    tab-size: 4;
+}
+code[class*="language-"] {
+    padding: 0;
+    background: transparent;
+}
+</style>
+</noscript>

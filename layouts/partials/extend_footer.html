@@ -1,0 +1,73 @@
+{{- /* Prism.js JavaScript Resources for Syntax Highlighting */ -}}
+
+{{- /* Core Library */ -}}
+<script defer
+        src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/prism.min.js"
+        crossorigin="anonymous"
+        integrity="sha384-TFmz7LdLjBbxqW/aBPHcnQNBnH7IcDEYGSl9D/rbx3+2G5/jO2dK2lZ8q5X8fEMV">
+</script>
+
+{{- /* Language Components */ -}}
+<script defer
+        src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-javascript.min.js"
+        crossorigin="anonymous"
+        integrity="sha384-+d0rYhzJr1PbKxjGaZN/iPsY+8bDsn0k8Y4hUB2PmOVY3j2h1K7cyjAMVzlHs8wJ">
+</script>
+<script defer
+        src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-python.min.js"
+        crossorigin="anonymous"
+        integrity="sha384-LKJP0dWr4s/JpBWr1H2K/jN/PBKS2qJqr3LS/PRE6eVD3a9lJjHVjZ4xhS4lNjqv">
+</script>
+<script defer
+        src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-go.min.js"
+        crossorigin="anonymous"
+        integrity="sha384-r9y7k6W1b8R/R2tMWbDL13kYzPJBNi+VBxnM3J0rZ6K5xNYB6bYfPK6GJ0FqH7Yc">
+</script>
+<script defer
+        src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-bash.min.js"
+        crossorigin="anonymous"
+        integrity="sha384-hJfR2b6JjKMhcJq7bN/HhN3T1fSV+V2z+FLklK3qLPv7Gu3EYhJx3x4YBHL0J6M/">
+</script>
+<script defer
+        src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/components/prism-yaml.min.js"
+        crossorigin="anonymous"
+        integrity="sha384-K1Uvu5VR3qkF7NsJY2A8hYBvYl4gKkpZ3y9xwCjHCEQ6aW1F8bXeCJj3TAb0aPG4">
+</script>
+
+{{- /* Plugins (in dependency order) */ -}}
+{{- /* Toolbar Plugin (required for copy-to-clipboard) */ -}}
+<script defer
+        src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/plugins/toolbar/prism-toolbar.min.js"
+        crossorigin="anonymous"
+        integrity="sha384-xHq5pJgVNSt0v0R2p3N5p6HhQTZ1N2pPJnKpMRZCr8KvKchJCmhCj5bK5Y0nHmNl">
+</script>
+
+{{- /* Copy to Clipboard Plugin */ -}}
+<script defer
+        src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"
+        crossorigin="anonymous"
+        integrity="sha384-fhkhddqFTpXzpXF8EoEHb5xqO1e6x7LVTxQJJPJDiJj3cLfMhvkWNJeM1jKQ7dZ/">
+</script>
+
+{{- /* Line Numbers Plugin */ -}}
+<script defer
+        src="https://cdn.jsdelivr.net/npm/prismjs@1.30.0/plugins/line-numbers/prism-line-numbers.min.js"
+        crossorigin="anonymous"
+        integrity="sha384-vrPhbD1PD7oLN6kS8Y6c7x/xWWkVqD1SnZ9e8qp5L7V0mf7OO5/YIFkNQz3dZKTH">
+</script>
+
+{{- /* Initialization Script */ -}}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add line-numbers class to all pre elements for consistent styling
+    document.querySelectorAll('pre').forEach(function(pre) {
+        if (!pre.classList.contains('line-numbers')) {
+            pre.classList.add('line-numbers');
+        }
+    });
+    // Highlight all code blocks
+    if (typeof Prism !== 'undefined') {
+        Prism.highlightAll();
+    }
+});
+</script>

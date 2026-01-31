@@ -22,7 +22,7 @@ outputs:
 # Markup configuration
 markup:
   highlight:
-    codeFences: true
+    codeFences: false
     guessSyntax: true
     lineNos: false
     noClasses: true
@@ -68,7 +68,7 @@ params:
   # Post metadata
   ShowPostNavLinks: true
   ShowBreadCrumbs: true
-  ShowCodeCopyButtons: true
+  ShowCodeCopyButtons: false
   ShowWordCount: true
 
   # Home page
