@@ -3,6 +3,9 @@ languageCode: "en-us"
 title: "My New Hugo Site"
 theme: "PaperMod"
 
+# Pagination
+paginate: 10
+
 # Build configuration
 buildDrafts: false
 buildFuture: false
@@ -15,10 +18,30 @@ outputs:
     - RSS
     - JSON
 
+# Markup configuration
+markup:
+  highlight:
+    codeFences: false
+
+# RSS configuration
+rss:
+  limit: 20
+
+# Privacy settings
+privacy:
+  disqus:
+    disable: true
+  googleAnalytics:
+    disable: true
+
 # PaperMod theme parameters
 params:
   # Environment
   env: production
+
+  # SEO metadata
+  description: "Technical articles and tutorials"
+  author: "Your Name"
 
   # Dark mode toggle
   defaultTheme: auto
@@ -36,8 +59,6 @@ params:
   ShareButtons:
     - linkedin
     - twitter
-    - reddit
-    - facebook
 
   # Post metadata
   ShowPostNavLinks: true
@@ -50,21 +71,29 @@ params:
     Title: "Welcome"
     Content: "Welcome to my blog"
 
-  # Social icons (customize as needed)
-  socialIcons: []
+  # Analytics
+  goatcounter:
+    code: "your-site-code"
+
+  # Social icons
+  socialIcons:
+    - name: "github"
+      url: "https://github.com/username"
+    - name: "twitter"
+      url: "https://twitter.com/username"
+    - name: "linkedin"
+      url: "https://linkedin.com/in/username"
+    - name: "rss"
+      url: "/index.xml"
 
 # Menu configuration
 menu:
   main:
-    - identifier: archives
-      name: Archives
-      url: /archives/
-      weight: 5
-    - identifier: tags
-      name: Tags
-      url: /tags/
-      weight: 10
-    - identifier: search
-      name: Search
-      url: /search/
-      weight: 15
+    - identifier: home
+      name: Home
+      url: /
+      weight: 1
+    - identifier: about
+      name: About
+      url: /about/
+      weight: 2
