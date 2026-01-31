@@ -2,7 +2,7 @@
 title: "Comprehensive Test Post: Demonstrating All Hugo Features"
 date: 2026-01-31T10:00:00Z
 lastmod: 2026-01-31T10:00:00Z
-draft: true
+draft: false
 description: "A comprehensive test post showcasing Hugo's page bundles, syntax highlighting, TOC generation, cover images, and all PaperMod theme features."
 slug: ""
 toc: true
