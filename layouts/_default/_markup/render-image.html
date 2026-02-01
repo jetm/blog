@@ -1,14 +1,16 @@
 {{- /*
   Custom Render Hook for Markdown Images
 
-  Processes inline images with responsive srcset, WebP generation, and lazy loading.
-  Mirrors the sophisticated processing from cover.html for consistency.
+  Processes inline images with responsive srcset, configurable formats/quality, and lazy loading.
+  Delegates to process-image partial for processable images.
+  Preserves user-specified markdown attributes (class, id, width, height, loading, etc.).
 */ -}}
 
 {{- $u := urls.Parse .Destination -}}
 {{- $src := $u.String -}}
 {{- $alt := .Text -}}
 {{- $title := .Title -}}
+{{- $userAttrs := .Attributes | default dict -}}
 {{- $image := false -}}
 
 {{- /* Resolve image resource */ -}}
@@ -35,62 +37,52 @@
 {{- $prod := (hugo.IsProduction | or (eq site.Params.env "production")) -}}
 
 {{- if and $image (in $processableFormats $image.MediaType.SubType) $prod -}}
-    {{- /* Process image with responsive srcset */ -}}
-    {{- $sizes := site.Params.imageProcessing.responsiveSizes | default (slice 360 480 720 1080 1500) -}}
-
-    {{- /* Build srcset with multiple sizes */ -}}
-    {{- $srcset := slice -}}
-    {{- range $size := $sizes -}}
-        {{- if ge $image.Width (int $size) -}}
-            {{- $resized := $image.Resize (printf "%dx webp" (int $size)) -}}
-            {{- $srcset = $srcset | append (printf "%s %dw" $resized.RelPermalink (int $size)) -}}
-        {{- end -}}
-    {{- end -}}
-    {{- /* Add original size as fallback */ -}}
-    {{- $srcset = $srcset | append (printf "%s %dw" $image.RelPermalink $image.Width) -}}
-
-    {{- if $title -}}
-    <figure>
-        <img
-            src="{{ $image.RelPermalink }}"
-            srcset="{{ delimit $srcset ", " }}"
-            sizes="(min-width: 768px) 720px, 100vw"
-            width="{{ $image.Width }}"
-            height="{{ $image.Height }}"
-            alt="{{ $alt }}"
-            title="{{ $title | transform.HTMLEscape }}"
-            loading="lazy"
-            decoding="async">
-        <figcaption>{{ $title | markdownify }}</figcaption>
-    </figure>
-    {{- else -}}
-    <img
-        src="{{ $image.RelPermalink }}"
-        srcset="{{ delimit $srcset ", " }}"
-        sizes="(min-width: 768px) 720px, 100vw"
-        width="{{ $image.Width }}"
-        height="{{ $image.Height }}"
-        alt="{{ $alt }}"
-        loading="lazy"
-        decoding="async">
-    {{- end -}}
+    {{- /* Delegate to process-image partial for processable images */ -}}
+    {{- partial "process-image.html" (dict
+        "image" $image
+        "alt" $alt
+        "title" $title
+        "attributes" $userAttrs
+        "asFigure" (ne $title "")
+    ) -}}
 {{- else -}}
-    {{- /* Non-processable image or external URL - render basic img */ -}}
+    {{- /* Non-processable image or external URL - render with merged attributes */ -}}
+
+    {{- /* Build base attributes */ -}}
+    {{- $baseAttrs := dict
+        "src" $src
+        "alt" $alt
+        "loading" "lazy"
+        "decoding" "async"
+    -}}
+
+    {{- /* Add width/height if we have the image resource */ -}}
+    {{- if $image -}}
+        {{- $baseAttrs = merge (dict
+            "width" (printf "%d" $image.Width)
+            "height" (printf "%d" $image.Height)
+        ) $baseAttrs -}}
+    {{- end -}}
+
+    {{- if $title -}}
+        {{- $baseAttrs = merge (dict "title" ($title | transform.HTMLEscape)) $baseAttrs -}}
+    {{- end -}}
+
+    {{- /* Merge user attributes - they override base defaults */ -}}
+    {{- $attrs := merge $userAttrs $baseAttrs -}}
+
     {{- if $title -}}
     <figure>
         <img
-            src="{{ $src }}"
-            alt="{{ $alt }}"
-            title="{{ $title | transform.HTMLEscape }}"
-            loading="lazy"
-            decoding="async">
+            {{- range $key, $val := $attrs }}
+            {{ $key }}="{{ $val }}"
+            {{- end }}>
         <figcaption>{{ $title | markdownify }}</figcaption>
     </figure>
     {{- else -}}
     <img
-        src="{{ $src }}"
-        alt="{{ $alt }}"
-        loading="lazy"
-        decoding="async">
+        {{- range $key, $val := $attrs }}
+        {{ $key }}="{{ $val }}"
+        {{- end }}>
     {{- end -}}
 {{- end -}}
