@@ -78,7 +78,7 @@ params:
 
   # Analytics
   goatcounter:
-    code: "your-site-code"
+    code: "jetm"
 
   # Social icons
   socialIcons:
