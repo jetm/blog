@@ -1,0 +1,96 @@
+{{- /*
+  Custom Render Hook for Markdown Images
+
+  Processes inline images with responsive srcset, WebP generation, and lazy loading.
+  Mirrors the sophisticated processing from cover.html for consistency.
+*/ -}}
+
+{{- $u := urls.Parse .Destination -}}
+{{- $src := $u.String -}}
+{{- $alt := .Text -}}
+{{- $title := .Title -}}
+{{- $image := false -}}
+
+{{- /* Resolve image resource */ -}}
+{{- if not $u.IsAbs -}}
+    {{- $path := strings.TrimPrefix "./" $u.Path -}}
+    {{- with or (.PageInner.Resources.Get $path) (resources.Get $path) -}}
+        {{- $image = . -}}
+        {{- $src = .RelPermalink -}}
+        {{- with $u.RawQuery -}}
+            {{- $src = printf "%s?%s" $src . -}}
+        {{- end -}}
+        {{- with $u.Fragment -}}
+            {{- $src = printf "%s#%s" $src . -}}
+        {{- end -}}
+    {{- end -}}
+{{- end -}}
+
+{{- /* Define processable formats */ -}}
+{{- $processableFormats := (slice "jpg" "jpeg" "png" "tif" "bmp" "gif") -}}
+{{- if hugo.IsExtended -}}
+    {{- $processableFormats = $processableFormats | append "webp" -}}
+{{- end -}}
+
+{{- $prod := (hugo.IsProduction | or (eq site.Params.env "production")) -}}
+
+{{- if and $image (in $processableFormats $image.MediaType.SubType) $prod -}}
+    {{- /* Process image with responsive srcset */ -}}
+    {{- $sizes := site.Params.imageProcessing.responsiveSizes | default (slice 360 480 720 1080 1500) -}}
+
+    {{- /* Build srcset with multiple sizes */ -}}
+    {{- $srcset := slice -}}
+    {{- range $size := $sizes -}}
+        {{- if ge $image.Width (int $size) -}}
+            {{- $resized := $image.Resize (printf "%dx webp" (int $size)) -}}
+            {{- $srcset = $srcset | append (printf "%s %dw" $resized.RelPermalink (int $size)) -}}
+        {{- end -}}
+    {{- end -}}
+    {{- /* Add original size as fallback */ -}}
+    {{- $srcset = $srcset | append (printf "%s %dw" $image.RelPermalink $image.Width) -}}
+
+    {{- if $title -}}
+    <figure>
+        <img
+            src="{{ $image.RelPermalink }}"
+            srcset="{{ delimit $srcset ", " }}"
+            sizes="(min-width: 768px) 720px, 100vw"
+            width="{{ $image.Width }}"
+            height="{{ $image.Height }}"
+            alt="{{ $alt }}"
+            title="{{ $title | transform.HTMLEscape }}"
+            loading="lazy"
+            decoding="async">
+        <figcaption>{{ $title | markdownify }}</figcaption>
+    </figure>
+    {{- else -}}
+    <img
+        src="{{ $image.RelPermalink }}"
+        srcset="{{ delimit $srcset ", " }}"
+        sizes="(min-width: 768px) 720px, 100vw"
+        width="{{ $image.Width }}"
+        height="{{ $image.Height }}"
+        alt="{{ $alt }}"
+        loading="lazy"
+        decoding="async">
+    {{- end -}}
+{{- else -}}
+    {{- /* Non-processable image or external URL - render basic img */ -}}
+    {{- if $title -}}
+    <figure>
+        <img
+            src="{{ $src }}"
+            alt="{{ $alt }}"
+            title="{{ $title | transform.HTMLEscape }}"
+            loading="lazy"
+            decoding="async">
+        <figcaption>{{ $title | markdownify }}</figcaption>
+    </figure>
+    {{- else -}}
+    <img
+        src="{{ $src }}"
+        alt="{{ $alt }}"
+        loading="lazy"
+        decoding="async">
+    {{- end -}}
+{{- end -}}

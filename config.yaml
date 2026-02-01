@@ -39,6 +39,12 @@ privacy:
   googleAnalytics:
     disable: true
 
+# Image processing configuration
+imaging:
+  quality: 75
+  resampleFilter: Lanczos
+  anchor: Smart
+
 # PaperMod theme parameters
 params:
   # Environment
@@ -79,6 +85,19 @@ params:
   # Analytics
   goatcounter:
     code: "jetm"
+
+  # Image processing parameters
+  imageProcessing:
+    quality: 75
+    formats:
+      - webp
+    lazyLoading: true
+    responsiveSizes:
+      - 360
+      - 480
+      - 720
+      - 1080
+      - 1500
 
   # Social icons
   socialIcons:

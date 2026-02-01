@@ -71,3 +71,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
+{{- /* GoatCounter Analytics */ -}}
+{{- if hugo.IsProduction | or (eq site.Params.env "production") }}
+{{- with site.Params.goatcounter.code }}
+<script>
+// Respect Do Not Track header
+window.goatcounter = {
+    no_onload: navigator.doNotTrack === '1'
+};
+</script>
+<script data-goatcounter="https://{{ . }}.goatcounter.com/count"
+        async
+        src="//gc.zgo.at/count.js">
+</script>
+{{- end }}
+{{- end }}

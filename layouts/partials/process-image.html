@@ -1,0 +1,74 @@
+{{- /*
+  Process Image Partial
+
+  Generates responsive images with WebP format and srcset attributes.
+
+  Parameters (passed as dict):
+    - image: Hugo image resource (required)
+    - alt: Alt text for accessibility (required)
+    - title: Optional title attribute
+    - loading: "lazy" or "eager" (default: "lazy")
+    - class: Optional CSS class names
+    - sizes: Responsive sizes array (default from site params or [360, 480, 720, 1080, 1500])
+*/ -}}
+
+{{- $image := .image -}}
+{{- $alt := .alt | default "" -}}
+{{- $title := .title | default "" -}}
+{{- $loading := .loading | default "lazy" -}}
+{{- $class := .class | default "" -}}
+{{- $sizes := .sizes | default (site.Params.imageProcessing.responsiveSizes | default (slice 360 480 720 1080 1500)) -}}
+
+{{- $prod := (hugo.IsProduction | or (eq site.Params.env "production")) -}}
+
+{{- /* Define processable formats */ -}}
+{{- $processableFormats := (slice "jpg" "jpeg" "png" "tif" "bmp" "gif") -}}
+{{- if hugo.IsExtended -}}
+    {{- $processableFormats = $processableFormats | append "webp" -}}
+{{- end -}}
+
+{{- $isProcessable := in $processableFormats $image.MediaType.SubType -}}
+
+{{- if and $isProcessable $prod -}}
+    {{- /* Build srcset with multiple sizes */ -}}
+    {{- $srcset := slice -}}
+    {{- range $size := $sizes -}}
+        {{- if ge $image.Width (int $size) -}}
+            {{- $resized := $image.Resize (printf "%dx webp" (int $size)) -}}
+            {{- $srcset = $srcset | append (printf "%s %dw" $resized.RelPermalink (int $size)) -}}
+        {{- end -}}
+    {{- end -}}
+    {{- /* Add original size as fallback */ -}}
+    {{- $srcset = $srcset | append (printf "%s %dw" $image.RelPermalink $image.Width) -}}
+
+    <img
+        src="{{ $image.RelPermalink }}"
+        srcset="{{ delimit $srcset ", " }}"
+        sizes="(min-width: 768px) 720px, 100vw"
+        width="{{ $image.Width }}"
+        height="{{ $image.Height }}"
+        alt="{{ $alt }}"
+        {{- if $title }}
+        title="{{ $title }}"
+        {{- end }}
+        {{- if $class }}
+        class="{{ $class }}"
+        {{- end }}
+        loading="{{ $loading }}"
+        decoding="async">
+{{- else -}}
+    {{- /* Non-processable or development mode - render basic img */ -}}
+    <img
+        src="{{ $image.RelPermalink }}"
+        width="{{ $image.Width }}"
+        height="{{ $image.Height }}"
+        alt="{{ $alt }}"
+        {{- if $title }}
+        title="{{ $title }}"
+        {{- end }}
+        {{- if $class }}
+        class="{{ $class }}"
+        {{- end }}
+        loading="{{ $loading }}"
+        decoding="async">
+{{- end -}}
