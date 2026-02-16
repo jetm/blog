@@ -66,10 +66,7 @@ params:
   TocOpen: false
 
   # Share buttons
-  ShowShareButtons: true
-  ShareButtons:
-    - linkedin
-    - twitter
+  ShowShareButtons: false
 
   # Post metadata
   ShowPostNavLinks: true
