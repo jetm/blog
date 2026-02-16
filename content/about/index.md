@@ -1,8 +1,8 @@
 ---
 title: "About"
 description: "About me and this blog"
-toc: false
-readingTime: false
+ShowToc: false
+ShowReadingTime: false
 outputs:
   - HTML
 ---

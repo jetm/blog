@@ -4,7 +4,7 @@
   "private": true,
   "description": "Hugo blog with Pagefind search",
   "scripts": {
-    "build:search": "pagefind --source public"
+    "build:search": "pagefind --site public"
   },
   "devDependencies": {
     "pagefind": "^1.4.0"

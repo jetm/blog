@@ -3,8 +3,8 @@ title: "Enabling MediaTek MT7927 Bluetooth on Linux: A 15-Month Journey"
 date: 2026-02-16T10:00:00Z
 draft: false
 description: "A technical deep-dive into enabling MT7927 Bluetooth support on Linux through kernel patches, firmware extraction, and DKMS packaging — from initial investigation to working AUR package."
-toc: true
-readingTime: true
+ShowToc: true
+ShowReadingTime: true
 tags:
   - "linux"
   - "bluetooth"
