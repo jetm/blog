@@ -67,7 +67,7 @@ I documented everything in a `FINDINGS.md` and settled in to wait.
 
 The [OpenWRT mt76 issue #927](https://github.com/openwrt/mt76/issues/927) had been tracking MT7927 support since October 2024. The thread was a slow accumulation of users with the same problem: "my WiFi 7 card doesn't work on Linux," followed by confirmation that the chip was unsupported.
 
-I monitored the Bluetooth LKML mailing list and the linux-firmware GitLab. Months passed. MediaTek firmware updates landed for MT7921, MT7925 — but nothing for MT6639.
+I monitored the Bluetooth LKML mailing list and the [linux-firmware GitLab](https://gitlab.com/kernel-firmware/linux-firmware). Months passed. MediaTek firmware updates landed for MT7921, MT7925 — but nothing for MT6639.
 
 Then in September 2025, a breakthrough appeared in the OpenWRT thread. A contributor named marcin-fm reverse-engineered the firmware format from an ASUS Windows driver package. The critical discovery: the MT7927's Bluetooth firmware was embedded inside `mtkwlan.dat` — a WiFi firmware container — not distributed as a separate Bluetooth file. The chip identifier wasn't MT7927 but MT6639, confirming the mobile SoC lineage.
 
