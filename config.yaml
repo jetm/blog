@@ -1,6 +1,6 @@
 baseURL: "https://jetm.github.io/blog/"
 languageCode: "en-us"
-title: "My New Hugo Site"
+title: "Javier Tia's Blog"
 theme: "PaperMod"
 
 # Pagination
@@ -51,8 +51,8 @@ params:
   env: production
 
   # SEO metadata
-  description: "Technical articles and tutorials"
-  author: "Your Name"
+  description: "Systems programming, Linux internals, and developer tooling — hands-on technical articles from the field"
+  author: "Javier Tia"
 
   # Dark mode toggle
   defaultTheme: auto
@@ -79,8 +79,8 @@ params:
 
   # Home page
   homeInfoParams:
-    Title: "Welcome"
-    Content: "Welcome to my blog"
+    Title: "Systems & Linux Engineering"
+    Content: "Technical deep-dives into Linux internals, kernel development, and systems programming"
 
   # Analytics
   goatcounter:
@@ -102,11 +102,9 @@ params:
   # Social icons
   socialIcons:
     - name: "github"
-      url: "https://github.com/username"
-    - name: "twitter"
-      url: "https://twitter.com/username"
+      url: "https://github.com/jetm/"
     - name: "linkedin"
-      url: "https://linkedin.com/in/username"
+      url: "https://www.linkedin.com/in/javiertia/"
     - name: "rss"
       url: "/index.xml"
 
