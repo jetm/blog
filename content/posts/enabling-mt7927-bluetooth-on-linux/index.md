@@ -25,6 +25,14 @@ In November 2024, I installed an ASUS ROG Crosshair X870E Hero motherboard — A
 
 This is the story of how it got there.
 
+{{< update date="February 21, 2026" >}}
+This package has been renamed from `btusb-mt7927-dkms` to
+[`mediatek-mt7927-dkms`](https://aur.archlinux.org/packages/mediatek-mt7927-dkms)
+and now includes WiFi modules for MT7925e and MT7902, plus multi-device support
+for Lenovo, Foxconn, and AMD RZ738 hardware. See the follow-up:
+[MT7927 WiFi on Linux: Wrong Driver, Wrong Chip, No Driver](/posts/mt7927-wifi-the-missing-piece/).
+{{< /update >}}
+
 ## Act 1: The Three Missing Layers (November 2024)
 
 Running `bluetoothctl show` returned nothing. No adapter, no controller, no error. Just silence. The `rfkill` output showed an `hci0` device, soft-blocked, but nothing behind it. Something was clearly half-working.
