@@ -24,7 +24,7 @@ outputs:
   - "HTML"
 ---
 
-In my [previous post](/posts/enabling-mt7927-bluetooth-on-linux/), I documented the 15-month journey to get Bluetooth working on the MediaTek MT7927. The `btusb-mt7927-dkms` AUR package patched three missing layers - USB device ID, hardware variant support, and firmware extraction - to bring up a fully functional Bluetooth 5.4 adapter.
+In my [previous post]({{< ref "/posts/enabling-mt7927-bluetooth-on-linux" >}}), I documented the 15-month journey to get Bluetooth working on the MediaTek MT7927. The `btusb-mt7927-dkms` AUR package patched three missing layers - USB device ID, hardware variant support, and firmware extraction - to bring up a fully functional Bluetooth 5.4 adapter.
 
 WiFi was next. I spent most of a day on it and came out the other side with the wrong driver applied, a hard crash course in MediaTek's chip numbering, and the realization that MT7927 WiFi straight up does not work on Linux. Not with patches, not with hacks, not yet.
 
@@ -193,4 +193,4 @@ And if you're trying to figure out which MediaTek chip you actually have - ignor
 - [clemenscodes kernel module repo](https://github.com/clemenscodes/linux-mediatek-mt6639-bluetooth-kernel-module) - MT6639 Bluetooth patch and firmware extraction
 - [CachyOS issue #688](https://github.com/CachyOS/linux-cachyos/issues/688) - "Replace it with an Intel wireless card"
 - [mediatek-mt7927-dkms AUR package](https://aur.archlinux.org/packages/mediatek-mt7927-dkms) - DKMS package for Arch Linux
-- [Previous post: Enabling MT7927 Bluetooth on Linux](/posts/enabling-mt7927-bluetooth-on-linux/)
+- [Previous post: Enabling MT7927 Bluetooth on Linux]({{< ref "/posts/enabling-mt7927-bluetooth-on-linux" >}})
