@@ -1,7 +1,7 @@
 ---
 title: "MT7927 WiFi on Linux: Wrong Driver, Wrong Chip, No Driver"
 date: 2026-02-20T12:00:00Z
-draft: true
+draft: false
 description: "I spent a day applying the wrong kernel patches to the wrong driver for the wrong chip before figuring out that MT7927 WiFi doesn't actually work on Linux yet. Here's how MediaTek's naming burned me and what I built anyway."
 ShowToc: true
 ShowReadingTime: true
