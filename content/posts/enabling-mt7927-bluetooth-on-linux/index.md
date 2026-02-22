@@ -30,7 +30,7 @@ This package has been renamed from `btusb-mt7927-dkms` to
 [`mediatek-mt7927-dkms`](https://aur.archlinux.org/packages/mediatek-mt7927-dkms)
 and now includes WiFi modules for MT7925e and MT7902, plus multi-device support
 for Lenovo, Foxconn, and AMD RZ738 hardware. See the follow-up:
-[MT7927 WiFi on Linux: Wrong Driver, Wrong Chip, No Driver](/posts/mt7927-wifi-the-missing-piece/).
+[MT7927 WiFi on Linux: Wrong Driver, Wrong Chip, No Driver]({{< ref "/posts/mt7927-wifi-the-missing-piece" >}}).
 {{< /update >}}
 
 ## Act 1: The Three Missing Layers (November 2024)
