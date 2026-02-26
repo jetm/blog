@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 {{- /* GoatCounter Analytics */ -}}
-{{- if hugo.IsProduction | or (eq site.Params.env "production") }}
+{{- if hugo.IsProduction }}
 {{- with site.Params.goatcounter.code }}
 <script>
 // Respect Do Not Track header

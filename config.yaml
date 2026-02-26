@@ -2,6 +2,12 @@ baseURL: "https://jetm.github.io/blog/"
 languageCode: "en-us"
 title: "Javier Tia's Blog"
 theme: "PaperMod"
+enableRobotsTXT: true
+
+# Taxonomies
+taxonomies:
+  tag: "tags"
+  category: "categories"
 
 # Pagination
 pagination:
@@ -23,10 +29,6 @@ outputs:
 markup:
   highlight:
     codeFences: false
-    guessSyntax: true
-    lineNos: false
-    noClasses: true
-    style: monokai
 
 # RSS configuration
 rss:
@@ -103,7 +105,7 @@ params:
     - name: "linkedin"
       url: "https://www.linkedin.com/in/javiertia/"
     - name: "rss"
-      url: "/index.xml"
+      url: "index.xml"
 
 # Menu configuration
 menu:
