@@ -130,7 +130,7 @@ WARN: Configuration file 'ov2740.yaml' not found for IPA module 'simple',
       falling back to '/usr/share/libcamera/ipa/simple/uncalibrated.yaml'
 ```
 
-The uncalibrated profile enables AGC (auto gain control) and AWB (auto white balance) but has no color correction matrix. The output has a visible green color cast. While the grey world AWB should theoretically compensate for any channel imbalance, the cast persists because of a bug in how the AWB interacts with the black level correction (details below). Without a CCM to compensate, everything looks green.
+The uncalibrated profile enables AGC (auto gain control) and AWB (auto white balance) but has no color correction matrix. On the OV2740, this produces a noticeable green color cast caused by a bit-depth mismatch in the AWB statistics ([explained below](#the-awb-statistics-bit-depth-bug)). The proportional AGC fix also helps — without it, the brightness oscillates.
 
 ### The AGC flicker problem
 
@@ -167,7 +167,7 @@ The controller converges smoothly without overshooting. There's a ~3 second ramp
 
 ### Creating a tuning file
 
-The OV2740 tuning file goes in `/usr/share/libcamera/ipa/simple/ov2740.yaml`. libcamera discovers it automatically by matching the sensor name. With the proportional AGC fix, AGC can remain enabled:
+The OV2740 tuning file goes in `/usr/share/libcamera/ipa/simple/ov2740.yaml`. libcamera discovers it automatically by matching the sensor name:
 
 ```yaml
 # /usr/share/libcamera/ipa/simple/ov2740.yaml
@@ -177,42 +177,28 @@ The OV2740 tuning file goes in `/usr/share/libcamera/ipa/simple/ov2740.yaml`. li
 version: 1
 algorithms:
   - BlackLevel:
-      blackLevel: 4096
   - Awb:
-  - Ccm:
-      ccms:
-        - ct: 6500
-          ccm: [ 2.49, -0.91, -0.26,
-                -0.30,  1.20,  0.10,
-                 0.07, -0.80,  2.19 ]
   - Adjust:
   - Agc:
 ```
 
-The explicit `blackLevel: 4096` corresponds to the OV2740 kernel driver's BLC register value of 64 at 10-bit (register 0x4003 = 0x40 for the 180 MHz link frequency mode). At 16-bit representation: 64 * 64 = 4096. Without an explicit value, the auto-guess path in `blc.cpp` converges to the same effective value (16 at 8-bit), but specifying it explicitly documents the correct sensor characteristic.
+The black level value (4096, i.e. 64 at 10-bit, register 0x4003 = 0x40) is provided by the `CameraSensorHelperOv2740` class in the libcamera source rather than the tuning file. This is the canonical location for sensor calibration data. No color correction matrix (CCM) is needed — with the AWB statistics fix described below, the grey world AWB converges to R/G ≈ 0.98 and B/G ≈ 0.99 under 6500K lighting.
 
-### Why the green cast: AWB/BLC bit-depth mismatch
+### The AWB statistics bit-depth bug
 
-The CCM corrects a green cast caused by a bit-depth mismatch in the SoftISP's AWB algorithm. The statistics gathering code (`swstats_cpu.cpp`) accumulates raw pixel values at the sensor's native 10-bit depth (values 0-1023). But the AWB algorithm (`awb.cpp`) reads the black level as a `uint8_t` (value 16) and subtracts `blackLevel * nPixels` from the 10-bit sums. The correct per-pixel offset for 10-bit data is 64, not 16 - a 4x under-correction.
+The SoftISP had a bug that produced a green color cast on all sensors with >8-bit output. The statistics gathering code (`swstats_cpu.cpp`) normalizes the luminance histogram to 8-bit range (dividing by 4 for 10-bit, 16 for 12-bit), but the RGB channel sums were accumulated at native bit depth without normalization. The AWB algorithm (`awb.cpp`) reads the black level as a `uint8_t` (value 16) and subtracts `blackLevel * nPixels` from these sums. For 10-bit data, the correct per-pixel offset is 64, not 16 — a 4x under-correction.
 
-This causes the AWB grey world computation to underestimate the green channel's excess over red and blue. The resulting AWB gains are too low for full correction, leaving a ~9% green cast (R/G ≈ 0.91 without CCM).
+The fix normalizes the RGB sums to 8-bit in `SwStatsCpu::finishFrame()` by right-shifting them according to the format's bit depth (shift by 2 for 10-bit, 4 for 12-bit, 0 for 8-bit and CSI-2 packed). This makes the sums consistent with both the histogram and the 8-bit BLC used by AWB.
 
-The evidence: when the tuning file specifies `blackLevel: 0` (no subtraction), the AWB produces perfect ratios (R/G = 1.000, B/G = 1.001) because the offset mismatch disappears - but the shadows are lifted (minimum pixel values ~75 instead of 0). With the correct BLC of 4096 and no CCM, the green cast is clearly visible. The CCM compensates empirically until the AWB bit-depth handling is fixed upstream.
+The evidence across test configurations confirms the root cause and fix:
 
-This bug affects all sensors with >8-bit output using the Simple pipeline. For 8-bit sensors, the AWB offset computation is correct.
+| Configuration | R/G | B/G | Notes |
+|---------------|-----|-----|-------|
+| Unfixed, no CCM | 0.910 | 0.904 | ~9% green cast (the bug) |
+| BLC=0 control (unfixed) | 1.000 | 1.001 | Perfect — mismatch disappears |
+| **Fixed, no CCM** | **0.984** | **0.985** | **~1.5% residual (acceptable)** |
 
-The CCM matrix was computed iteratively - capturing frames, measuring RGB ratios in white regions, and adjusting until neutral grey actually read as neutral.
-
-The measured progression across tuning iterations:
-
-| Iteration | R/G ratio | B/G ratio | Ceiling luma | Notes |
-|-----------|-----------|-----------|--------------|-------|
-| uncalibrated.yaml | 0.819 | 0.773 | 88 | Heavy green, AGC flicker |
-| CCM v1 (balanced rows) | 0.931 | 0.886 | 108 | Better, still green, dark |
-| CCM v2 (measured correction) | 0.987 | 0.979 | 108 | Near-neutral, dark (no AGC) |
-| CCM v2 + fixed gain | 1.023 | 1.086 | 169 | White reads as white |
-
-A slight blue tint remains (B/G=1.086) and the left side of the frame is darker than the right due to lens shading - a per-pixel correction that the SoftISP doesn't implement. For a webcam, this is acceptable.
+BLC=0 produces perfect AWB balance because the offset mismatch disappears, but the lack of black level subtraction lifts shadow values (minimum ~75 instead of 0). With the fix applied and proper BLC, the AWB converges to near-neutral without any CCM. The left side of the frame is slightly darker than the right due to lens shading — a per-pixel correction that the SoftISP doesn't implement. For a webcam, this is acceptable.
 
 ### Setting digital gain
 
@@ -288,15 +274,17 @@ This forces a clean re-probe (including fresh CSE authentication) on every resum
 
 ## Upstreaming
 
-Two patches have been submitted to the [libcamera mailing list](https://lists.libcamera.org/listinfo/libcamera-devel):
+A four-patch series (v2) has been submitted to the [libcamera mailing list](https://lists.libcamera.org/listinfo/libcamera-devel):
 
-**1. [Proportional AGC for the Simple pipeline](https://lists.libcamera.org/pipermail/libcamera-devel/2026-February/057552.html).** The bang-bang controller in `src/ipa/simple/algorithms/agc.cpp` is replaced with a proportional controller. This is a generic improvement - any sensor on the Simple pipeline benefits from reduced overshoot. The patch is ~30 lines of changed logic.
+**1. [Proportional AGC for the Simple pipeline](https://lists.libcamera.org/pipermail/libcamera-devel/2026-February/057552.html).** The bang-bang controller in `src/ipa/simple/algorithms/agc.cpp` is replaced with a proportional controller. This is a generic improvement — any sensor on the Simple pipeline benefits from reduced overshoot. The patch is ~30 lines of changed logic.
 
-**2. [OV2740 tuning file](https://lists.libcamera.org/pipermail/libcamera-devel/2026-February/057553.html).** The `ov2740.yaml` goes in `src/ipa/simple/data/`. As of libcamera 0.7, no sensor-specific tuning files exist for the Simple pipeline - only `uncalibrated.yaml`. This would be the first.
+**2. AWB statistics normalization fix.** Normalizes the RGB sums in `SwStatsCpu::finishFrame()` to 8-bit scale, fixing the bit-depth mismatch described above. This affects all >8-bit sensors on the Simple pipeline — 8-bit and CSI-2 packed formats are unaffected (their shift is 0).
 
-The [cover letter](https://lists.libcamera.org/pipermail/libcamera-devel/2026-February/057551.html) describes the series and testing methodology. During review, Milan Zamazal from Red Hat suggested investigating the black level as a potential root cause of the green cast. This led to discovering the AWB/BLC bit-depth mismatch described above - a systemic issue affecting all >8-bit sensors on the Simple pipeline. The v2 patches add an explicit black level and document the finding.
+**3. [OV2740 tuning file](https://lists.libcamera.org/pipermail/libcamera-devel/2026-February/057553.html).** The `ov2740.yaml` goes in `src/ipa/simple/data/`. As of libcamera 0.7, no sensor-specific tuning files exist for the Simple pipeline — only `uncalibrated.yaml`. This would be the first. With the AWB fix from patch 2, no CCM is needed.
 
-The CCM values are eyeball-calibrated from pixel measurements, not from a proper Macbeth ColorChecker calibration under controlled lighting. A proper submission would benefit from at least one calibration run, ideally at multiple color temperatures (2800K, 4000K, 6500K). The libcamera project provides tuning tools in `utils/tuning/` that could help.
+**4. OV2740 black level in CameraSensorHelper.** Adds `blackLevel_ = 4096` to `CameraSensorHelperOv2740` (`src/ipa/libipa/camera_sensor_helper.cpp`), following the pattern used by OV5675, IMX219, and other sensors. This is the canonical location for sensor calibration data — the tuning file in patch 3 relies on the helper for the black level rather than specifying it explicitly.
+
+The [cover letter](https://lists.libcamera.org/pipermail/libcamera-devel/2026-February/057551.html) describes the series and testing methodology. During review, Milan Zamazal from Red Hat suggested investigating the black level as a potential root cause of the green cast. This led to discovering the AWB statistics bit-depth mismatch — a systemic issue affecting all >8-bit sensors on the Simple pipeline. Robert Mader from Collabora [pointed out](https://lists.libcamera.org/pipermail/libcamera-devel/2026-February/057557.html) that the black level belongs in the `CameraSensorHelper` rather than the YAML tuning file. Kieran Bingham from Ideas on Board reviewed the CCM and noted the row sums didn't equal 1.0, which was the final clue that the CCM was compensating for a bug rather than doing proper color correction. The v2 series fixes the root cause and drops the CCM entirely.
 
 The `digital_gain` udev rule is a system-level workaround that doesn't belong upstream. The proper fix would be extending the Simple IPA's AGC to also manage `V4L2_CID_DIGITAL_GAIN` when the sensor's analogue gain range is exhausted.
 
@@ -309,12 +297,12 @@ After migration, the working configuration on a ThinkPad X1 Carbon (Alder Lake, 
 | `intel-ipu6`, `intel-ipu6-isys` | In-tree kernel module | Raw Bayer capture |
 | `ivsc-ace`, `ivsc-csi` | In-tree kernel module | Sensor power/CSI bridge |
 | `ov2740` | In-tree kernel module | Sensor driver |
-| `libcamera` 0.7.0 (patched) | Arch `extra` repo + AGC patch | Simple pipeline + proportional AGC |
+| `libcamera` 0.7.0 (patched) | Arch `extra` repo + 4 patches | Simple pipeline + AGC fix + AWB stats fix |
 | `pipewire-libcamera` | Arch `extra` repo | PipeWire integration |
-| `ov2740.yaml` | Patched into libcamera | BLC + CCM + AGC |
+| `ov2740.yaml` | Patched into libcamera | BLC + AWB + AGC |
 | `99-ov2740-digital-gain.rules` | udev rule | digital_gain=2x at probe |
 
-Image quality is noticeably worse than the proprietary Intel stack - the SoftISP doesn't have per-pixel lens shading correction, the CCM is a single global matrix rather than a per-channel curve, and the debayer algorithm is simpler. But it works with mainline kernels, doesn't break on updates, integrates natively with PipeWire, and requires zero out-of-tree code.
+Image quality is noticeably worse than the proprietary Intel stack — the SoftISP doesn't have per-pixel lens shading correction and the debayer algorithm is simpler. But it works with mainline kernels, doesn't break on updates, integrates natively with PipeWire, and requires zero out-of-tree code.
 
 For video conferencing, which is what most laptop webcams are used for, it's sufficient.
 
