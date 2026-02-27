@@ -1,15 +1,14 @@
 ---
-title: "Firmware Updates on Linux When the Tools Are Windows-Only"
+title: "Building a Bootable Windows USB from Linux for Firmware Updates"
 date: 2026-02-27T18:00:00Z
-draft: true
-description: "How to build a bootable Windows 11 VHD entirely from Linux using QEMU, UEFI Secure Boot, and Ventoy - for when your hardware vendor only ships Windows firmware tools."
+draft: false
+description: "How to build a bootable Windows 11 USB drive entirely from Linux using QEMU, UEFI Secure Boot, and qemu-img - for when your hardware vendor only ships Windows firmware tools."
 ShowToc: true
 ShowReadingTime: true
 tags:
   - "linux"
   - "firmware"
   - "qemu"
-  - "ventoy"
   - "windows"
   - "hardware"
   - "arch-linux"
@@ -24,7 +23,7 @@ Three devices on my PC have firmware that can only be updated through Windows to
 
 The obvious answer is "just boot Windows." But I don't have a Windows partition, don't want one, and installing Windows to flash three firmware blobs is absurd. I needed a way to boot a fully configured Windows environment from Linux, run the vendor tools, and shut down. No permanent installation, no dual-boot, no repartitioning.
 
-The solution: build a Windows 11 VM in QEMU, install the firmware tools inside it, convert the disk to a VHD, and boot it directly from a Ventoy USB. The entire pipeline runs on Linux. The VHD is reusable - update the tools, re-export, done.
+The solution: build a Windows 11 VM in QEMU, install the firmware tools inside it, and write the disk image directly to a USB drive. The entire pipeline runs on Linux. The image is reusable - update the tools, re-write, done.
 
 This post walks through the end-to-end process, including the gotchas that aren't documented anywhere else.
 
@@ -38,21 +37,21 @@ There are several ways to get a Windows environment from Linux. Most of them don
 | Ventoy (ISO) | Requires install | After install | Yes | No |
 | WinPE (mkwinpeimg) | Minimal only | No (missing runtimes) | Yes | Yes |
 | Hiren's Boot PE | Fixed toolset | No (can't add apps) | Partially | Yes |
-| **Ventoy (VHD)** | **Boots directly** | **Yes** | **Yes** | **Yes** |
+| **Raw USB (qemu-img)** | **Boots directly** | **Yes** | **Yes** | **Yes** |
 
 WoeUSB and bare ISOs require installing Windows to a USB drive every time - you're sitting through the OOBE, installing tools, and throwing it away. WinPE doesn't have the .NET runtimes and UI frameworks that NZXT CAM and Razer Synapse need. Hiren's Boot PE has a fixed set of tools that can't be extended.
 
-A Ventoy VHD wins on every axis. You build Windows once in a VM, export the disk as a VHD, and Ventoy boots it directly from USB as if it were installed on bare metal. The firmware tools are pre-installed and ready. When you need to update, you boot the VM again, update the tools, re-export, and re-copy.
+A raw USB image wins on every axis. You build Windows once in a VM, write the disk image directly to a USB drive with `qemu-img convert -O raw`, and the USB boots natively - no bootloader, no intermediate format. The qcow2 already contains a full GPT layout (EFI partition, MSR, Windows NTFS), so the USB is indistinguishable from a Windows install. The firmware tools are pre-installed and ready. When you need to update, you boot the VM again, update the tools, and re-write the image.
 
 ## Building the VM
 
 The VM needs UEFI Secure Boot and a TPM 2.0 device - Windows 11 refuses to install without both. QEMU provides these through OVMF (UEFI firmware) and swtpm (software TPM emulator).
 
-The full script is at [jetm/dotfiles](https://github.com/jetm/dotfiles) (`win11-fw-vm.sh`). Here's what it does:
+The full script is at [jetm/dotfiles](https://github.com/jetm/dotfiles/tree/master/tooling/win11-usb) (`win11-fw-vm.sh`). Here's what it does:
 
-**Prerequisites:** `qemu-desktop`, `edk2-ovmf`, `swtpm`, `mtools` (for `mkfs.fat` and `mcopy`), a Windows 11 ISO, and the [VirtIO drivers ISO](https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso).
+**Prerequisites:** `qemu-desktop`, `edk2-ovmf`, `swtpm`, `mtools` (for `mkfs.fat` and `mcopy`), a [Windows 11 ISO](https://www.microsoft.com/software-download/windows11) (no license required - Windows runs unactivated indefinitely with minor cosmetic restrictions), and the [VirtIO drivers ISO](https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso) (on Arch Linux, install `virtio-win` from the AUR instead).
 
-**Disk creation.** A 40GB qcow2 image. This is the virtual disk that becomes the VHD later. 40GB is enough for Windows 11 Pro plus a few firmware utilities.
+**Disk creation.** A 40GB qcow2 image. This is the virtual disk that gets written to USB later. 40GB is enough for Windows 11 Pro plus a few firmware utilities.
 
 ```bash
 qemu-img create -f qcow2 win11-fw.qcow2 40G
@@ -126,125 +125,32 @@ One quirk: on the very first boot, OVMF may show a "no bootable device" screen b
 
 After Windows is running, install whatever firmware tools you need inside the VM. The VirtIO network gives you internet access for downloading installers. Then shut down Windows cleanly through the Start menu.
 
-## Converting to VHD
+## Writing to USB
 
-With the VM shut down, convert the qcow2 disk to VHD format:
+With the VM shut down, write the qcow2 disk directly to the USB drive as a raw image:
 
 ```bash
-qemu-img convert -O vpc -o subformat=fixed win11-fw.qcow2 win11-fw.vhd
+qemu-img convert -p -O raw win11-fw.qcow2 /dev/sdX
 ```
 
-### The 0x12F gotcha
+This converts the qcow2 (a sparse, copy-on-write format) to raw - a byte-for-byte disk image - and writes it directly to the USB device. The qcow2 already contains a full GPT layout from the Windows install (EFI System Partition, MSR, Windows NTFS partition), so the USB boots natively like a Windows install. No bootloader, no intermediate format, no VHD.
 
-The `-o subformat=fixed` flag is critical. Without it, `qemu-img` creates a **dynamic** VHD - and dynamic VHDs will not boot.
+The `-p` flag shows a progress bar, which is useful since the write takes a few minutes.
 
-When Windows does native VHD boot, the early boot environment (bootmgr, winload) needs to map the VHD's contents into physical memory at predictable offsets. A fixed VHD is a 1:1 image of the virtual disk plus a 512-byte footer - the bootloader can treat it as a raw disk. A dynamic VHD uses a Block Allocation Table (BAT) where blocks are allocated on demand and stored out-of-order. The Windows boot environment can't parse the BAT because the drivers for it haven't loaded yet.
-
-The result is a blue screen with `VHD_BOOT_INITIALIZATION_FAILED` (error code 0x12F). No diagnostic information, no hint that VHD format is the problem.
-
-You can verify the format with `qemu-img info`:
+You can verify the result with `qemu-img info`:
 
 ```text
-# Dynamic VHD (BAD - will 0x12F)
-$ qemu-img info win11-fw-dynamic.vhd
-file format: vpc
-virtual size: 40 GiB
-disk size: 12.4 GiB           # <-- smaller than virtual size = dynamic
-
-# Fixed VHD (GOOD)
-$ qemu-img info win11-fw.vhd
-file format: vpc
-virtual size: 40 GiB
-disk size: 40 GiB             # <-- matches virtual size = fixed
+$ qemu-img info win11-fw.qcow2
+file format: qcow2
+virtual size: 40 GiB (42949672960 bytes)
+disk size: 12.4 GiB
 ```
 
-The trade-off is size: a fixed VHD is the full 40GB regardless of how much space Windows actually uses. This is fine for a USB drive; it would be a problem if you were short on storage.
-
-## Ventoy USB Setup
-
-[Ventoy](https://www.ventoy.net/) is an open-source tool that creates a bootable USB where you just drop ISO/VHD/WIM files and boot them directly. Install it on a USB drive:
-
-```bash
-sudo /opt/ventoy/Ventoy2Disk.sh -i /dev/sdX   # DESTROYS ALL DATA ON USB
-```
-
-### The mkexfatfs symlink
-
-On Arch, Ventoy's install script looks for `mkexfatfs` but the package (`exfatprogs`) provides `mkfs.exfat`. If the install fails with a missing command error:
-
-```bash
-sudo ln -s /usr/bin/mkfs.exfat /usr/local/bin/mkexfatfs
-```
-
-### The vhdboot helper
-
-Without an extra helper file, Ventoy won't boot VHDs correctly in UEFI mode. Instead of launching Windows, it presents a file picker showing every EFI file on the USB.
-
-The fix is `ventoy_vhdboot.img` - a small helper image that Ventoy loads before the VHD to set up the EFI boot chain. Download it from the [ventoy/vhdiso](https://github.com/ventoy/vhdiso/releases) GitHub releases:
-
-```bash
-curl -sL -o /tmp/ventoy_vhdboot.zip \
-  https://github.com/ventoy/vhdiso/releases/download/v3.0/ventoy_vhdboot.zip
-unzip -o /tmp/ventoy_vhdboot.zip -d /tmp
-```
-
-The ZIP contains two versions: `Win10Based` and `Win11Based`. Use `Win10Based` - it's compatible with Windows 11 and is more widely tested.
-
-### The scanning problem
-
-Ventoy scans the entire USB partition at boot to find bootable images. On a large drive with other data, this takes forever. My 950GB USB drive (which doubles as general storage) took over 8 minutes to scan because Ventoy was walking 762GB of files looking for ISOs and VHDs.
-
-The fix is to set Ventoy's image list mode to `whitelist`, so it only looks for the files you specify.
-
-### Putting it all together
-
-Mount the Ventoy USB partition and set up the config:
-
-```bash
-sudo mount /dev/sdX1 /mnt
-sudo mkdir -p /mnt/ventoy
-
-# Install vhdboot helper (Win10Based version, compatible with Windows 11)
-sudo cp /tmp/ventoy_vhdboot/Win10Based/ventoy_vhdboot.img /mnt/ventoy/
-```
-
-Create `/mnt/ventoy/ventoy.json`:
-
-```json
-{
-    "control_uefi": [
-        { "VTOY_SECONDARY_BOOT_MENU": "0" },
-        { "VTOY_FILE_FLT_EFI": "1" }
-    ],
-    "auto_install": [
-        {
-            "image": "/win11-fw.vhd",
-            "timout": 0
-        }
-    ],
-    "image_list_mode": "whitelist",
-    "image_list": [
-        "/win11-fw.vhd"
-    ]
-}
-```
-
-Three fixes in one config:
-- `VTOY_SECONDARY_BOOT_MENU: 0` - disables the "Boot in Wimboot mode?" prompt.
-- `VTOY_FILE_FLT_EFI: 1` - filters stray EFI files that confuse the boot menu.
-- `image_list_mode: whitelist` with `image_list` - only scans for `/win11-fw.vhd`, skipping the full drive walk.
-
-Copy the VHD and unmount:
-
-```bash
-sudo cp win11-fw.vhd /mnt/
-sync
-sudo umount /mnt
-```
+The trade-off is write time: `qemu-img convert -O raw` writes the full 40 GiB regardless of how much space Windows actually uses inside the image. This takes a few minutes on a USB 3.x drive. The same trade-off existed with the fixed VHD approach, so nothing changes in practice.
 
 ## Boot and Flash
 
-Reboot, hit F8 (ASUS boot menu), select the Ventoy USB. Ventoy shows one entry: `win11-fw.vhd`. Select it, Windows boots to the desktop with the firmware tools pre-installed.
+Reboot, hit F8 (ASUS boot menu), and select the USB drive. Windows boots directly to the desktop with the firmware tools pre-installed.
 
 Connect the devices that need updating (the USB4 controller is on the motherboard, so it's always connected; the NZXT AIO and Razer webcam go over USB), run each vendor's tool, flash, and shut down. Remove the USB, boot back into Linux.
 
@@ -256,14 +162,12 @@ When firmware tools release new versions or you need to add another tool, run th
 win11-fw-vm.sh
 ```
 
-Update tools inside the VM, shut down, re-convert to VHD, re-copy to USB. The Ventoy config doesn't change.
+Update tools inside the VM, shut down, and re-write the image to USB with `qemu-img convert -O raw`.
 
 ## References
 
-- [Ventoy](https://www.ventoy.net/) - Open-source tool for creating bootable USB drives
-- [ventoy/vhdiso releases](https://github.com/ventoy/vhdiso/releases) - VHD boot helper images
 - [VirtIO drivers ISO](https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/stable-virtio/virtio-win.iso) - Red Hat VirtIO drivers for Windows guests
 - [OVMF (edk2)](https://github.com/tianocore/edk2) - UEFI firmware for virtual machines
 - [swtpm](https://github.com/stefanberger/swtpm) - Software TPM 2.0 emulator
 - [Microsoft unattended reference](https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/automate-windows-setup) - autounattend.xml documentation
-- [Full scripts on GitHub (jetm/dotfiles)](https://github.com/jetm/dotfiles) - `win11-fw-vm.sh` and `autounattend.xml`
+- [Full scripts on GitHub (jetm/dotfiles)](https://github.com/jetm/dotfiles/tree/master/tooling/win11-usb) - `win11-fw-vm.sh` and `autounattend.xml`
