@@ -33,6 +33,16 @@ for Lenovo, Foxconn, and AMD RZ738 hardware. See the follow-up:
 [MT7927 WiFi on Linux: Wrong Driver, Wrong Chip, No Driver]({{< ref "/posts/mt7927-wifi-the-missing-piece" >}}).
 {{< /update >}}
 
+{{< update date="March 5, 2026" >}}
+All three missing layers have been submitted upstream. BT driver patches sent to
+[linux-bluetooth](https://lore.kernel.org/linux-bluetooth/177272816248.352280.12453518046823439297@jetm.me/),
+BT firmware submitted to
+[linux-firmware MR !946](https://gitlab.com/kernel-firmware/linux-firmware/-/merge_requests/946),
+and six USB device IDs confirmed across hardware. The BT maintainer has reviewed
+and is waiting for a MediaTek engineer sign-off. See:
+[MT7927 Bluetooth: From DKMS to Upstream]({{< ref "/posts/mt7927-bluetooth-upstream-submission" >}}).
+{{< /update >}}
+
 ## Act 1: The Three Missing Layers (November 2024)
 
 Running `bluetoothctl show` returned nothing. No adapter, no controller, no error. Just silence. The `rfkill` output showed an `hci0` device, soft-blocked, but nothing behind it. Something was clearly half-working.
