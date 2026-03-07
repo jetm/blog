@@ -24,6 +24,13 @@ outputs:
   - "HTML"
 ---
 
+{{< update date="March 5, 2026" >}}
+MT7927 WiFi now fully works on Linux - 2.4/5/6 GHz, WiFi 7 320MHz EHT (~1 Gbps),
+MLO, AP mode, suspend/resume, and mac_reset recovery. 20 patches, community-tested
+on 10+ hardware platforms. See the follow-up:
+[MT7927 WiFi on Linux: Making It Work]({{< ref "/posts/mt7927-wifi-making-it-work" >}}).
+{{< /update >}}
+
 In my [previous post]({{< ref "/posts/enabling-mt7927-bluetooth-on-linux" >}}), I documented the 15-month journey to get Bluetooth working on the MediaTek MT7927. The `btusb-mt7927-dkms` AUR package patched three missing layers - USB device ID, hardware variant support, and firmware extraction - to bring up a fully functional Bluetooth 5.4 adapter.
 
 WiFi was next. I spent most of a day on it and came out the other side with the wrong driver applied, a hard crash course in MediaTek's chip numbering, and the realization that MT7927 WiFi straight up does not work on Linux. Not with patches, not with hacks, not yet.
