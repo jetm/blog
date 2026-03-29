@@ -2,7 +2,7 @@
 title: "Intel IPU6 Webcam on Linux: From Proprietary Stack to Mainline"
 date: 2026-02-25T20:00:00Z
 draft: false
-description: "How to transition an Intel IPU6 webcam (OV2740) from the out-of-tree ipu6-drivers stack to mainline kernel + libcamera on Linux 6.19, with tuning fixes for the SoftISP color pipeline."
+description: "How to transition an Intel IPU6 webcam (OV2740) from the out-of-tree ipu6-drivers stack to mainline kernel + libcamera on Linux 6.19, with fixes for the SoftISP AGC and AWB color pipeline."
 ShowToc: true
 ShowReadingTime: true
 tags:
@@ -274,17 +274,19 @@ This forces a clean re-probe (including fresh CSE authentication) on every resum
 
 ## Upstreaming
 
-A four-patch series (v2) has been submitted to the [libcamera mailing list](https://lists.libcamera.org/listinfo/libcamera-devel):
+A three-patch series ([v4](https://patchwork.libcamera.org/project/libcamera/list/?series=5824)) has been submitted to the [libcamera mailing list](https://lists.libcamera.org/listinfo/libcamera-devel):
 
-**1. [Proportional AGC for the Simple pipeline](https://lists.libcamera.org/pipermail/libcamera-devel/2026-February/057552.html).** The bang-bang controller in `src/ipa/simple/algorithms/agc.cpp` is replaced with a proportional controller. This is a generic improvement — any sensor on the Simple pipeline benefits from reduced overshoot. The patch is ~30 lines of changed logic.
+**1. Proportional AGC for the Simple pipeline.** The bang-bang controller in `src/ipa/simple/algorithms/agc.cpp` is replaced with a proportional controller. This is a generic improvement — any sensor on the Simple pipeline benefits from reduced overshoot. The patch is ~30 lines of changed logic.
 
 **2. AWB statistics normalization fix.** Normalizes the RGB sums in `SwStatsCpu::finishFrame()` to 8-bit scale, fixing the bit-depth mismatch described above. This affects all >8-bit sensors on the Simple pipeline — 8-bit and CSI-2 packed formats are unaffected (their shift is 0).
 
-**3. [OV2740 tuning file](https://lists.libcamera.org/pipermail/libcamera-devel/2026-February/057553.html).** The `ov2740.yaml` goes in `src/ipa/simple/data/`. As of libcamera 0.7, no sensor-specific tuning files exist for the Simple pipeline — only `uncalibrated.yaml`. This would be the first. With the AWB fix from patch 2, no CCM is needed.
+**3. OV2740 black level in CameraSensorHelper.** Adds `blackLevel_ = 4096` to `CameraSensorHelperOv2740` (`src/ipa/libipa/camera_sensor_helper.cpp`), following the pattern used by OV5675, IMX219, and other sensors. This is the canonical location for sensor calibration data.
 
-**4. OV2740 black level in CameraSensorHelper.** Adds `blackLevel_ = 4096` to `CameraSensorHelperOv2740` (`src/ipa/libipa/camera_sensor_helper.cpp`), following the pattern used by OV5675, IMX219, and other sensors. This is the canonical location for sensor calibration data — the tuning file in patch 3 relies on the helper for the black level rather than specifying it explicitly.
+The series started as four patches in v1, including a dedicated `ov2740.yaml` tuning file and a color correction matrix. During review, Milan Zamazal from Red Hat suggested investigating the black level as a potential root cause of the green cast. This led to discovering the AWB statistics bit-depth mismatch — a systemic issue affecting all >8-bit sensors on the Simple pipeline. Robert Mader from Collabora [pointed out](https://lists.libcamera.org/pipermail/libcamera-devel/2026-February/057557.html) that the black level belongs in the `CameraSensorHelper` rather than the YAML tuning file. Kieran Bingham from Ideas on Board reviewed the CCM and noted the row sums didn't equal 1.0, which was the final clue that the CCM was compensating for a bug rather than doing proper color correction. By v2, the root cause was fixed and the CCM dropped entirely. By v3, the tuning file itself was dropped — with the AWB fix and the black level in the sensor helper, `uncalibrated.yaml` produces correct colors without any sensor-specific tuning.
 
-The [cover letter](https://lists.libcamera.org/pipermail/libcamera-devel/2026-February/057551.html) describes the series and testing methodology. During review, Milan Zamazal from Red Hat suggested investigating the black level as a potential root cause of the green cast. This led to discovering the AWB statistics bit-depth mismatch — a systemic issue affecting all >8-bit sensors on the Simple pipeline. Robert Mader from Collabora [pointed out](https://lists.libcamera.org/pipermail/libcamera-devel/2026-February/057557.html) that the black level belongs in the `CameraSensorHelper` rather than the YAML tuning file. Kieran Bingham from Ideas on Board reviewed the CCM and noted the row sums didn't equal 1.0, which was the final clue that the CCM was compensating for a bug rather than doing proper color correction. The v2 series fixes the root cause and drops the CCM entirely.
+Barnabas Pocze from Ideas on Board tested v3 and v4 on a ThinkPad X1 Yoga Gen 7 (also OV2740 behind IPU6), confirming both the AGC and AWB fixes work on a second device. Robert Mader tested the AWB statistics patch on a Fairphone 5, which uses the CSI-2 packed code path — a different pipeline from IPU6 — and confirmed correct behavior there too. Three devices across two pipeline paths gives reasonable confidence the fixes are correct.
+
+The OV2740 tuning file (`ov2740.yaml`) remains useful as a local configuration — it explicitly lists the algorithm chain rather than relying on `uncalibrated.yaml`'s defaults — but it's not part of the upstream series since it's functionally equivalent.
 
 The `digital_gain` udev rule is a system-level workaround that doesn't belong upstream. The proper fix would be extending the Simple IPA's AGC to also manage `V4L2_CID_DIGITAL_GAIN` when the sensor's analogue gain range is exhausted.
 
@@ -297,9 +299,9 @@ After migration, the working configuration on a ThinkPad X1 Carbon (Alder Lake, 
 | `intel-ipu6`, `intel-ipu6-isys` | In-tree kernel module | Raw Bayer capture |
 | `ivsc-ace`, `ivsc-csi` | In-tree kernel module | Sensor power/CSI bridge |
 | `ov2740` | In-tree kernel module | Sensor driver |
-| `libcamera` 0.7.0 (patched) | Arch `extra` repo + 4 patches | Simple pipeline + AGC fix + AWB stats fix |
+| `libcamera` 0.7.0 (patched) | Arch `extra` repo + 3 patches | Simple pipeline + AGC fix + AWB stats fix + OV2740 BLC |
 | `pipewire-libcamera` | Arch `extra` repo | PipeWire integration |
-| `ov2740.yaml` | Patched into libcamera | BLC + AWB + AGC |
+| `ov2740.yaml` | Local tuning file | Explicit algorithm chain (optional — `uncalibrated.yaml` works) |
 | `99-ov2740-digital-gain.rules` | udev rule | digital_gain=2x at probe |
 
 Image quality is noticeably worse than the proprietary Intel stack — the SoftISP doesn't have per-pixel lens shading correction and the debayer algorithm is simpler. But it works with mainline kernels, doesn't break on updates, integrates natively with PipeWire, and requires zero out-of-tree code.
@@ -315,4 +317,4 @@ For video conferencing, which is what most laptop webcams are used for, it's suf
 - [Arch Linux Forums - IPU6 webcam](https://bbs.archlinux.org/viewtopic.php?pid=2287604) - Community OV2740 tuning discussion
 - [archlinux-ipu6-webcam](https://github.com/stefanpartheym/archlinux-ipu6-webcam) - AUR package for old stack (with suspend workaround scripts)
 - [Arch Wiki - Libcamera](https://wiki.archlinux.org/title/Libcamera)
-- [ov2740.yaml tuning file](https://lists.libcamera.org/pipermail/libcamera-devel/2026-February/057553.html) - Tuning file from this post (submitted upstream)
+- [v4 patch series on Patchwork](https://patchwork.libcamera.org/project/libcamera/list/?series=5824) - Current upstream submission (AGC, AWB stats, OV2740 BLC)
