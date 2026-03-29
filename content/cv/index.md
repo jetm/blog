@@ -1,0 +1,191 @@
+---
+title: "Javier Tia — CV"
+description: "Senior Systems Engineer specializing in upstream Linux kernel development, embedded Linux, UEFI Secure Boot, and CI/CD infrastructure."
+ShowToc: false
+ShowReadingTime: false
+ShowWordCount: false
+ShowBreadCrumbs: false
+ShowPostNavLinks: false
+layout: "cv"
+outputs:
+  - HTML
+---
+
+## Summary
+
+Senior Systems Engineer with 13+ years of production embedded software experience,
+specializing in upstream Linux kernel development, Yocto/OpenEmbedded, embedded
+security (UEFI Secure Boot, OP-TEE), and CI/CD infrastructure for hardware
+platforms. Active upstream contributor with patch series currently under review on
+linux-wireless@, linux-bluetooth@, linux-firmware, U-Boot, Yocto and more FLOSS
+projects. Comfortable working fully remotely across time zones. Open to consulting
+engagements and full-time remote roles.
+
+## Technical Skills
+
+**Kernel & firmware:** Linux kernel development, DKMS, U-Boot, UEFI/Secure Boot,
+OP-TEE, device drivers (WiFi/mac80211/cfg80211, Bluetooth/btusb/btmtk, PCIe,
+camera/libcamera)
+
+**Build systems:** Yocto/OpenEmbedded (BitBake, kas, meta-arm, meta-openembedded,
+meta-secure-core), Make, CMake, Meson, Autotools
+
+**CI/CD & testing:** LAVA, SQUAD, TuxSuite, GitLab CI, GitHub Actions
+
+**Languages:** C, C++, Go, Python, Shell/Perl
+
+**Security:** UEFI Secure Boot, measured boot, TPM, sbsign, EFI variable
+management (libefivar)
+
+**Backend:** Django, REST APIs, shell automation
+
+**Wireless:** mac80211, cfg80211, mt76 driver family, btusb/btmtk Bluetooth stack
+
+**Platforms:** ARM/AArch64/ARMv8, x86-64, RISC-V, QEMU, Raspberry Pi, NXP i.MX,
+Qualcomm, MediaTek, Xilinx/AMD KV260, Synquacer
+
+**Embedded:** BSP development, board bring-up, device tree (DTS/DTB),
+cross-compilation, UART/I2C/SPI, systemd, udev, initramfs
+
+## Experience
+
+### Linaro — Senior Systems Engineer
+**Sep 2022 – Mar 2026 | Remote**
+
+Linaro is an open-source collaborative engineering organization focused on
+Arm-based hardware and software. Worked across upstream kernel enablement,
+embedded security, CI/CD infrastructure, and platform bring-up for ARM-based
+reference stacks used by Linaro member companies.
+
+**Upstream Kernel & Firmware**
+- Authored 18-patch WiFi 7 series for MediaTek MT7927/MT6639 (Filogic 380) in the
+  mt76/mt7925 driver (linux-wireless@, v4) — community-tested across 10+ hardware
+  platforms with 9 Tested-by tags from ASUS, Lenovo, Foxconn, and AMD
+- Authored 8-patch Bluetooth series enabling MT6639 in btusb/btmtk
+  (linux-bluetooth@, v2); companion firmware submitted to linux-firmware
+- Authored 3-patch libcamera AGC/AWB fixes for Simple pipeline sensors with >8-bit
+  output (libcamera-devel@, v4) — reviewed by engineers from Red Hat, Collabora,
+  and Ideas on Board
+- Maintained Linux kernel stable branches for ARM embedded targets: CVE backports,
+  stability patches, regular release cadence
+- Contributed upstream patches to u-boot/u-boot for ARM platform bring-up, Secure
+  Boot chain configuration, and UEFI key management
+
+**Embedded Security**
+- Designed and upstreamed complete UEFI Secure Boot implementation into meta-arm:
+  U-Boot key enrollment, systemd-boot + kernel signing, sbsign BitBake class,
+  OE-QA runtime test cases, GitLab CI — merged after 8 revision cycles (Oct 2024,
+  reviewed by Jon Mason, ARM)
+- Authored OP-TEE/optee-client patches: udev-based tee-supplicant activation
+  replacing static dependencies, resolving failures on multi-device
+  /dev/teepriv* platforms (merged 2023)
+- Contributed to meta-ledge-secure Yocto security layer: Secure Boot integration,
+  disk encryption, and EFI variable management
+
+**CI/CD Infrastructure**
+- Built GPIT — end-to-end GitLab CI/CD for Yocto Trusted Substrate images with
+  automated LAVA hardware testing, OEQA result parsing, two-pass log analysis, and
+  email reporting across ARM targets (KV260, RockPi4, Synquacer, AVA,
+  genericarm64) — 19 merged MRs
+- Built and maintained LAVA-based CI/CD for embedded Linux testing across ARM
+  hardware (Synquacer, RockPi4, KV260, AVA): test plans, capsule update pipelines,
+  image merging scripts, GitLab CI integration — 40+ merged MRs
+- Integrated ARM development boards into LAVA, SQUAD, and TuxSuite pipelines,
+  increasing automated hardware test coverage and reducing manual validation cycles
+- Built SOAFEE test framework: container engine, k3s, Xen virtualization, OpenAD
+  Kit, and Linux ABI compliance testing with TAP reporting and LAVA integration —
+  30+ merged MRs
+
+**Yocto/OpenEmbedded**
+- Owned the Yocto/OE build system delivering all software and kernels for
+  ARM-based embedded Linux products — managing layers across meta-openembedded,
+  meta-arm, meta-secure-core, and meta-arm-bsp
+- Established reproducible BitBake configurations and sstate-cache strategies,
+  reducing build failures across the team
+- Active patch reviewer and contributor across meta-openembedded, meta-arm, and
+  meta-secure-core
+
+**Backend & Tooling**
+- Contributed Django REST API features to ONELab (Linaro's edge/IoT
+  interoperability testing platform): automated GitLab CI deployment pipelines and
+  shell tooling, reducing manual device onboarding effort
+- Integrated EFI variable tooling (rhboot/efivar) into embedded firmware stacks,
+  enabling runtime EFI variable access from Linux user-space on ARM platforms
+
+---
+
+### Hewlett Packard Enterprise / Aruba — Systems Engineer
+**Mar 2011 – Sep 2022 | Remote**
+
+11 years of production embedded software engineering on HPE/Aruba network switches
+running embedded Linux. Worked across the full firmware stack for high-availability
+enterprise networking hardware.
+
+- Participated in large-scale re-architecture effort to modularize and modernize
+  HPE/Aruba switch firmware — production-grade embedded Linux across a fleet of
+  enterprise networking devices
+- Developed and maintained embedded Linux BSPs for network switch platforms: kernel
+  configuration, driver integration, board bring-up, and system-level testing
+- Worked on firmware build systems, CI integration, and release engineering for
+  embedded switch software
+- Contributed to cross-functional efforts spanning kernel, user-space, and
+  management plane components in a large, distributed engineering organization
+
+## Upstream Contributions
+
+| Project | Contribution | Status |
+|---|---|---|
+| linux-wireless@ | MT7927 WiFi 7 — 18-patch series (chip ID, PCI IDs, DMA init, mac_reset, suspend/resume) | v4, active review |
+| linux-bluetooth@ | MT7927 Bluetooth — 8-patch series (USB ID, firmware filtering, naming) | v2, active review |
+| libcamera-devel@ | Simple pipeline AGC/AWB fixes (>8-bit sensor support) | v4, active review |
+| linux-firmware | MT6639 Bluetooth firmware (MR!946) | Under review |
+| meta-arm (Yocto) | UEFI Secure Boot — full implementation (v8) | Merged Oct 2024 |
+| meta-arm (Yocto) | OP-TEE udev-based tee-supplicant activation | Merged 2023 |
+| edk2 | CapsuleApp proper return after capsule update | Merged Mar 2025 |
+| fwupd | Firmware metadata generation enhancement | Merged Aug 2025 |
+| OpenWrt | KASLR for armsr/armv8 kernel 6.1 | Merged Oct 2023 |
+| mbedtls | Host header fix in ssl_client2 (3.x + 3.6 backport) | Merged Oct 2024 |
+
+Full list of 200+ merged PRs/MRs: [jetm.github.io/blog/projects](https://jetm.github.io/blog/projects/)
+
+## Projects & Tooling
+
+**[mediatek-mt7927-dkms](https://github.com/jetm/mediatek-mt7927-dkms)** — DKMS
+package bridging out-of-tree MT7927 WiFi 7 + Bluetooth 5.4 patches to Arch Linux,
+Debian, and Fedora users while upstream review is in progress. Supports 10+
+hardware variants with firmware extraction tooling and an 8-hour stability test
+suite.
+
+**[jig](https://github.com/jetm/jig)** — Go TUI for git workflows built with
+Bubble Tea. Consolidates interactive staging, hunk-level add, diff viewing, commit
+log browsing, fixup commits, and interactive rebase into one tool. Ships with
+goreleaser, golangci-lint, and a 90% test coverage threshold.
+
+**[glpkg](https://github.com/jetm/glpkg)** — Python CLI for the GitLab Generic
+Package Registry, published on PyPI as `glpkg-cli`. Shell completion, GitHub
+Actions CI/CD, and a comprehensive test suite.
+
+**[devspec](https://github.com/jetm/devspec)** — Spec-driven workflow engine; MCP
+server with multiple tools, skills, TF-IDF drift detection, and ~1,245 tests.
+
+## Technical Writing
+
+**Linaro Engineering Blog**
+- [From Replace It with Intel to Upstream: Bringing MediaTek Bluetooth/WiFi 7 to Linux](https://www.linaro.org/blog/from-replace-it-with-intel-to-upstream-bringing-mediatek-bluetooth-wifi-7-to-linux/) — Mar 2026.
+  Full account of the MT7927 community reverse-engineering and upstream submission
+  effort: engineering decisions, DMA debugging methodology, cross-distribution
+  testing across 20+ testers and 15 hardware platforms, and the business case for
+  upstreaming.
+- [5 Common Mistakes When Enabling Your Arm Device in the Automated Test Lab](https://www.linaro.org/blog/5-common-mistakes-when-enabling-your-arm-device-in-the-automated-test-lab/) — Mar 2026.
+  Practical LAVA/LAA device integration tutorial: hardware setup, voltage
+  configuration, USB debugging, and automated test workflows.
+- [Enabling Standard Linux on Arm: How ONELab Accelerates Interoperability and SystemReady Continuous Compliance](https://www.linaro.org/blog/enabling-standard-linux-on-arm-how-onelab-accelerates-interoperability-and-systemready-continuous-compliance/) — Mar 2026.
+  Architectural overview of automated ARM firmware validation and OS compatibility
+  testing at scale.
+
+**Personal Blog** — [jetm.github.io/blog](https://jetm.github.io/blog)
+
+In-depth articles on Linux kernel driver development, Yocto, UEFI, and systems
+engineering. Series covering the 15-month MT7927 upstream journey (4 posts), Intel
+IPU6 mainline migration, DKMS packaging, and UEFI/QEMU workflows. Articles average
+1,000–4,500 words with working code and patch series.
