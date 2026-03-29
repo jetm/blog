@@ -195,7 +195,7 @@
     text-decoration: none;
   }
   /* Hide everything that isn't the CV */
-  header,
+  header.header,
   footer,
   nav,
   #top-link,
@@ -244,15 +244,20 @@
   }
 
   .cv-contact a {
-    color: black !important;
+    color: #2E75B6 !important;
     text-decoration: none;
   }
 
-  /* Section headings */
+  .cv-header {
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #ccc;
+  }
+
+  /* Section headings - steel blue accent like reference PDF */
   .cv-body h2 {
     font-size: 9pt;
-    color: black !important;
-    border-bottom-color: black !important;
+    color: #2E75B6 !important;
+    border-bottom-color: #2E75B6 !important;
     margin-top: 1.2rem;
   }
 
@@ -269,8 +274,8 @@
   }
 
   .cv-body a {
-    color: black !important;
-    text-decoration: none;
+    color: #2E75B6 !important;
+    text-decoration: underline;
   }
 
   /* Tables */
@@ -294,8 +299,10 @@
     page-break-inside: avoid;
   }
 
-  /* Hide horizontal rules in print */
+  /* Section dividers - visible in print like reference PDF */
   .cv-body hr {
-    display: none;
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 1.2rem 0;
   }
 }

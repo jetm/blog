@@ -3,7 +3,7 @@
 
   {{/* Print / Download button — hidden in print */}}
   <div class="cv-actions no-print">
-    <button onclick="window.print()" class="cv-print-btn">
+    <button onclick="(function(){var t=document.title,d=new Date(),y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0');document.title='Javier_Tia_CV_'+y+m;window.print();document.title=t;})()" class="cv-print-btn">
       ↓ Save as PDF
     </button>
     <span class="cv-hint">Use your browser's "Save as PDF" destination when printing</span>
