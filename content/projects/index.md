@@ -1,10 +1,15 @@
 ---
-title: "Projects"
-description: "Upstream kernel contributions, open source tools, GitHub contributions, and published writing"
+title: "Projects & Contributions"
+description: "Upstream kernel patches, open source tools, 200+ merged PRs/MRs across GitHub and GitLab, and published writing on Linux internals"
 ShowToc: true
 ShowReadingTime: false
 TocOpen: true
 ---
+
+Linux kernel patches under active upstream review, open source tools
+used in production, 200+ merged pull requests and merge requests
+across GitHub and GitLab, and published technical writing on systems
+engineering. Everything listed here is public and verifiable.
 
 ## Upstream Kernel Contributions
 
