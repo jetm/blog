@@ -172,16 +172,28 @@ server with multiple tools, skills, TF-IDF drift detection, and ~1,245 tests.
 
 **Linaro Engineering Blog**
 - [From Replace It with Intel to Upstream: Bringing MediaTek Bluetooth/WiFi 7 to Linux](https://www.linaro.org/blog/from-replace-it-with-intel-to-upstream-bringing-mediatek-bluetooth-wifi-7-to-linux/) — Mar 2026.
-  Full account of the MT7927 community reverse-engineering and upstream submission
-  effort: engineering decisions, DMA debugging methodology, cross-distribution
-  testing across 20+ testers and 15 hardware platforms, and the business case for
-  upstreaming.
+  MediaTek's MT7927 WiFi 7 chip shipped on 15+ flagship products from ASUS,
+  Gigabyte, Lenovo, MSI, and TP-Link with zero Linux support. Through community
+  reverse-engineering and 20 upstream kernel patches, full WiFi 7 (2+ Gbps on
+  6 GHz) and Bluetooth 5.4 now work on every major Linux distribution. Once
+  merged, every distribution gets support automatically - eliminating the
+  maintenance burden of out-of-tree drivers and reducing hardware support risk
+  for silicon vendors and OEMs alike.
 - [5 Common Mistakes When Enabling Your Arm Device in the Automated Test Lab](https://www.linaro.org/blog/5-common-mistakes-when-enabling-your-arm-device-in-the-automated-test-lab/) — Mar 2026.
-  Practical LAVA/LAA device integration tutorial: hardware setup, voltage
-  configuration, USB debugging, and automated test workflows.
+  Bringing up a new hardware platform in an automated test environment is rarely
+  simple. For many engineers working with Arm development boards, the first
+  experience with automated testing infrastructure quickly turns into a debugging
+  session - silent serial consoles, misconfigured USB ports, unexpected voltage
+  levels, and devices that refuse to boot. A real-world debugging journey while
+  enabling a new device on a Linaro Automation Appliance (LAA), used by ONELab,
+  Linaro's automated testing service for Arm platforms.
 - [Enabling Standard Linux on Arm: How ONELab Accelerates Interoperability and SystemReady Continuous Compliance](https://www.linaro.org/blog/enabling-standard-linux-on-arm-how-onelab-accelerates-interoperability-and-systemready-continuous-compliance/) — Mar 2026.
-  Architectural overview of automated ARM firmware validation and OS compatibility
-  testing at scale.
+  Most Arm embedded platforms still struggle to boot standard Linux distributions
+  due to fragmented firmware implementations and non-standard boot flows. ONELab
+  by Linaro addresses this by providing fully automated testing infrastructure
+  that validates firmware compliance and OS interoperability on real hardware,
+  aligned with Arm SystemReady requirements. Reduces what traditionally required
+  12-24 weeks of manual validation to an automated 6-12 week compliance cycle.
 
 **Personal Blog** — [jetm.github.io/blog](https://jetm.github.io/blog)
 
