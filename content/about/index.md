@@ -1,6 +1,6 @@
 ---
 title: "About"
-description: "About me and this blog"
+description: "Systems engineer specializing in upstream Linux kernel development, embedded Linux, and CI/CD infrastructure. Available for consulting."
 ShowToc: false
 ShowReadingTime: false
 outputs:
