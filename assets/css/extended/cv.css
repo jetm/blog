@@ -1,0 +1,301 @@
+/* ============================================================
+   CV PAGE STYLES
+   File: assets/css/extended/cv.css
+   Applies only to pages with class .cv-page
+   ============================================================ */
+
+/* ---------- Screen styles ---------- */
+
+.cv-page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* Actions bar */
+.cv-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.cv-print-btn {
+  background: var(--primary);
+  color: var(--theme);
+  border: none;
+  padding: 0.5rem 1.25rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.15s ease;
+}
+
+.cv-print-btn:hover {
+  opacity: 0.85;
+}
+
+.cv-hint {
+  font-size: 0.8rem;
+  color: var(--secondary);
+  font-style: italic;
+}
+
+/* CV Header */
+.cv-header {
+  margin-bottom: 2rem;
+}
+
+.cv-name {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem;
+  line-height: 1.2;
+}
+
+.cv-title {
+  font-size: 1rem;
+  color: var(--secondary);
+  margin: 0 0 0.75rem;
+}
+
+.cv-contact {
+  font-size: 0.85rem;
+  color: var(--secondary);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.cv-contact a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.cv-contact a:hover {
+  text-decoration: underline;
+}
+
+.cv-sep {
+  color: var(--border);
+}
+
+/* CV Body — markdown rendered content */
+.cv-body h2 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--primary);
+  border-bottom: 1.5px solid var(--primary);
+  padding-bottom: 0.25rem;
+  margin: 2rem 0 0.75rem;
+}
+
+.cv-body h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 1.25rem 0 0.1rem;
+}
+
+.cv-body h3 + p strong {
+  color: var(--secondary);
+  font-weight: 500;
+  font-size: 0.88rem;
+}
+
+.cv-body p {
+  margin: 0.4rem 0;
+}
+
+.cv-body ul {
+  margin: 0.4rem 0 0.75rem 1.25rem;
+  padding: 0;
+}
+
+.cv-body ul li {
+  margin-bottom: 0.3rem;
+}
+
+.cv-body strong {
+  font-weight: 600;
+}
+
+.cv-body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  margin: 0.75rem 0 1.25rem;
+}
+
+.cv-body table th {
+  text-align: left;
+  font-weight: 600;
+  border-bottom: 1.5px solid var(--border);
+  padding: 0.3rem 0.5rem 0.3rem 0;
+  color: var(--secondary);
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+}
+
+.cv-body table td {
+  padding: 0.3rem 0.5rem 0.3rem 0;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.cv-body hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 1.5rem 0;
+}
+
+.cv-body a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.cv-body a:hover {
+  text-decoration: underline;
+}
+
+/* Print-only generation date — invisible on screen */
+.print-only {
+  display: none;
+}
+
+/* ---------- Print styles ---------- */
+
+@media print {
+
+  /* Show print-only elements */
+  .print-only {
+    display: block !important;
+  }
+
+  /* Generation date styling */
+  .cv-print-meta {
+    font-size: 8pt;
+    color: #888 !important;
+    text-align: right;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .cv-print-meta a {
+    color: #888 !important;
+    text-decoration: none;
+  }
+  /* Hide everything that isn't the CV */
+  header,
+  footer,
+  nav,
+  #top-link,
+  .no-print,
+  .paginav,
+  .share-buttons,
+  #theme-toggle,
+  .toc-container {
+    display: none !important;
+  }
+
+  /* Reset page layout */
+  body {
+    background: white !important;
+    color: black !important;
+    font-size: 11pt;
+    line-height: 1.5;
+  }
+
+  .cv-page {
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* Page margins */
+  @page {
+    margin: 1.5cm 1.8cm;
+    size: A4;
+  }
+
+  /* Header */
+  .cv-name {
+    font-size: 20pt;
+    color: black !important;
+  }
+
+  .cv-title {
+    font-size: 10pt;
+    color: #444 !important;
+  }
+
+  .cv-contact {
+    font-size: 9pt;
+    color: #444 !important;
+  }
+
+  .cv-contact a {
+    color: black !important;
+    text-decoration: none;
+  }
+
+  /* Section headings */
+  .cv-body h2 {
+    font-size: 9pt;
+    color: black !important;
+    border-bottom-color: black !important;
+    margin-top: 1.2rem;
+  }
+
+  .cv-body h3 {
+    font-size: 10.5pt;
+    margin-top: 0.8rem;
+    color: black !important;
+  }
+
+  .cv-body p,
+  .cv-body ul li {
+    font-size: 10pt;
+    color: black !important;
+  }
+
+  .cv-body a {
+    color: black !important;
+    text-decoration: none;
+  }
+
+  /* Tables */
+  .cv-body table th,
+  .cv-body table td {
+    font-size: 9pt;
+    color: black !important;
+    border-color: #aaa !important;
+  }
+
+  .cv-body table th {
+    color: #444 !important;
+  }
+
+  /* Avoid breaking sections across pages */
+  h2, h3 {
+    page-break-after: avoid;
+  }
+
+  ul, table {
+    page-break-inside: avoid;
+  }
+
+  /* Hide horizontal rules in print */
+  .cv-body hr {
+    display: none;
+  }
+}
