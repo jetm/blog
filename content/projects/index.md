@@ -428,6 +428,10 @@ soafee/ namespace.
 - [5 Common Mistakes When Enabling Your Arm Device in the Automated Test Lab](https://www.linaro.org/blog/5-common-mistakes-when-enabling-your-arm-device-in-the-automated-test-lab/) - Mar 2026
 - [Enabling Standard Linux on Arm: How ONELab Accelerates Interoperability and SystemReady Continuous Compliance](https://www.linaro.org/blog/enabling-standard-linux-on-arm-how-onelab-accelerates-interoperability-and-systemready-continuous-compliance/) - Mar 2026
 
+### Press Coverage
+
+- [MediaTek MT7927 WiFi 7 + Bluetooth 5.4 Linux Support Coming Together](https://www.phoronix.com/news/MediaTek-MT7927-WiFi-Linux) - Phoronix, Mar 2026
+
 ### Personal Blog
 
 In-depth articles on Linux kernel development, Yocto, embedded

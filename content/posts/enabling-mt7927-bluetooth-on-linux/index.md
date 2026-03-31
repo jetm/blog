@@ -43,6 +43,11 @@ and is waiting for a MediaTek engineer sign-off. See:
 [MT7927 Bluetooth: From DKMS to Upstream]({{< ref "/posts/mt7927-bluetooth-upstream-submission" >}}).
 {{< /update >}}
 
+{{< update date="March 31, 2026" >}}
+This work was covered by Phoronix:
+[MediaTek MT7927 WiFi 7 + Bluetooth 5.4 Linux Support Coming Together](https://www.phoronix.com/news/MediaTek-MT7927-WiFi-Linux).
+{{< /update >}}
+
 ## Act 1: The Three Missing Layers (November 2024)
 
 Running `bluetoothctl show` returned nothing. No adapter, no controller, no error. Just silence. The `rfkill` output showed an `hci0` device, soft-blocked, but nothing behind it. Something was clearly half-working.

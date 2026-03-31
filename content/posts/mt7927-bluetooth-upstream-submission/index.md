@@ -2,7 +2,7 @@
 title: "MT7927 Bluetooth: From DKMS to Upstream"
 date: 2026-03-05T10:00:00Z
 draft: false
-description: "Submitting MT7927 Bluetooth support to the Linux kernel - BT driver patches to linux-bluetooth, firmware to linux-firmware, and what the maintainer review process looks like from a first-time contributor's perspective."
+description: "MT7927 Bluetooth driver patches merged into bluetooth-next - the full journey from DKMS package to upstream acceptance, including 5 revision cycles, automated review tools, and community testing across 16+ boards."
 ShowToc: true
 ShowReadingTime: true
 tags:
@@ -24,7 +24,9 @@ In [Part 1]({{< ref "/posts/enabling-mt7927-bluetooth-on-linux" >}}), I document
 
 > As of February 2026, none of the three layers have reached mainline Linux.
 
-This post covers what happened next: submitting all three layers upstream.
+This post covers what happened next: submitting all three layers upstream and getting the BT driver patches merged after five revision cycles.
+
+**Update (2026-03-31):** The BT driver patches have been [merged into bluetooth-next](https://lore.kernel.org/linux-bluetooth/20260330-mt7927-bt-support-v4-0-cecc025e7062@jetm.me/) by Luiz Augusto von Dentz. They will ship in mainline Linux 7.1 or 7.2.
 
 ## Two Submissions, Two Channels
 
@@ -47,10 +49,11 @@ The MR adds the firmware file under `mediatek/mt6639/` with the WHENCE entry doc
 
 ## Bluetooth Driver: linux-bluetooth
 
-The BT driver changes are two patches:
+The BT driver changes grew from two patches to eight over five revisions:
 
-1. **btmtk**: Add MT6639 (MT7927) hardware variant support - firmware naming, section filtering, initialization sequence
-2. **btusb**: Add USB device IDs for six confirmed MT7927 hardware variants
+1. **btmtk**: Add MT6639 (MT7927) hardware variant support - firmware naming, section filtering, CHIPID workaround, initialization sequence
+2. **btmtk**: Fix ISO interface setup for devices with a single alternate setting
+3. **btusb**: Six per-device USB ID commits, each with `Tested-by` trailers from community testers
 
 ### The Section Filter
 
@@ -60,49 +63,42 @@ A v2.1-20 bug fix caught a critical regression in this filter: the `dlmodecrctyp
 
 ### Confirmed Hardware
 
-Patch 2 adds USB IDs confirmed by community testing across multiple hardware platforms:
+Patches 3-8 add USB IDs confirmed by community testing across multiple hardware platforms. Each ID has its own commit with `Tested-by` trailers:
 
-| USB ID | Hardware |
-|--------|----------|
-| `0489:e10f` | Gigabyte Z790 AORUS MASTER X |
-| `0489:e116` | TP-Link Archer TBE550E |
-| `0489:e13a` | ASUS ROG Crosshair X870E Hero |
-| `0489:e0fa` | Lenovo Legion Pro 7 16ARX9 |
-| `13d3:3588` | ASUS X870E-E / ASUS ProArt X870E-Creator WiFi |
-| `0e8d:6639` | Generic MediaTek MT6639 |
+| USB ID | Hardware | Tested by |
+|--------|----------|-----------|
+| `0489:e13a` | ASUS ROG Crosshair X870E Hero | Jose Tiburcio Ribeiro Netto |
+| `0489:e0fa` | Lenovo Legion Pro 7 16ARX9 | Llewellyn Curran |
+| `0489:e10f` | Gigabyte Z790 AORUS MASTER X | Chapuis Dario, Evgeny Kapusta |
+| `0489:e110` | MSI X870E Ace Max | Nitin Gurram |
+| `0489:e116` | TP-Link Archer TBE550E | Thibaut Francois |
+| `13d3:3588` | ASUS X870E-E / ProArt X870E-Creator | Jose Tiburcio Ribeiro Netto, Ivan Lubnin |
 
-New IDs can be added incrementally as users report them. The current set covers all known hardware.
+New IDs can be added incrementally as users report them. The current set covers all known MT7927 hardware.
 
-## Luiz Dentz's Review
+## The Review Process: Five Versions
 
-[Luiz Augusto von Dentz](https://lore.kernel.org/linux-bluetooth/?q=f%3Aluiz.dentz), the Bluetooth subsystem maintainer, reviewed both patches within hours of submission. His feedback was specific and practical.
+[Luiz Augusto von Dentz](https://lore.kernel.org/linux-bluetooth/?q=f%3Aluiz.dentz), the Bluetooth subsystem maintainer, reviewed each revision within hours. The series went through five versions over four weeks:
 
-**On the btmtk patch:** He asked for dmesg output showing the firmware loading before and after the patch, and noted that changes to MediaTek's vendor-specific code typically require a Signed-off-by from a MediaTek engineer. This is standard practice in the kernel - the vendor's sign-off confirms the changes match the hardware's actual behavior and won't break other MediaTek chips.
+**v1 (2026-03-05):** Two patches. Luiz asked for per-device USB ID commits with `Tested-by` trailers, `lsusb -v` output confirming real hardware, and dmesg before/after. He also asked about the `Assisted-by: Claude Code` trailer - the kernel's [coding-assistants policy](https://docs.kernel.org/process/coding-assistants.html) requires disclosure when AI tools assist development.
 
-**On the btusb IDs:** He wanted `lsusb -v` output confirming the USB IDs are real devices, not guesses. Device ID patches occasionally get submitted based on documentation rather than hardware testing, so maintainers want proof.
+**v2 (2026-03-25):** Split USB IDs into per-device commits. Added the ISO interface fix for single-alt-setting devices (13d3:3588). Collected `Tested-by` trailers from 8 community members. Dropped the `BTMTK_FIRMWARE_LOADED` skip logic per Sean Wang's feedback.
 
-I replied with:
+**v3 (2026-03-26):** Scoped the CHIPID workaround to VID/PID matching (not all zero-reads). Moved firmware to `mediatek/mt7927/` directory per Sean Wang. Luiz ran [sashiko](https://sashiko.dev/) - an automated AI review tool - which flagged two issues: an SDIO slab-out-of-bounds risk in `btmtk_setup_firmware_79xx` (used `hci_get_priv` with wrong struct) and a subsys reset failure (post-reset CHIPID validation always fails on MT6639).
 
-- Full `lsusb -v` output from my ASUS ROG Crosshair X870E Hero (`0489:e13a`)
-- dmesg before (firmware load failure) and after (successful initialization with `Device setup in 2602559 usecs`)
-- Links to the [DKMS repository](https://github.com/jetm/mediatek-mt7927-dkms) and [OpenWRT tracking issue](https://github.com/openwrt/mt76/issues/927) showing community-wide hardware confirmation
-- CC'd MediaTek engineers requesting their Signed-off-by on the btmtk changes
+**v4 (2026-03-30):** Fixed both sashiko findings. Passed `dev_id` as a parameter instead of using `hci_get_priv`. Skipped post-reset CHIPID validation for 0x6639.
 
-### The AI Disclosure
+**v5 (2026-03-31):** Fixed a cross-patch commit message coherence issue that Luiz caught - patch 8/8 described a 19-second initialization delay that patch 2/8 already fixes. Luiz applied v4 with the misleading note removed entirely, which was the simpler resolution.
 
-Luiz also asked about the `Assisted-by: Claude Code` trailer in the patches. The kernel's [coding-assistants policy](https://docs.kernel.org/process/coding-assistants.html) requires disclosure when AI tools are used during development. I clarified that the patches are human-authored - the AI assisted with code review, identifying the `sta_rec_mld` out-of-bounds bug, and catching the section filter scoping issue, but didn't generate the driver code itself.
+### Merged
 
-This is a relatively new area for kernel development. The policy exists because the kernel community wants transparency about how code is produced, not because AI-assisted code is inherently problematic.
+On 2026-03-31, Luiz pushed all 8 patches to [bluetooth-next](https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git). The code will flow into mainline during the next merge window, shipping in Linux 7.1 or 7.2.
 
-## Waiting on MediaTek
+The MediaTek sign-off that initially blocked the series turned out to be unnecessary - Luiz accepted the patches based on the community testing evidence and code quality alone.
 
-The BT driver patches are currently blocked on a MediaTek engineer providing their Signed-off-by on the btmtk changes. Chris Lu and Deren Wu from MediaTek have been active on linux-bluetooth recently - their [btmtk firmware retry patches](https://lkml.org/lkml/2026/2/3/338) were merged in February - so the request isn't going into a void.
+## The Community
 
-Once the MediaTek sign-off arrives, Luiz can merge the patches into bluetooth-next. From there, they'll flow into Linus's tree during the next merge window and eventually reach stable kernels.
-
-## The Community While We Wait
-
-While the upstream process moves at kernel pace, the DKMS package continues to serve users today. Community-maintained ports have appeared for distributions beyond Arch Linux:
+The upstream process took four weeks. During that time, 8 community members across 6 countries provided hardware testing, bug reports, and `Tested-by` trailers. The [DKMS package](https://github.com/jetm/mediatek-mt7927-dkms) served as the bridge - giving users working Bluetooth while the upstream patches went through review. Community-maintained ports appeared for multiple distributions:
 
 | Distribution | Maintainer | Repository |
 |---|---|---|
@@ -112,22 +108,26 @@ While the upstream process moves at kernel pace, the DKMS package continues to s
 | NixOS (module) | clemenscodes | [clemenscodes/linux-mt7927](https://github.com/clemenscodes/linux-mt7927) |
 | Bazzite (Fedora Atomic) | samutoljamo | [samutoljamo/bazzite-mt7927](https://github.com/samutoljamo/bazzite-mt7927) |
 
-These packages carry the same patches but handle distro-specific differences: initramfs rebuilding, module signing, firmware paths, and package management. When the patches land upstream, these packages become unnecessary - which is the goal.
+When the BT patches ship in mainline Linux 7.1 or 7.2, the Bluetooth portion of these packages becomes unnecessary - which is the goal.
 
 ## What's Left
 
-1. **MediaTek sign-off** on the btmtk patch - the single blocking item
-2. **linux-firmware MR !946** merge - ready, waiting for maintainer review
-3. **Kernel release cycle** - even after acceptance, patches flow through bluetooth-next to a stable release, typically 2-3 kernel cycles
+1. ~~**BT driver patches**~~ - merged into bluetooth-next (2026-03-31)
+2. **linux-firmware MR !946** - BT firmware blob, waiting for maintainer review
+3. **WiFi driver patches** - 9-patch series on linux-wireless@, v4 under review
+4. **Kernel release** - BT patches will ship in Linux 7.1 or 7.2
 
-Until then, the [DKMS package](https://aur.archlinux.org/packages/mediatek-mt7927-dkms) remains the way to get MT7927 Bluetooth working on Linux. WiFi support - which is a much larger story involving reverse-engineering, DMA ring layouts, and community collaboration - will be covered separately.
+The [DKMS package](https://aur.archlinux.org/packages/mediatek-mt7927-dkms) remains necessary for WiFi and for users on kernels older than 7.1. WiFi support - a larger story involving 320 MHz EHT channels, per-chip IRQ maps, and ASPM quirks - will be covered separately.
 
 ## References
 
+- [BT driver patches (merged, v4)](https://lore.kernel.org/linux-bluetooth/20260330-mt7927-bt-support-v4-0-cecc025e7062@jetm.me/) - linux-bluetooth mailing list
+- [BT driver patches (v1, original submission)](https://lore.kernel.org/linux-bluetooth/177272816248.352280.12453518046823439297@jetm.me/) - linux-bluetooth mailing list
 - [BT firmware MR !946](https://gitlab.com/kernel-firmware/linux-firmware/-/merge_requests/946) - linux-firmware GitLab
-- [BT driver patches on lore](https://lore.kernel.org/linux-bluetooth/177272816248.352280.12453518046823439297@jetm.me/) - linux-bluetooth mailing list
+- [bluetooth-next tree](https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git) - Luiz's bluetooth-next repository
 - [mediatek-mt7927-dkms](https://github.com/jetm/mediatek-mt7927-dkms) - DKMS package source and documentation
 - [OpenWRT mt76 issue #927](https://github.com/openwrt/mt76/issues/927) - MT7927 Linux support tracking
 - [Kernel coding-assistants policy](https://docs.kernel.org/process/coding-assistants.html) - AI disclosure requirements
+- [Phoronix: MediaTek MT7927 WiFi 7 Linux support](https://www.phoronix.com/news/MediaTek-MT7927-WiFi-Linux) - Phoronix coverage
 - [Part 1: Enabling MT7927 Bluetooth]({{< ref "/posts/enabling-mt7927-bluetooth-on-linux" >}})
 - [Part 2: WiFi - Wrong Driver, Wrong Chip]({{< ref "/posts/mt7927-wifi-the-missing-piece" >}})
