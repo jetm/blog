@@ -29,7 +29,7 @@
 {{- end -}}
 
 {{- /* Define processable formats */ -}}
-{{- $processableFormats := (slice "jpg" "jpeg" "png" "tif" "bmp" "gif") -}}
+{{- $processableFormats := (slice "jpg" "jpeg" "png" "tif" "bmp") -}}
 {{- if hugo.IsExtended -}}
     {{- $processableFormats = $processableFormats | append "webp" -}}
 {{- end -}}
@@ -56,8 +56,8 @@
         "decoding" "async"
     -}}
 
-    {{- /* Add width/height if we have the image resource */ -}}
-    {{- if $image -}}
+    {{- /* Add width/height if we have the image resource (skip for GIF to preserve intrinsic size) */ -}}
+    {{- if and $image (ne $image.MediaType.SubType "gif") -}}
         {{- $baseAttrs = merge (dict
             "width" (printf "%d" $image.Width)
             "height" (printf "%d" $image.Height)
@@ -73,16 +73,16 @@
 
     {{- if $title -}}
     <figure>
-        <img
-            {{- range $key, $val := $attrs }}
+        <img src="{{ $src }}"
+            {{- range $key, $val := $attrs }}{{ if ne $key "src" }}
             {{ $key }}="{{ $val }}"
-            {{- end }}>
+            {{- end }}{{ end }}>
         <figcaption>{{ $title | markdownify }}</figcaption>
     </figure>
     {{- else -}}
-    <img
-        {{- range $key, $val := $attrs }}
+    <img src="{{ $src }}"
+        {{- range $key, $val := $attrs }}{{ if ne $key "src" }}
         {{ $key }}="{{ $val }}"
-        {{- end }}>
+        {{- end }}{{ end }}>
     {{- end -}}
 {{- end -}}

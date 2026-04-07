@@ -30,7 +30,7 @@
 {{- $prod := (hugo.IsProduction | or (eq site.Params.env "production")) -}}
 
 {{- /* Define processable formats */ -}}
-{{- $processableFormats := (slice "jpg" "jpeg" "png" "tif" "bmp" "gif") -}}
+{{- $processableFormats := (slice "jpg" "jpeg" "png" "tif" "bmp") -}}
 {{- if hugo.IsExtended -}}
     {{- $processableFormats = $processableFormats | append "webp" -}}
 {{- end -}}
