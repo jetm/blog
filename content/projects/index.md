@@ -2,6 +2,7 @@
 title: "Projects & Contributions"
 description: "Upstream kernel patches, open source tools, 200+ merged PRs/MRs across GitHub and GitLab, and published writing on Linux internals"
 ShowToc: true
+ShowWordCount: false
 ShowReadingTime: false
 TocOpen: true
 ---
