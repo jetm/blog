@@ -165,9 +165,6 @@ goreleaser, golangci-lint, and a 90% test coverage threshold.
 Package Registry, published on PyPI as `glpkg-cli`. Shell completion, GitHub
 Actions CI/CD, and a comprehensive test suite.
 
-**[devspec](https://github.com/jetm/devspec)** — Spec-driven workflow engine; MCP
-server with multiple tools, skills, TF-IDF drift detection, and ~1,245 tests.
-
 ## Technical Writing
 
 **Linaro Engineering Blog**
