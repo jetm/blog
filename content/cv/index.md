@@ -27,12 +27,12 @@ engagements and full-time remote roles.
 OP-TEE, device drivers (WiFi/mac80211/cfg80211, Bluetooth/btusb/btmtk, PCIe,
 camera/libcamera)
 
-**Build systems:** Yocto/OpenEmbedded (BitBake, kas, meta-arm, meta-openembedded,
-meta-secure-core), Make, CMake, Meson, Autotools
+**Build systems:** Yocto/OpenEmbedded, BitBake, kas, (meta-arm, meta-openembedded,
+meta-secure-core), Make, CMake, Meson, Autotools, repo tool
 
 **CI/CD & testing:** LAVA, SQUAD, TuxSuite, GitLab CI, GitHub Actions
 
-**Languages:** C, C++, Go, Python, Shell/Perl
+**Languages:** C, C++, Go, Python, Shell, Perl
 
 **Security:** UEFI Secure Boot, measured boot, TPM, sbsign, EFI variable
 management (libefivar)
@@ -66,8 +66,9 @@ reference stacks used by Linaro member companies.
 - Authored 3-patch libcamera AGC/AWB fixes for Simple pipeline sensors with >8-bit
   output (libcamera-devel@, v4) — reviewed by engineers from Red Hat, Collabora,
   and Ideas on Board
-- Maintained Linux kernel stable branches for ARM embedded targets: CVE backports,
-  stability patches, regular release cadence
+- Maintained Linux kernel stable branches for ARM embedded targets (KV260,
+  RockPi4, Synquacer, AVA, TI SK-AM62P-LP, NXP i.MX 8M, Raspberry Pi, genericarm64):
+  CVE backports, stability patches, regular release cadence
 - Contributed upstream patches to u-boot/u-boot for ARM platform bring-up, Secure
   Boot chain configuration, and UEFI key management
 
@@ -98,7 +99,9 @@ reference stacks used by Linaro member companies.
 
 **Yocto/OpenEmbedded**
 - Owned the Yocto/OE build system delivering all software and kernels for
-  ARM-based embedded Linux products — managing layers across meta-openembedded,
+  ARM-based embedded Linux products — Trusted Substrate and SOAFEE reference
+  images across KV260, RockPi4, Synquacer, AVA, TI SK-AM62P-LP, NXP i.MX 8M,
+  Raspberry Pi, and genericarm64 — managing layers across meta-openembedded,
   meta-arm, meta-secure-core, and meta-arm-bsp
 - Established reproducible BitBake configurations and sstate-cache strategies,
   reducing build failures across the team
