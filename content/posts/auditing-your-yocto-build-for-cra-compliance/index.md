@@ -1,7 +1,7 @@
 ---
 title: "Auditing your Yocto build for CRA compliance"
 date: 2026-04-24T20:00:00Z
-draft: true
+draft: false
 description: "The CRA paperwork nobody wants to write, and how shipcheck generates your Annex VII draft from a Yocto build."
 ShowToc: true
 ShowReadingTime: true
@@ -93,7 +93,7 @@ That is where the paperwork problem lives. Every vendor I have seen new to CRA t
 
 `shipcheck` is an open-source CLI tool ([jetm/shipcheck](https://github.com/jetm/shipcheck), Apache-2.0, Python 3.13+) that reads a Yocto build directory, cross-checks it against a `product.yaml` with the vendor commitments, and emits an evidence report plus draft paperwork.
 
-Seven checks registered in v0.0.3:
+Seven checks registered in v0.0.4:
 
 - `sbom-generation` - validates SPDX 2.x against BSI TR-03183-2 field requirements (detects SPDX 3.0 and CycloneDX without field validation)
 - `cve-tracking` - consumes Yocto `cve-check`, `vex.bbclass`, and [`sbom-cve-check`](https://github.com/bootlin/sbom-cve-check) JSON output (the last is preferred when present)
@@ -210,7 +210,7 @@ One-line rule: compliance is what you declare on the Declaration of Conformity. 
 
 shipcheck's `sbom-generation` check validates SPDX 2.x against [BSI TR-03183-2](https://www.bsi.bund.de/SharedDocs/Downloads/EN/BSI/Publications/TechGuidelines/TR03183/BSI-TR-03183-2.pdf). BSI TR-03183-2 is the de-facto SBOM-content baseline European regulators point at when they want a concrete field list - minimum package fields, checksum requirement, supplier, license. If you are asking "but what fields are mandatory in my SBOM for CRA?", that document is the answer.
 
-SPDX 3.0 is detected but not field-validated in v0.0.3 (validation is on the roadmap). CycloneDX is detected but not field-validated either.
+SPDX 3.0 is detected but not field-validated in v0.0.4 (validation is on the roadmap). CycloneDX is detected but not field-validated either.
 
 ## A note on CVE sources
 
@@ -229,7 +229,7 @@ The v0.1 line is the first publishable release. Remaining gate items:
 - Wider Annex I Part I coverage across the engineering-properties items
 - Community outreach and maintainer feedback
 
-v0.0.3 is usable today for the paperwork workflow described in this post - an alpha line on the way to v0.1 with the gate items above rolling in next. If you try it on your own Yocto build and something breaks, [file an issue](https://github.com/jetm/shipcheck/issues) - pilot data on real-world builds is the best input to the v0.1 cut.
+v0.0.4 is usable today for the paperwork workflow described in this post - an alpha line on the way to v0.1 with the gate items above rolling in next. If you try it on your own Yocto build and something breaks, [file an issue](https://github.com/jetm/shipcheck/issues) - pilot data on real-world builds is the best input to the v0.1 cut.
 
 ## Closing: CRA is sustained activity
 
