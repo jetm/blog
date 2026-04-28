@@ -29,7 +29,7 @@ The mainline kernel has had IPU6 ISYS support since 6.10. libcamera has had IPU6
 
 The out-of-tree setup, typically installed via AUR packages like `archlinux-ipu6-webcam`, looks like this:
 
-```
+```text
 Sensor (OV2740)
   -> IPU6 ISYS (raw capture)
   -> IPU6 PSYS (hardware ISP)        [out-of-tree, not in mainline]
@@ -48,7 +48,7 @@ The PSYS module (Processing System - the hardware ISP) was never merged into mai
 
 The mainline path replaces the hardware ISP with libcamera's software ISP (SoftISP):
 
-```
+```text
 Sensor (OV2740)
   -> IPU6 ISYS (raw Bayer capture)    [in-tree since 6.10]
   -> libcamera Simple pipeline
@@ -95,7 +95,7 @@ The critical chain is: `mei_vsc_hw` -> `mei_vsc` -> `ivsc-ace` (powers the senso
 
 The required kernel configs (check with `zgrep` on `/proc/config.gz`):
 
-```
+```text
 CONFIG_VIDEO_INTEL_IPU6=m
 CONFIG_INTEL_VSC=m
 CONFIG_INTEL_SKL_INT3472=m
@@ -125,7 +125,7 @@ Log out and back in for the group change to take effect.
 
 Out of the box, the SoftISP uses a generic uncalibrated profile. The image will have a heavy green tint and unstable brightness. libcamera logs confirm the fallback:
 
-```
+```text
 WARN: Configuration file 'ov2740.yaml' not found for IPA module 'simple',
       falling back to '/usr/share/libcamera/ipa/simple/uncalibrated.yaml'
 ```
@@ -228,13 +228,13 @@ Chromium-based browsers (Chrome, Vivaldi, Edge) need the PipeWire camera feature
 
 **Chrome** (`~/.config/chrome-flags.conf`):
 
-```
+```text
 --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer,WebRtcPipeWireCamera
 ```
 
 **Vivaldi** (`~/.config/vivaldi-stable.conf`):
 
-```
+```text
 --enable-features=UseOzonePlatform,WaylandWindowDecorations,WebRTCPipeWireCapturer,WebRtcPipeWireCamera
 ```
 
@@ -248,7 +248,7 @@ The feature flag name is `WebRtcPipeWireCamera` (not `PipeWireCamera` - check `s
 
 The IPU6 firmware re-authentication fails after S3 resume on kernels 6.16+. After waking from suspend:
 
-```
+```text
 intel-ipu6: Unexpected magic number 0xffffffeb
 intel-ipu6: FW authentication failed(-110)
 ```

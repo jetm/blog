@@ -27,7 +27,7 @@ The solution: build a Windows 11 VM in QEMU, install the firmware tools inside i
 
 This post walks through the end-to-end process, including the gotchas that aren't documented anywhere else.
 
-## Why Not Just...
+## Why the Obvious Approaches Don't Work
 
 There are several ways to get a Windows environment from Linux. Most of them don't work for this use case:
 

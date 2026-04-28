@@ -72,7 +72,7 @@ What you do not have is a tool that walks those artefacts, pivots the findings b
 
 Here is the mental model. Split your CRA readiness into two halves:
 
-```
+```text
 From the build (derivable):            From the vendor (commitment):
   - SBOM summary                         - Manufacturer legal entity
   - CVE reconciliation                   - Registered postal address

@@ -91,7 +91,7 @@ This is where I wasted the most time. MediaTek's chip numbers look sequential bu
 
 MT7927 is not "newer than MT7925." It *is* MT7925, bundled with a Bluetooth controller (MT6639) in one combo package. MediaTek calls it Filogic 380. And MT7902? Completely different product line - WiFi 6E, older generation, uses the mt7921 driver. The number is between 7921 and 7925 but it has nothing to do with either of them architecturally.
 
-```
+```text
 MT7927 (combo module on the motherboard)
 ├── BT:   MT6639 → btusb/btmtk driver (USB, 0489:e13a)
 └── WiFi: MT7925-architecture → mt7925e driver (PCIe, 14c3:7927)
