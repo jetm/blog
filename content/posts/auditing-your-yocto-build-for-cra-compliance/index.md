@@ -2,7 +2,7 @@
 title: "Auditing your Yocto build for CRA compliance"
 date: 2026-04-24T20:00:00Z
 draft: false
-description: "The CRA paperwork nobody wants to write, and how shipcheck generates your Annex VII draft from a Yocto build."
+description: "The CRA evidence layer nobody wants to assemble, and how shipcheck drafts your Annex VII technical file from a Yocto build."
 ShowToc: true
 ShowReadingTime: true
 tags:
@@ -21,7 +21,7 @@ categories:
 
 **TL;DR**
 
-- CRA is a paperwork regulation, not a scanner-selection problem.
+- CRA is a process and design regulation; the risk analysis is the central document and the technical file is the evidence the regulator audits, not a scanner-selection problem.
 - Yocto already emits the build-derivable half: SBOM (`create-spdx`), CVE scans, license manifests, signing posture.
 - The vendor-committed half - CVD policy, support period, update mechanism, Declaration of Conformity - has to be written by hand.
 - [shipcheck](https://github.com/jetm/shipcheck) reads a Yocto build plus `product.yaml`, pivots findings by CRA Annex, and drafts your Annex VII technical file and DoC.
@@ -30,11 +30,11 @@ categories:
 
 Read any CRA compliance article from a security vendor and you will see the same shape of pitch: run a scanner, triage the CVEs, generate an SBOM, ship. The regulation becomes a scanner-selection problem, and whichever product the vendor sells happens to be the right scanner.
 
-That framing is wrong, and if you ship embedded Linux you already know it. The Cyber Resilience Act (Regulation (EU) 2024/2847) is a paperwork regulation. Scanning is the easy part. The hard part is putting in place and keeping current the coordinated vulnerability disclosure policy, the single point of contact, the support-period commitment, the update distribution mechanism, the Annex VII technical file, the Declaration of Conformity, and the sustained record of vulnerability-handling activity required by Article 13 and 14.
+That framing is wrong, and if you ship embedded Linux you already know it. The Cyber Resilience Act (Regulation (EU) 2024/2847) is a process and design regulation. The risk analysis is the document everything else flows from; the technical file (Annex VII), the Declaration of Conformity, and the sustained record of vulnerability handling are the evidence the regulator audits. Scanning is one input. The hard part is the process around it: putting in place and keeping current the coordinated vulnerability disclosure policy, the single point of contact, the support-period commitment, the update distribution mechanism, the Annex VII technical file, the Declaration of Conformity, and the sustained record of vulnerability-handling activity required by Article 13 and 14.
 
 Experienced Yocto maintainers have been pointing this out on the mailing lists for months. SPDX is for machines. The real daily tooling - the stuff you read while triaging a cvelistV5 feed at 11pm - is `license.manifest`, `cve-check.bbclass`, and hand-curated audits. Compliance is sustained activity, not a snapshot.
 
-This post is about the paperwork problem, what Yocto already solves for you, and how [shipcheck](https://github.com/jetm/shipcheck) drafts the rest.
+This post is about the evidence-layer problem, what Yocto already solves for you, and how [shipcheck](https://github.com/jetm/shipcheck) drafts the rest.
 
 ## What CRA actually requires, by Annex
 
@@ -66,9 +66,9 @@ Yocto Project with Poky on Scarthgap or newer ships a lot of this for free if yo
 
 If you are an experienced Yocto engineer you already know this. The tooling is mature. The bitbake output lands in predictable places. `cve-check.bbclass` writes `tmp/log/cve/cve-summary.json`, `license.manifest` files land under `tmp/deploy/licenses/<arch>/<image-or-package>/`, SPDX documents under `tmp/deploy/spdx/`.
 
-What you do not have is a tool that walks those artefacts, pivots the findings by CRA annex item, flags the paperwork gaps, and emits the drafts you hand to your compliance team.
+What you do not have is a tool that walks those artefacts, pivots the findings by CRA annex item, flags the gaps in the evidence layer, and emits the drafts you hand to your compliance team.
 
-## The real gap: paperwork, not scanning
+## The real gap: evidence, not scanning
 
 Here is the mental model. Split your CRA readiness into two halves:
 
@@ -87,11 +87,11 @@ The left column is what bitbake emits. A tool can read those artefacts and rende
 
 The right column is what the vendor must write down. No scanner in the world will tell you what your CVD policy URL is, because it is a policy commitment, not a file on disk. You have to put it in writing.
 
-That is where the paperwork problem lives. Every vendor I have seen new to CRA tries to substitute the left column for the right column - "we run cve-check, so we have vulnerability handling covered". That is not what Annex I Part II §5 asks for. It asks for a published coordinated vulnerability disclosure policy with a single point of contact, a support-period commitment, and an update distribution mechanism. Those are sentences you write, not binaries you build.
+That is where the evidence-layer gap lives. Every vendor I have seen new to CRA tries to substitute the left column for the right column - "we run cve-check, so we have vulnerability handling covered". That is not what Annex I Part II §5 asks for. It asks for a published coordinated vulnerability disclosure policy with a single point of contact, a support-period commitment, and an update distribution mechanism. Those are sentences you write, not binaries you build.
 
 ## What shipcheck does about it
 
-`shipcheck` is an open-source CLI tool ([jetm/shipcheck](https://github.com/jetm/shipcheck), Apache-2.0, Python 3.13+) that reads a Yocto build directory, cross-checks it against a `product.yaml` with the vendor commitments, and emits an evidence report plus draft paperwork.
+`shipcheck` is an open-source CLI tool ([jetm/shipcheck](https://github.com/jetm/shipcheck), Apache-2.0, Python 3.13+) that reads a Yocto build directory, cross-checks it against a `product.yaml` with the vendor commitments, and emits an evidence report plus a draft technical file and Declaration of Conformity.
 
 Seven checks registered in v0.0.4:
 
@@ -187,11 +187,11 @@ The full dossier for this example is committed to the repository under [audits/0
 
 If you are shopping for CRA tooling today, here is how the three common options compare:
 
-**[EMBA](https://github.com/e-m-b-a/emba)** is an automated firmware pentester. It unpacks a binary image, runs a battery of static and dynamic analysis, and reports findings. It is excellent at what it does. What it does is not CRA paperwork - it is post-release firmware analysis for red teams.
+**[EMBA](https://github.com/e-m-b-a/emba)** is an automated firmware pentester. It unpacks a binary image, runs a battery of static and dynamic analysis, and reports findings. It is excellent at what it does. What it does is not the CRA evidence layer - it is post-release firmware analysis for red teams.
 
 **[FOSSology](https://www.fossology.org/)** is a license-compliance workbench. It scans binaries and sources for license text, tracks audits, and reviews manually. Use it to clear licenses, not to file your Annex VII.
 
-**[shipcheck](https://github.com/jetm/shipcheck)** is the purpose-built option for the paperwork: it consumes Yocto build output, pivots findings by Annex, and drafts the technical file. Use EMBA for pentesting, FOSSology for license review, and shipcheck for the job neither of them does - assembling the CRA dossier from a Yocto build.
+**[shipcheck](https://github.com/jetm/shipcheck)** is the purpose-built option for the evidence layer: it consumes Yocto build output, pivots findings by Annex, and drafts the technical file. Use EMBA for pentesting, FOSSology for license review, and shipcheck for the job neither of them does - assembling the CRA evidence dossier from a Yocto build.
 
 ## Readiness is not compliance
 
@@ -229,7 +229,7 @@ The v0.1 line is the first publishable release. Remaining gate items:
 - Wider Annex I Part I coverage across the engineering-properties items
 - Community outreach and maintainer feedback
 
-v0.0.4 is usable today for the paperwork workflow described in this post - an alpha line on the way to v0.1 with the gate items above rolling in next. If you try it on your own Yocto build and something breaks, [file an issue](https://github.com/jetm/shipcheck/issues) - pilot data on real-world builds is the best input to the v0.1 cut.
+v0.0.4 is usable today for the evidence-dossier workflow described in this post - an alpha line on the way to v0.1 with the gate items above rolling in next. If you try it on your own Yocto build and something breaks, [file an issue](https://github.com/jetm/shipcheck/issues) - pilot data on real-world builds is the best input to the v0.1 cut.
 
 ## Closing: CRA is sustained activity
 
