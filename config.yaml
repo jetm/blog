@@ -1,5 +1,5 @@
 baseURL: "https://jetm.github.io/blog/"
-languageCode: "en-us"
+locale: "en-us"
 title: "Javier Tia's Blog"
 theme: "PaperMod"
 enableRobotsTXT: true
