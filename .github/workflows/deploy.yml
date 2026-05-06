@@ -7,9 +7,8 @@ on:
   workflow_dispatch:
     inputs:
       hugoVersion:
-        description: "Hugo Version"
+        description: "Hugo Version (leave blank for latest)"
         required: false
-        default: "0.154.2"
 
 # Allow one concurrent deployment
 concurrency:
@@ -27,16 +26,23 @@ permissions:
   pages: write
   id-token: write
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      HUGO_VERSION: ${{ github.event.inputs.hugoVersion || '0.154.2' }}
     steps:
       - name: Install Hugo CLI
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb \
-          && sudo dpkg -i ${{ runner.temp }}/hugo.deb
+          HUGO_VERSION="${{ github.event.inputs.hugoVersion }}"
+          if [ -z "$HUGO_VERSION" ]; then
+            HUGO_VERSION=$(gh release view --repo gohugoio/hugo --json tagName -q '.tagName | ltrimstr("v")')
+          fi
+          wget -O ${{ runner.temp }}/hugo.deb "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb"
+          sudo dpkg -i ${{ runner.temp }}/hugo.deb
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
