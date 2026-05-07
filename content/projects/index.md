@@ -50,15 +50,18 @@ firmware submitted to linux-firmware (MR !946, pipeline passing).
 
 ### libcamera Simple Pipeline - AGC and AWB fixes
 
-3-patch series (v4) fixing two bugs affecting all sensors with >8-bit
-output on the Simple pipeline: a proportional AGC controller replacing
-the fixed +/-10% bang-bang step (eliminates brightness flicker), and
-an AWB statistics normalization fix correcting a bit-depth mismatch
-that produced a ~9% green color cast. Reviewed by engineers from Red
-Hat, Collabora, and Ideas on Board.
+3-patch series fixing two bugs affecting all sensors with >8-bit output
+on the Simple pipeline: a proportional AGC controller replacing the
+fixed +/-10% bang-bang step (eliminates brightness flicker), and an AWB
+statistics normalization fix correcting a bit-depth mismatch that
+produced a ~9% green color cast. Reviewed by engineers from Red Hat,
+Collabora, and Ideas on Board. Merged 2026-05-07. A follow-up 2-patch
+series (sumShift cleanup + OV2740 tuning file calibrated from Intel
+AIQB binary) is in review.
 
-- **Status:** v4, active review
-- **Mailing list:** [libcamera-devel@](https://lists.libcamera.org/pipermail/libcamera-devel/2026-March/057635.html)
+- **Status:** Merged (May 2026)
+- **Patchwork:** [v5 series](https://patchwork.libcamera.org/project/libcamera/list/?series=5913)
+- **Follow-up:** [sumShift + OV2740 tuning](https://lists.libcamera.org/pipermail/libcamera-devel/2026-May/058643.html)
 - **Blog post:** [Intel IPU6 Webcam: From Proprietary Stack to Mainline](/blog/posts/ipu6-webcam-libcamera-on-linux/)
 - **Language:** C++
 

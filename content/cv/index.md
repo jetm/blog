@@ -64,8 +64,8 @@ reference stacks used by Linaro member companies.
 - Authored 8-patch Bluetooth series enabling MT6639 in btusb/btmtk
   (linux-bluetooth@, v2); companion firmware submitted to linux-firmware
 - Authored 3-patch libcamera AGC/AWB fixes for Simple pipeline sensors with >8-bit
-  output (libcamera-devel@, v4) — reviewed by engineers from Red Hat, Collabora,
-  and Ideas on Board
+  output (libcamera-devel@) — merged May 2026; follow-up 2-patch series (OV2740
+  tuning file) in review
 - Maintained Linux kernel stable branches for ARM embedded targets (KV260,
   RockPi4, Synquacer, AVA, TI SK-AM62P-LP, NXP i.MX 8M, Raspberry Pi, genericarm64):
   CVE backports, stability patches, regular release cadence
@@ -140,7 +140,7 @@ enterprise networking hardware.
 |---|---|---|
 | linux-wireless@ | MT7927 WiFi 7 — 18-patch series (chip ID, PCI IDs, DMA init, mac_reset, suspend/resume) | v4, active review |
 | linux-bluetooth@ | MT7927 Bluetooth — 8-patch series (USB ID, firmware filtering, naming) | v2, active review |
-| libcamera-devel@ | Simple pipeline AGC/AWB fixes (>8-bit sensor support) | v4, active review |
+| libcamera-devel@ | Simple pipeline AGC/AWB fixes (>8-bit sensor support) | Merged May 2026 |
 | linux-firmware | MT6639 Bluetooth firmware (MR!946) | Under review |
 | meta-arm (Yocto) | UEFI Secure Boot — full implementation (v8) | Merged Oct 2024 |
 | meta-arm (Yocto) | OP-TEE udev-based tee-supplicant activation | Merged 2023 |

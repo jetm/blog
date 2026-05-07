@@ -274,7 +274,7 @@ This forces a clean re-probe (including fresh CSE authentication) on every resum
 
 ## Upstreaming
 
-A three-patch series ([v4](https://patchwork.libcamera.org/project/libcamera/list/?series=5824)) has been submitted to the [libcamera mailing list](https://lists.libcamera.org/listinfo/libcamera-devel):
+A three-patch series ([v5](https://patchwork.libcamera.org/project/libcamera/list/?series=5913)) was merged into libcamera master on 2026-05-07:
 
 **1. Proportional AGC for the Simple pipeline.** The bang-bang controller in `src/ipa/simple/algorithms/agc.cpp` is replaced with a proportional controller. This is a generic improvement — any sensor on the Simple pipeline benefits from reduced overshoot. The patch is ~30 lines of changed logic.
 
@@ -286,7 +286,7 @@ The series started as four patches in v1, including a dedicated `ov2740.yaml` tu
 
 Barnabas Pocze from Ideas on Board tested v3 and v4 on a ThinkPad X1 Yoga Gen 7 (also OV2740 behind IPU6), confirming both the AGC and AWB fixes work on a second device. Robert Mader tested the AWB statistics patch on a Fairphone 5, which uses the CSI-2 packed code path — a different pipeline from IPU6 — and confirmed correct behavior there too. Three devices across two pipeline paths gives reasonable confidence the fixes are correct.
 
-The OV2740 tuning file (`ov2740.yaml`) remains useful as a local configuration — it explicitly lists the algorithm chain rather than relying on `uncalibrated.yaml`'s defaults — but it's not part of the upstream series since it's functionally equivalent.
+A [follow-up series](https://lists.libcamera.org/pipermail/libcamera-devel/2026-May/058643.html) is now in review with two patches: a cleanup that drops a redundant `if (sumShift_)` guard in `finishFrame()` (suggested during v5 review by Laurent Pinchart and Barnabás Pőcze), and the OV2740 tuning file calibrated from the Intel IPU6 AIQB binary shipped with the ThinkPad X1 Carbon Gen 10. The tuning file extracts black level, AWB gain limits, and eight CCMs (covering 2319 K to 6302 K) from `OV2740_CJFLE23_ADL.aiqb`. With the upstream merge providing correct AGC and AWB behavior, the tuning file's role is now to provide proper color correction matrices rather than to compensate for pipeline bugs.
 
 The `digital_gain` udev rule is a system-level workaround that doesn't belong upstream. The proper fix would be extending the Simple IPA's AGC to also manage `V4L2_CID_DIGITAL_GAIN` when the sensor's analogue gain range is exhausted.
 
@@ -299,7 +299,7 @@ After migration, the working configuration on a ThinkPad X1 Carbon (Alder Lake, 
 | `intel-ipu6`, `intel-ipu6-isys` | In-tree kernel module | Raw Bayer capture |
 | `ivsc-ace`, `ivsc-csi` | In-tree kernel module | Sensor power/CSI bridge |
 | `ov2740` | In-tree kernel module | Sensor driver |
-| `libcamera` 0.7.0 (patched) | Arch `extra` repo + 3 patches | Simple pipeline + AGC fix + AWB stats fix + OV2740 BLC |
+| `libcamera` 0.7.1+ | Arch `extra` repo | Simple pipeline + AGC fix + AWB stats fix + OV2740 BLC (merged upstream) |
 | `pipewire-libcamera` | Arch `extra` repo | PipeWire integration |
 | `ov2740.yaml` | Local tuning file | Explicit algorithm chain (optional — `uncalibrated.yaml` works) |
 | `99-ov2740-digital-gain.rules` | udev rule | digital_gain=2x at probe |
@@ -317,4 +317,5 @@ For video conferencing, which is what most laptop webcams are used for, it's suf
 - [Arch Linux Forums - IPU6 webcam](https://bbs.archlinux.org/viewtopic.php?pid=2287604) - Community OV2740 tuning discussion
 - [archlinux-ipu6-webcam](https://github.com/stefanpartheym/archlinux-ipu6-webcam) - AUR package for old stack (with suspend workaround scripts)
 - [Arch Wiki - Libcamera](https://wiki.archlinux.org/title/Libcamera)
-- [v4 patch series on Patchwork](https://patchwork.libcamera.org/project/libcamera/list/?series=5824) - Current upstream submission (AGC, AWB stats, OV2740 BLC)
+- [v5 patch series on Patchwork](https://patchwork.libcamera.org/project/libcamera/list/?series=5913) - Merged 2026-05-07 (AGC, AWB stats, OV2740 BLC)
+- [Follow-up series (sumShift cleanup + OV2740 tuning file)](https://lists.libcamera.org/pipermail/libcamera-devel/2026-May/058643.html) - In review
