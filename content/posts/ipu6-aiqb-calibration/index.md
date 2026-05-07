@@ -40,6 +40,10 @@ tuning file in libcamera (in review as of May 2026) was generated this way.
 
 ## Where AIQB files come from
 
+There are two sources.
+
+### Option A: intel/ipu6-camera-hal (easier)
+
 Intel maintains a repository of AIQB calibration files for IPU6 sensors at
 [intel/ipu6-camera-hal](https://github.com/intel/ipu6-camera-hal) under
 `config/linux/ipu6ep/`. At the time of writing it covers:
@@ -61,13 +65,6 @@ ov13b10.aiqb
 ov8856.aiqb
 ```
 
-The naming convention is `SENSOR_MODULE_PLATFORM.aiqb` for Alder Lake
-files, and just `sensor.aiqb` for older files. The module name (e.g.
-`CJFLE23` = Chicony camera module on Lenovo hardware) tells you which
-physical camera assembly this calibration targets, since the same sensor
-die can be mounted with different lenses, focus ranges, and IR filters
-across products.
-
 Download whichever file matches your hardware:
 
 ```bash
@@ -78,6 +75,57 @@ gh api repos/intel/ipu6-camera-hal/contents/config/linux/ipu6ep \
 gh api repos/intel/ipu6-camera-hal/contents/config/linux/ipu6ep/OV2740_CJFLE23_ADL.aiqb \
   --jq '.download_url' | xargs curl -sL -o OV2740_CJFLE23_ADL.aiqb
 ```
+
+If your sensor or module combination is not in that repository, use option B.
+
+### Option B: OEM Windows driver installer
+
+The authoritative source is the camera driver package your laptop
+manufacturer ships for Windows. These are Inno Setup installers (.exe) that
+bundle Intel's IPU6 driver, firmware, and the AIQB calibration files for
+the specific camera module on that machine. This is how the OV2740
+calibration for the ThinkPad X1 Carbon Gen 10 was obtained.
+
+You need two tools: `p7zip` to unpack the outer installer archive, and
+`innoextract` to unpack the Inno Setup payload.
+
+```bash
+# Arch Linux
+sudo pacman -S p7zip innoextract
+```
+
+Download the Windows camera driver from your OEM support page (Lenovo,
+Dell, HP, etc.) - look for "Intel IPU6 Camera Driver" or similar. For
+the ThinkPad X1 Carbon Gen 10, the file is `n3ace31w.exe` from Lenovo's
+support site. Then extract on Linux:
+
+```bash
+# Step 1: unpack the outer archive (some installers are just self-extracting zip)
+7z x CameraDriver.exe -o camera-extracted/
+
+# Step 2: find and unpack the Inno Setup payload
+# The .exe itself or a file inside is usually an Inno Setup installer
+innoextract camera-extracted/setup.exe -d camera-unpacked/
+
+# Step 3: find the AIQB files
+find camera-unpacked/ -name "*.aiqb"
+```
+
+The exact inner structure varies by OEM and driver version. For the Lenovo
+ThinkPad X1 Carbon Gen 10 camera driver (`n3ace31w.exe`), the AIQB files
+are nested inside a sub-installer that `7z` can also unpack directly:
+
+```bash
+7z x n3ace31w.exe -o ipu6-extracted/
+find ipu6-extracted/ -name "*.aiqb"
+# -> ipu6-extracted/.../OV2740_CJFLE23_ADL.aiqb
+```
+
+The naming convention is `SENSOR_MODULE_PLATFORM.aiqb` for Alder Lake
+files (e.g. `CJFLE23` = Chicony camera module on Lenovo hardware). The
+module name matters because the same sensor die is mounted with different
+lenses and IR filters across products, and the calibration is
+module-specific, not just sensor-specific.
 
 ## The AIQB binary format
 
