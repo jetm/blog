@@ -29,9 +29,10 @@ My current active upstream work includes:
   the MediaTek MT7927/MT6639 (Filogic 380) to the mt76/mt7925 driver — v4,
   community-tested across 10+ hardware platforms
 - **Linux kernel (linux-bluetooth@):** 8-patch series enabling MT6639 Bluetooth
-  in btusb/btmtk — v2, active review
-- **libcamera (libcamera-devel@):** AGC and AWB fixes for the Simple pipeline
-  affecting all sensors with >8-bit output — v4, active review
+  in btusb/btmtk — merged into bluetooth-next, targeting mainline Linux 7.1/7.2
+- **libcamera (libcamera-devel@):** 3-patch AGC and AWB fix series for the Simple
+  pipeline — merged May 2026. Follow-up 2-patch series (sumShift cleanup + OV2740
+  tuning file) in review
 
 Everything is public and verifiable via lore.kernel.org and the projects page.
 
@@ -59,13 +60,13 @@ automation, package registry tooling, and build system integration.
 
 ## About This Blog
 
-This blog covers upstream kernel development, Yocto, embedded security, and
+This blog covers upstream kernel development, hardware bring-up, Yocto, and
 systems engineering — written from real problems encountered in production. Posts
 tend to be long, hands-on, and include the parts that didn't work the first time.
 
-Recent series: the full MT7927 WiFi 7 upstream journey across 4 posts, Intel
-IPU6 webcam mainline migration, DKMS packaging for in-review kernel patches,
-and UEFI Secure Boot on ARM with QEMU.
+Published series: the full MT7927 story across 4 posts (WiFi 7 driver development
+and BT upstreaming), Intel IPU6 webcam mainline migration, Yocto build systems
+and CRA compliance, and practical Linux tooling.
 
 ## Work With Me
 
