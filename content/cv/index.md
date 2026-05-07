@@ -13,13 +13,13 @@ outputs:
 
 ## Summary
 
-Senior Systems Engineer with 13+ years of production embedded software experience,
+Senior Systems Engineer with 15+ years of production embedded software experience,
 specializing in upstream Linux kernel development, Yocto/OpenEmbedded, embedded
 security (UEFI Secure Boot, OP-TEE), and CI/CD infrastructure for hardware
 platforms. Active upstream contributor with recent merges into bluetooth-next
 (targeting Linux 7.1/7.2) and libcamera, and active patch series under review on
-linux-wireless@, linux-firmware, and Yocto. Comfortable working fully remotely across time zones.
-engagements and full-time remote roles.
+linux-wireless@, linux-firmware, and Yocto. Comfortable working fully remotely
+across time zones. Open to consulting engagements and full-time remote roles.
 
 ## Technical Skills
 
