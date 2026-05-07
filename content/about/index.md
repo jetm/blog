@@ -13,7 +13,7 @@ outputs:
 I'm Javier Tia, a systems engineer specializing in upstream Linux kernel
 development, embedded Linux, and CI/CD infrastructure for hardware platforms.
 
-I work close to the metal — writing and upstreaming kernel drivers, building
+I work close to the metal - writing and upstreaming kernel drivers, building
 Yocto-based BSPs from scratch, implementing UEFI Secure Boot on ARM platforms,
 and building the automated test infrastructure that keeps it all green across
 kernel releases.
@@ -26,12 +26,12 @@ and LAVA-based CI/CD infrastructure for Yocto image validation.
 My current active upstream work includes:
 
 - **Linux kernel (linux-wireless@):** 18-patch series adding WiFi 7 support for
-  the MediaTek MT7927/MT6639 (Filogic 380) to the mt76/mt7925 driver — v4,
+  the MediaTek MT7927/MT6639 (Filogic 380) to the mt76/mt7925 driver - v4,
   community-tested across 10+ hardware platforms
 - **Linux kernel (linux-bluetooth@):** 8-patch series enabling MT6639 Bluetooth
-  in btusb/btmtk — merged into bluetooth-next, targeting mainline Linux 7.1/7.2
+  in btusb/btmtk - merged into bluetooth-next, targeting mainline Linux 7.1/7.2
 - **libcamera (libcamera-devel@):** 3-patch AGC and AWB fix series for the Simple
-  pipeline — merged May 2026. Follow-up 2-patch series (sumShift cleanup + OV2740
+  pipeline - merged May 2026. Follow-up 2-patch series (sumShift cleanup + OV2740
   tuning file) in review
 
 Everything is public and verifiable via lore.kernel.org and the projects page.
@@ -55,13 +55,13 @@ automated hardware testing. Turning manual QA into reproducible, automated
 regression detection.
 
 **Developer tooling**
-Go and Python tooling for engineering workflows — CLI tools, GitLab/GitHub
+Go and Python tooling for engineering workflows - CLI tools, GitLab/GitHub
 automation, package registry tooling, and build system integration.
 
 ## About This Blog
 
 This blog covers upstream kernel development, hardware bring-up, Yocto, and
-systems engineering — written from real problems encountered in production. Posts
+systems engineering - written from real problems encountered in production. Posts
 tend to be long, hands-on, and include the parts that didn't work the first time.
 
 Published series: the full MT7927 story across 4 posts (WiFi 7 driver development
@@ -73,11 +73,11 @@ and CRA compliance, and practical Linux tooling.
 I'm currently available for consulting engagements. I work with:
 
 - **Semiconductor vendors and OEMs** needing upstream kernel enablement for new
-  silicon — WiFi, Bluetooth, camera, and platform drivers
+  silicon - WiFi, Bluetooth, camera, and platform drivers
 - **Embedded product companies** building on Yocto/OpenEmbedded who need BSP
   bring-up, Secure Boot implementation, or OP-TEE integration
 - **Engineering teams** building or improving automated test infrastructure for
-  embedded Linux — LAVA lab setup, GitLab CI pipelines, hardware-in-the-loop
+  embedded Linux - LAVA lab setup, GitLab CI pipelines, hardware-in-the-loop
   testing
 
 Engagements range from short advisory and code review to multi-month retainers.
