@@ -54,7 +54,7 @@ params:
   env: production
 
   # SEO metadata
-  description: "Systems programming, Linux internals, and developer tooling — hands-on technical articles from the field"
+  description: "Upstream kernel development, hardware bring-up, Yocto, and embedded Linux - engineering close to the metal"
   author: "Javier Tia"
 
   # Dark mode toggle
@@ -80,7 +80,7 @@ params:
   # Home page
   homeInfoParams:
     Title: "Systems & Linux Engineering"
-    Content: "Technical deep-dives into Linux internals, kernel development, and systems programming"
+    Content: "Upstream kernel development, hardware bring-up, Yocto, and embedded Linux - engineering close to the metal"
 
   # Analytics
   goatcounter:
