@@ -34,4 +34,4 @@ npm run build:search
 
 ## Deployment
 
-Deployment is automated via `.github/workflows/deploy.yml` — push to the default branch triggers build and deploy to GitHub Pages.
+Deployment is automated via `.github/workflows/deploy.yml` - push to the default branch triggers build and deploy to GitHub Pages.

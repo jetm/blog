@@ -4,8 +4,8 @@ The site is deployed to GitHub Pages via a GitHub Actions workflow at `.github/w
 
 ## Triggers
 
-- **Push to `main`** — automatic build and deploy
-- **Manual dispatch** (`workflow_dispatch`) — trigger from GitHub Actions UI with optional Hugo version override
+- **Push to `main`** - automatic build and deploy
+- **Manual dispatch** (`workflow_dispatch`) - trigger from GitHub Actions UI with optional Hugo version override
 
 ## Build Steps
 
@@ -37,8 +37,8 @@ Override via manual dispatch by specifying a `hugoVersion` input in the workflow
 
 Two caches speed up builds:
 
-- **Hugo modules** — keyed on `go.sum` hash, stored at `/tmp/hugo_cache`
-- **npm packages** — keyed on `package-lock.json` hash, stored at `~/.npm`
+- **Hugo modules** - keyed on `go.sum` hash, stored at `/tmp/hugo_cache`
+- **npm packages** - keyed on `package-lock.json` hash, stored at `~/.npm`
 
 ## Concurrency
 

@@ -53,11 +53,11 @@ blog/
 
 PaperMod customization is done through layout overrides in `layouts/`, not by editing theme files:
 
-- **`layouts/partials/head.html`** — full `<head>` override (Pagefind CSS, preloads)
-- **`layouts/partials/extend_head.html`** — additional head content
-- **`layouts/partials/extend_footer.html`** — footer additions (GoatCounter script)
-- **`layouts/partials/process-image.html`** — responsive image partial
-- **`layouts/_default/_markup/`** — markdown render hook overrides
+- **`layouts/partials/head.html`** - full `<head>` override (Pagefind CSS, preloads)
+- **`layouts/partials/extend_head.html`** - additional head content
+- **`layouts/partials/extend_footer.html`** - footer additions (GoatCounter script)
+- **`layouts/partials/process-image.html`** - responsive image partial
+- **`layouts/_default/_markup/`** - markdown render hook overrides
 
 ## Search
 

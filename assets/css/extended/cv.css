@@ -86,7 +86,7 @@
   color: var(--border);
 }
 
-/* CV Body — markdown rendered content */
+/* CV Body - markdown rendered content */
 .cv-body h2 {
   font-size: 1.05rem;
   font-weight: 700;
@@ -166,7 +166,7 @@
   text-decoration: underline;
 }
 
-/* Print-only generation date — invisible on screen */
+/* Print-only generation date - invisible on screen */
 .print-only {
   display: none;
 }

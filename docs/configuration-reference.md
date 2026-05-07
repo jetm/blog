@@ -68,7 +68,7 @@ params:
     code: "jetm"
 ```
 
-GoatCounter is a privacy-friendly analytics service. The tracking script is injected by `extend_footer.html` only in production. It respects the browser's Do Not Track (`navigator.doNotTrack`) header — tracking is disabled when DNT is set.
+GoatCounter is a privacy-friendly analytics service. The tracking script is injected by `extend_footer.html` only in production. It respects the browser's Do Not Track (`navigator.doNotTrack`) header - tracking is disabled when DNT is set.
 
 Dashboard: `https://jetm.goatcounter.com`
 

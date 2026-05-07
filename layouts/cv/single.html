@@ -1,7 +1,7 @@
 {{- define "main" }}
 <div class="cv-page">
 
-  {{/* Print / Download button — hidden in print */}}
+  {{/* Print / Download button - hidden in print */}}
   <div class="cv-actions no-print">
     <button onclick="(function(){var t=document.title,d=new Date(),y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0');document.title='Javier_Tia_CV_'+y+m;window.print();document.title=t;})()" class="cv-print-btn">
       ↓ Save as PDF
@@ -9,7 +9,7 @@
     <span class="cv-hint">Use your browser's "Save as PDF" destination when printing</span>
   </div>
 
-  {{/* Print-only generation date — hidden on screen, visible in PDF */}}
+  {{/* Print-only generation date - hidden on screen, visible in PDF */}}
   <div class="cv-print-meta print-only">
     Generated on <span id="cv-print-date"></span> · <a href="https://jetm.github.io/blog/cv/">jetm.github.io/blog/cv/</a>
   </div>
@@ -23,7 +23,7 @@
   {{/* CV Header */}}
   <header class="cv-header">
     <h1 class="cv-name">Javier Tia</h1>
-    <p class="cv-title">Senior Systems Engineer — Linux Kernel · Embedded Linux · CI/CD</p>
+    <p class="cv-title">Senior Systems Engineer - Linux Kernel · Embedded Linux · CI/CD</p>
     <div class="cv-contact">
       <a href="mailto:javier@jetm.me">javier@jetm.me</a>
       <span class="cv-sep">·</span>
@@ -37,7 +37,7 @@
     </div>
   </header>
 
-  {{/* CV Body — rendered from Markdown content */}}
+  {{/* CV Body - rendered from Markdown content */}}
   <div class="cv-body">
     {{ .Content }}
   </div>
