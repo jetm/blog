@@ -16,9 +16,9 @@ outputs:
 Senior Systems Engineer with 13+ years of production embedded software experience,
 specializing in upstream Linux kernel development, Yocto/OpenEmbedded, embedded
 security (UEFI Secure Boot, OP-TEE), and CI/CD infrastructure for hardware
-platforms. Active upstream contributor with patch series currently under review on
-linux-wireless@, linux-bluetooth@, linux-firmware, U-Boot, Yocto and more FLOSS
-projects. Comfortable working fully remotely across time zones. Open to consulting
+platforms. Active upstream contributor with recent merges into bluetooth-next
+(targeting Linux 7.1/7.2) and libcamera, and active patch series under review on
+linux-wireless@, linux-firmware, and Yocto. Comfortable working fully remotely across time zones.
 engagements and full-time remote roles.
 
 ## Technical Skills
@@ -61,8 +61,9 @@ reference stacks used by Linaro member companies.
 - Authored 18-patch WiFi 7 series for MediaTek MT7927/MT6639 (Filogic 380) in the
   mt76/mt7925 driver (linux-wireless@, v4) - community-tested across 10+ hardware
   platforms with 9 Tested-by tags from ASUS, Lenovo, Foxconn, and AMD
-- Authored 8-patch Bluetooth series enabling MT6639 in btusb/btmtk
-  (linux-bluetooth@, v2); companion firmware submitted to linux-firmware
+- Authored 8-patch Bluetooth series enabling MT6639 in btusb/btmtk; merged into
+  bluetooth-next, targeting mainline Linux 7.1/7.2; companion firmware submitted
+  to linux-firmware
 - Authored 3-patch libcamera AGC/AWB fixes for Simple pipeline sensors with >8-bit
   output (libcamera-devel@) - merged May 2026; follow-up 2-patch series (OV2740
   tuning file) in review
@@ -94,7 +95,7 @@ reference stacks used by Linaro member companies.
 - Integrated ARM development boards into LAVA, SQUAD, and TuxSuite pipelines,
   increasing automated hardware test coverage and reducing manual validation cycles
 - Built SOAFEE test framework: container engine, k3s, Xen virtualization, OpenAD
-  Kit, and Linux ABI compliance testing with TAP reporting and LAVA integration —
+  Kit, and Linux ABI compliance testing with TAP reporting and LAVA integration -
   30+ merged MRs
 
 **Yocto/OpenEmbedded**
@@ -139,7 +140,7 @@ enterprise networking hardware.
 | Project | Contribution | Status |
 |---|---|---|
 | linux-wireless@ | MT7927 WiFi 7 - 18-patch series (chip ID, PCI IDs, DMA init, mac_reset, suspend/resume) | v4, active review |
-| linux-bluetooth@ | MT7927 Bluetooth - 8-patch series (USB ID, firmware filtering, naming) | v2, active review |
+| linux-bluetooth@ | MT7927 Bluetooth - 8-patch series (USB ID, firmware filtering, naming) | Merged into bluetooth-next (targeting Linux 7.1/7.2) |
 | libcamera-devel@ | Simple pipeline AGC/AWB fixes (>8-bit sensor support) | Merged May 2026 |
 | linux-firmware | MT6639 Bluetooth firmware (MR!946) | Under review |
 | meta-arm (Yocto) | UEFI Secure Boot - full implementation (v8) | Merged Oct 2024 |
