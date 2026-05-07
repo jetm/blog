@@ -17,6 +17,7 @@ pagination:
 buildDrafts: false
 buildFuture: false
 buildExpired: false
+enableGitInfo: true
 
 # Output formats
 outputs:
@@ -74,7 +75,7 @@ params:
   ShowPostNavLinks: true
   ShowBreadCrumbs: true
   ShowCodeCopyButtons: false
-  ShowWordCount: true
+  ShowWordCount: false
 
   # Home page
   homeInfoParams:
