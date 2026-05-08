@@ -1,7 +1,7 @@
 ---
 title: "Extracting Sensor Calibration from Intel's AIQB Binary for libcamera"
 date: 2026-05-07T21:00:00Z
-draft: true
+draft: false
 description: "Intel ships per-sensor calibration data in proprietary AIQB binaries alongside their Windows camera drivers. Here is how to parse them to generate libcamera Simple IPA tuning files with accurate CCMs and AWB limits."
 ShowToc: true
 ShowReadingTime: true
