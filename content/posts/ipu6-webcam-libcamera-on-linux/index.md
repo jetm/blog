@@ -299,7 +299,7 @@ After migration, the working configuration on a ThinkPad X1 Carbon (Alder Lake, 
 | `intel-ipu6`, `intel-ipu6-isys` | In-tree kernel module | Raw Bayer capture |
 | `ivsc-ace`, `ivsc-csi` | In-tree kernel module | Sensor power/CSI bridge |
 | `ov2740` | In-tree kernel module | Sensor driver |
-| `libcamera` 0.7.1+ | Arch `extra` repo | Simple pipeline + AGC fix + AWB stats fix + OV2740 BLC (merged upstream) |
+| `libcamera` 0.7.2+ | Arch `extra` repo | Simple pipeline + AGC fix + AWB stats fix + OV2740 BLC (merged upstream) |
 | `pipewire-libcamera` | Arch `extra` repo | PipeWire integration |
 | `ov2740.yaml` | Local tuning file | Explicit algorithm chain (optional - `uncalibrated.yaml` works) |
 | `99-ov2740-digital-gain.rules` | udev rule | digital_gain=2x at probe |
