@@ -118,6 +118,29 @@ reference stacks used by Linaro member companies.
 
 ---
 
+### Open Source Engineer (Independent)
+**Mar 2026 – Present | Remote**
+
+Continued upstream kernel development and open source tooling after leaving Linaro.
+
+**Upstream & Open Source**
+- Authored libcamera follow-up series: `sumShift` cleanup and OV2740 sensor tuning file
+  calibrated from Intel AIQB binary (libcamera-devel@, under review)
+- Released mediatek-mt7927-dkms v2.10-1 and v2.11-1 tracking the upstream WiFi 7 patch series
+- Built shipcheck - EU Cyber Resilience Act (CRA) compliance auditor for Yocto/OE builds:
+  reads SBOM, CVE scan output, code-signing artefacts, and license manifests; produces
+  readiness score and multi-file CRA evidence dossier. v0.0.6 released May 2026, published
+  on PyPI. Contributed upstream Yocto SPDX 3.0 patch series (openembedded-core) as part of
+  gap analysis
+
+**Technical Writing**
+- [Extracting Sensor Calibration from Intel's AIQB Binary for libcamera](/blog/posts/ipu6-aiqb-calibration/) - May 2026
+- [Yocto build tunables and their hidden costs](/blog/posts/yocto-build-tunables-and-their-hidden-costs/) - May 2026
+- [Auditing your Yocto build for CRA compliance](/blog/posts/auditing-your-yocto-build-for-cra-compliance/) - Apr 2026
+- [When You're Fired, Your Next Job Is Finding a Job](/blog/posts/when-youre-fired-your-next-job-is-finding-a-job/) - Apr 2026
+
+---
+
 ### Hewlett Packard Enterprise / Aruba - Systems Engineer
 **Mar 2011 – Sep 2022 | Remote**
 
@@ -142,6 +165,7 @@ enterprise networking hardware.
 | linux-wireless@ | MT7927 WiFi 7 - 18-patch series (chip ID, PCI IDs, DMA init, mac_reset, suspend/resume) | v4, active review |
 | linux-bluetooth@ | MT7927 Bluetooth - 8-patch series (USB ID, firmware filtering, naming) | Merged into bluetooth-next (targeting Linux 7.1/7.2) |
 | libcamera-devel@ | Simple pipeline AGC/AWB fixes (>8-bit sensor support) | Merged May 2026 |
+| libcamera-devel@ | sumShift cleanup + OV2740 sensor tuning file (Intel AIQB extraction) | Under review |
 | linux-firmware | MT6639 Bluetooth firmware (MR!946) | Under review |
 | meta-arm (Yocto) | UEFI Secure Boot - full implementation (v8) | Merged Oct 2024 |
 | meta-arm (Yocto) | OP-TEE udev-based tee-supplicant activation | Merged 2023 |

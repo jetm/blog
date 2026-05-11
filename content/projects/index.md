@@ -62,6 +62,7 @@ AIQB binary) is in review.
 - **Status:** Merged (May 2026)
 - **Patchwork:** [v5 series](https://patchwork.libcamera.org/project/libcamera/list/?series=5913)
 - **Follow-up:** [sumShift + OV2740 tuning](https://lists.libcamera.org/pipermail/libcamera-devel/2026-May/058643.html)
+- **Follow-up blog:** [Extracting Sensor Calibration from Intel's AIQB Binary for libcamera](/blog/posts/ipu6-aiqb-calibration/)
 - **Blog post:** [Intel IPU6 Webcam: From Proprietary Stack to Mainline](/blog/posts/ipu6-webcam-libcamera-on-linux/)
 - **Language:** C++
 
@@ -97,7 +98,8 @@ platforms with multiple /dev/teepriv* devices.
 DKMS package bridging out-of-tree MT7927 WiFi 7 + Bluetooth 5.4
 patches to Arch Linux AUR users while upstream review is in progress.
 Packages for Debian and Fedora. Supports 10+ hardware variants with automated
-firmware extraction and an 8-hour stability test script.
+firmware extraction and an 8-hour stability test script. Released v2.10-1 and
+v2.11-1 (Apr 2026) tracking the upstream WiFi 7 patch series at v4.
 
 - **Repository:** [github.com/jetm/mediatek-mt7927-dkms](https://github.com/jetm/mediatek-mt7927-dkms)
 - **Language:** Shell, C, Python
@@ -127,6 +129,22 @@ a comprehensive test suite.
 
 - **Repository:** [github.com/jetm/glpkg](https://github.com/jetm/glpkg)
 - **PyPI:** [glpkg-cli](https://pypi.org/project/glpkg-cli/)
+- **Language:** Python
+
+---
+
+### shipcheck
+
+EU Cyber Resilience Act (CRA) compliance auditor for embedded Linux and Yocto builds.
+Reads what your Yocto build emits - SBOMs, CVE scan output, signing artefacts, license
+manifests - and reports whether the image is ready to ship. Produces a readiness score
+and a multi-file CRA evidence dossier (Annex VII technical doc, Declaration of
+Conformity, CVE report, license audit). Pilot 0001 (poky Scarthgap
+core-image-minimal) validated the full check set against real bitbake output. v0.0.6
+released May 2026.
+
+- **Repository:** [github.com/jetm/shipcheck](https://github.com/jetm/shipcheck)
+- **PyPI:** [shipcheck](https://pypi.org/project/shipcheck/)
 - **Language:** Python
 
 ---
@@ -439,8 +457,17 @@ soafee/ namespace.
 ### Personal Blog
 
 In-depth articles on Linux kernel development, Yocto, embedded
-security, and systems engineering. Covers the full MT7927 upstream
-journey across 4 posts, Intel IPU6 mainline migration, DKMS packaging,
-UEFI/QEMU workflows, and more.
+security, and systems engineering.
+
+- [Extracting Sensor Calibration from Intel's AIQB Binary for libcamera](/blog/posts/ipu6-aiqb-calibration/) - May 2026
+- [Yocto build tunables and their hidden costs](/blog/posts/yocto-build-tunables-and-their-hidden-costs/) - May 2026
+- [When You're Fired, Your Next Job Is Finding a Job](/blog/posts/when-youre-fired-your-next-job-is-finding-a-job/) - Apr 2026
+- [Auditing your Yocto build for CRA compliance](/blog/posts/auditing-your-yocto-build-for-cra-compliance/) - Apr 2026
+- [MT7927 Bluetooth: From DKMS to Upstream](/blog/posts/mt7927-bluetooth-upstream-submission/) - Mar 2026
+- [MT7927 WiFi on Linux: Making It Work](/blog/posts/mt7927-wifi-making-it-work/) - Mar 2026
+- [Intel IPU6 Webcam on Linux: From Proprietary Stack to Mainline](/blog/posts/ipu6-webcam-libcamera-on-linux/) - Feb 2026
+- [MT7927 WiFi on Linux: Wrong Driver, Wrong Chip, No Driver](/blog/posts/mt7927-wifi-the-missing-piece/) - Feb 2026
+- [Enabling MediaTek MT7927 Bluetooth on Linux: A 15-Month Journey](/blog/posts/enabling-mt7927-bluetooth-on-linux/) - Feb 2026
+- [Building a Bootable Windows USB from Linux for Firmware Updates](/blog/posts/building-bootable-windows-usb-from-linux-for-firmware-updates/) - Feb 2026
 
 [All posts](/blog/posts/)
