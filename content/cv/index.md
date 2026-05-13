@@ -49,6 +49,29 @@ cross-compilation, UART/I2C/SPI, systemd, udev, initramfs
 
 ## Experience
 
+### Open Source Engineer (Independent)
+**Mar 2026 – Present | Remote**
+
+Continued upstream kernel development and open source tooling after leaving Linaro.
+
+**Upstream & Open Source**
+- Authored libcamera follow-up series: `sumShift` cleanup and OV2740 sensor tuning file
+  calibrated from Intel AIQB binary (libcamera-devel@, under review)
+- Released mediatek-mt7927-dkms v2.10-1 and v2.11-1 tracking the upstream WiFi 7 patch series
+- Built shipcheck - EU Cyber Resilience Act (CRA) compliance auditor for Yocto/OE builds:
+  reads SBOM, CVE scan output, code-signing artefacts, and license manifests; produces
+  readiness score and multi-file CRA evidence dossier. v0.0.6 released May 2026, published
+  on PyPI. Contributed upstream Yocto SPDX 3.0 patch series (openembedded-core) as part of
+  gap analysis
+
+**Technical Writing**
+- [Extracting Sensor Calibration from Intel's AIQB Binary for libcamera](/blog/posts/ipu6-aiqb-calibration/) - May 2026
+- [Yocto build tunables and their hidden costs](/blog/posts/yocto-build-tunables-and-their-hidden-costs/) - May 2026
+- [Auditing your Yocto build for CRA compliance](/blog/posts/auditing-your-yocto-build-for-cra-compliance/) - Apr 2026
+- [When You're Fired, Your Next Job Is Finding a Job](/blog/posts/when-youre-fired-your-next-job-is-finding-a-job/) - Apr 2026
+
+---
+
 ### Linaro - Senior Systems Engineer
 **Sep 2022 – Mar 2026 | Remote**
 
@@ -115,29 +138,6 @@ reference stacks used by Linaro member companies.
   shell tooling, reducing manual device onboarding effort
 - Integrated EFI variable tooling (rhboot/efivar) into embedded firmware stacks,
   enabling runtime EFI variable access from Linux user-space on ARM platforms
-
----
-
-### Open Source Engineer (Independent)
-**Mar 2026 – Present | Remote**
-
-Continued upstream kernel development and open source tooling after leaving Linaro.
-
-**Upstream & Open Source**
-- Authored libcamera follow-up series: `sumShift` cleanup and OV2740 sensor tuning file
-  calibrated from Intel AIQB binary (libcamera-devel@, under review)
-- Released mediatek-mt7927-dkms v2.10-1 and v2.11-1 tracking the upstream WiFi 7 patch series
-- Built shipcheck - EU Cyber Resilience Act (CRA) compliance auditor for Yocto/OE builds:
-  reads SBOM, CVE scan output, code-signing artefacts, and license manifests; produces
-  readiness score and multi-file CRA evidence dossier. v0.0.6 released May 2026, published
-  on PyPI. Contributed upstream Yocto SPDX 3.0 patch series (openembedded-core) as part of
-  gap analysis
-
-**Technical Writing**
-- [Extracting Sensor Calibration from Intel's AIQB Binary for libcamera](/blog/posts/ipu6-aiqb-calibration/) - May 2026
-- [Yocto build tunables and their hidden costs](/blog/posts/yocto-build-tunables-and-their-hidden-costs/) - May 2026
-- [Auditing your Yocto build for CRA compliance](/blog/posts/auditing-your-yocto-build-for-cra-compliance/) - Apr 2026
-- [When You're Fired, Your Next Job Is Finding a Job](/blog/posts/when-youre-fired-your-next-job-is-finding-a-job/) - Apr 2026
 
 ---
 
