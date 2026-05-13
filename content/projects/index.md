@@ -41,7 +41,7 @@ ID registration, hardware variant support, firmware section filtering
 to prevent chip hang, and firmware naming corrections. Companion
 firmware submitted to linux-firmware (MR !946, pipeline passing).
 
-- **Status:** v2, active review
+- **Status:** Merged (April 2026)
 - **Mailing list:** [linux-bluetooth@](https://lore.kernel.org/linux-bluetooth/?q=javier+tia)
 - **Blog post:** [MT7927 Bluetooth: From DKMS to Upstream](/blog/posts/mt7927-bluetooth-upstream-submission/)
 - **Language:** C

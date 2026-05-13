@@ -16,9 +16,9 @@ outputs:
 Senior Systems Engineer with 15+ years of production embedded software experience,
 specializing in upstream Linux kernel development, Yocto/OpenEmbedded, embedded
 security (UEFI Secure Boot, OP-TEE), and CI/CD infrastructure for hardware
-platforms. Active upstream contributor with recent merges into bluetooth-next
-(targeting Linux 7.1/7.2) and libcamera, and active patch series under review on
-linux-wireless@, linux-firmware, and Yocto. Comfortable working fully remotely
+Active upstream contributor with recent merges into mainline Linux
+(Bluetooth, libcamera) and active patch series under review on
+linux-wireless@, linux-firmware, and Yocto.
 across time zones. Open to consulting engagements and full-time remote roles.
 
 ## Technical Skills
@@ -85,8 +85,7 @@ reference stacks used by Linaro member companies.
   mt76/mt7925 driver (linux-wireless@, v4) - community-tested across 10+ hardware
   platforms with 9 Tested-by tags from ASUS, Lenovo, Foxconn, and AMD
 - Authored 8-patch Bluetooth series enabling MT6639 in btusb/btmtk; merged into
-  bluetooth-next, targeting mainline Linux 7.1/7.2; companion firmware submitted
-  to linux-firmware
+  mainline (April 2026); companion firmware submitted to linux-firmware
 - Authored 3-patch libcamera AGC/AWB fixes for Simple pipeline sensors with >8-bit
   output (libcamera-devel@) - merged May 2026; follow-up 2-patch series (OV2740
   tuning file) in review
@@ -163,7 +162,7 @@ enterprise networking hardware.
 | Project | Contribution | Status |
 |---|---|---|
 | linux-wireless@ | MT7927 WiFi 7 - 18-patch series (chip ID, PCI IDs, DMA init, mac_reset, suspend/resume) | v4, active review |
-| linux-bluetooth@ | MT7927 Bluetooth - 8-patch series (USB ID, firmware filtering, naming) | Merged into bluetooth-next (targeting Linux 7.1/7.2) |
+| linux-bluetooth@ | MT7927 Bluetooth - 8-patch series (USB ID, firmware filtering, naming) | Merged (April 2026) |
 | libcamera-devel@ | Simple pipeline AGC/AWB fixes (>8-bit sensor support) | Merged May 2026 |
 | libcamera-devel@ | sumShift cleanup + OV2740 sensor tuning file (Intel AIQB extraction) | Under review |
 | linux-firmware | MT6639 Bluetooth firmware (MR!946) | Under review |
