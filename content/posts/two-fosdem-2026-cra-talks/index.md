@@ -1,6 +1,6 @@
 ---
 title: "Two FOSDEM talks on the CRA, from opposite sides of the table"
-date: 2026-05-15T20:00:00Z
+date: 2026-05-15T14:39:00Z
 draft: false
 description: "What I gathered from watching two FOSDEM 2026 talks on the Cyber
   Resilience Act: one from German IT lawyers explaining what manufacturers should
