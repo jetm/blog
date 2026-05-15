@@ -1,0 +1,29 @@
+{{- define "main" }}
+<div class="cv-page">
+
+  {{/* Print / Download button - hidden in print */}}
+  <div class="cv-actions no-print">
+    <button onclick="(function(){var t=document.title,d=new Date(),y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0');document.title='Javier_Tia_Carta_Capgemini_'+y+m;window.print();document.title=t;})()" class="cv-print-btn">
+      ↓ Guardar como PDF
+    </button>
+    <span class="cv-hint">Selecciona "Guardar como PDF" como destino al imprimir</span>
+  </div>
+
+  {{/* Print-only generation date - hidden on screen, visible in PDF */}}
+  <div class="cv-print-meta print-only">
+    Generado el <span id="cv-print-date"></span>
+  </div>
+
+  <script>
+    document.getElementById('cv-print-date').textContent = new Date().toLocaleDateString('es', {
+      year: 'numeric', month: 'long', day: 'numeric'
+    });
+  </script>
+
+  {{/* Letter body - rendered from Markdown content */}}
+  <div class="cv-body">
+    {{ .Content }}
+  </div>
+
+</div>
+{{- end }}

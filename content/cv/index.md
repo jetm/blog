@@ -13,13 +13,13 @@ outputs:
 
 ## Summary
 
-Senior Systems Engineer with 15+ years of production embedded software experience,
-specializing in upstream Linux kernel development, Yocto/OpenEmbedded, embedded
-security (UEFI Secure Boot, OP-TEE), and CI/CD infrastructure for hardware
-Active upstream contributor with recent merges into mainline Linux
-(Bluetooth, libcamera) and active patch series under review on
-linux-wireless@, linux-firmware, and Yocto.
-across time zones. Open to consulting engagements and full-time remote roles.
+Senior Systems Engineer with 15+ years of production embedded software
+experience, specializing in upstream Linux kernel development,
+Yocto/OpenEmbedded, embedded security (UEFI Secure Boot, OP-TEE), and CI/CD
+infrastructure for hardware. Active upstream contributor with recent merges
+into mainline Linux (Bluetooth, libcamera) and active patch series under
+review on linux-wireless@, linux-firmware, and Yocto. Open to consulting
+engagements and full-time remote roles.
 
 ## Technical Skills
 
@@ -52,23 +52,22 @@ cross-compilation, UART/I2C/SPI, systemd, udev, initramfs
 ### Open Source Engineer (Independent)
 **Mar 2026 – Present | Remote**
 
-Continued upstream kernel development and open source tooling after leaving Linaro.
+After leaving Linaro, continuing upstream Linux kernel, libcamera, and
+Yocto/OE patches. Maintaining open-source tooling work and writing
+technical articles.
 
-**Upstream & Open Source**
-- Authored libcamera follow-up series: `sumShift` cleanup and OV2740 sensor tuning file
-  calibrated from Intel AIQB binary (libcamera-devel@, under review)
-- Released mediatek-mt7927-dkms v2.10-1 and v2.11-1 tracking the upstream WiFi 7 patch series
-- Built shipcheck - EU Cyber Resilience Act (CRA) compliance auditor for Yocto/OE builds:
-  reads SBOM, CVE scan output, code-signing artefacts, and license manifests; produces
-  readiness score and multi-file CRA evidence dossier. v0.0.6 released May 2026, published
-  on PyPI. Contributed upstream Yocto SPDX 3.0 patch series (openembedded-core) as part of
-  gap analysis
-
-**Technical Writing**
-- [Extracting Sensor Calibration from Intel's AIQB Binary for libcamera](/blog/posts/ipu6-aiqb-calibration/) - May 2026
-- [Yocto build tunables and their hidden costs](/blog/posts/yocto-build-tunables-and-their-hidden-costs/) - May 2026
-- [Auditing your Yocto build for CRA compliance](/blog/posts/auditing-your-yocto-build-for-cra-compliance/) - Apr 2026
-- [When You're Fired, Your Next Job Is Finding a Job](/blog/posts/when-youre-fired-your-next-job-is-finding-a-job/) - Apr 2026
+- Built shipcheck tool, an EU Cyber Resilience Act (CRA) compliance auditor
+  for embedded Linux and Yocto builds. It reads what a Yocto build emits -
+  SBOMs, CVE scan output, signing artifacts, and license manifests - and
+  produces a readiness score and multi-file CRA evidence dossier. Published
+  on PyPI.
+- Maintained mediatek-mt7927-dkms and tracked the upstream WiFi 7 patch
+  series.
+- Authored a libcamera follow-up patch series for OV2740 sensor tuning
+  calibrated from Intel's AIQB binary.
+- Published technical writing on Yocto build performance, CRA compliance,
+  libcamera sensor calibration, and the experience of navigating a job
+  search as a senior engineer.
 
 ---
 
@@ -159,69 +158,21 @@ enterprise networking hardware.
 
 ## Upstream Contributions
 
-| Project | Contribution | Status |
-|---|---|---|
-| linux-wireless@ | MT7927 WiFi 7 - 18-patch series (chip ID, PCI IDs, DMA init, mac_reset, suspend/resume) | v4, active review |
-| linux-bluetooth@ | MT7927 Bluetooth - 8-patch series (USB ID, firmware filtering, naming) | Merged (April 2026) |
-| libcamera-devel@ | Simple pipeline AGC/AWB fixes (>8-bit sensor support) | Merged May 2026 |
-| libcamera-devel@ | sumShift cleanup + OV2740 sensor tuning file (Intel AIQB extraction) | Under review |
-| linux-firmware | MT6639 Bluetooth firmware (MR!946) | Under review |
-| meta-arm (Yocto) | UEFI Secure Boot - full implementation (v8) | Merged Oct 2024 |
-| meta-arm (Yocto) | OP-TEE udev-based tee-supplicant activation | Merged 2023 |
-| edk2 | CapsuleApp proper return after capsule update | Merged Mar 2025 |
-| fwupd | Firmware metadata generation enhancement | Merged Aug 2025 |
-| OpenWrt | KASLR for armsr/armv8 kernel 6.1 | Merged Oct 2023 |
-| mbedtls | Host header fix in ssl_client2 (3.x + 3.6 backport) | Merged Oct 2024 |
-
-Full list of 200+ merged PRs/MRs: [jetm.github.io/blog/projects](https://jetm.github.io/blog/projects/)
+Selected upstream patches and 200+ merged PRs/MRs: [jetm.github.io/blog/projects](https://jetm.github.io/blog/projects/)
 
 ## Projects & Tooling
 
-**[mediatek-mt7927-dkms](https://github.com/jetm/mediatek-mt7927-dkms)** - DKMS
-package bridging out-of-tree MT7927 WiFi 7 + Bluetooth 5.4 patches to Arch Linux,
-Debian, and Fedora users while upstream review is in progress. Supports 10+
-hardware variants with firmware extraction tooling and an 8-hour stability test
-suite.
+- [mediatek-mt7927-dkms](https://github.com/jetm/mediatek-mt7927-dkms)
+- [jig](https://github.com/jetm/jig)
+- [glpkg](https://github.com/jetm/glpkg)
 
-**[jig](https://github.com/jetm/jig)** - Go TUI for git workflows built with
-Bubble Tea. Consolidates interactive staging, hunk-level add, diff viewing, commit
-log browsing, fixup commits, and interactive rebase into one tool. Ships with
-goreleaser, golangci-lint, and a 90% test coverage threshold.
-
-**[glpkg](https://github.com/jetm/glpkg)** - Python CLI for the GitLab Generic
-Package Registry, published on PyPI as `glpkg-cli`. Shell completion, GitHub
-Actions CI/CD, and a comprehensive test suite.
+Full descriptions: [jetm.github.io/blog/projects](https://jetm.github.io/blog/projects/)
 
 ## Technical Writing
 
 **Linaro Engineering Blog**
-- [From Replace It with Intel to Upstream: Bringing MediaTek Bluetooth/WiFi 7 to Linux](https://www.linaro.org/blog/from-replace-it-with-intel-to-upstream-bringing-mediatek-bluetooth-wifi-7-to-linux/) - Mar 2026.
-  MediaTek's MT7927 WiFi 7 chip shipped on 15+ flagship products from ASUS,
-  Gigabyte, Lenovo, MSI, and TP-Link with zero Linux support. Through community
-  reverse-engineering and 20 upstream kernel patches, full WiFi 7 (2+ Gbps on
-  6 GHz) and Bluetooth 5.4 now work on every major Linux distribution. Once
-  merged, every distribution gets support automatically - eliminating the
-  maintenance burden of out-of-tree drivers and reducing hardware support risk
-  for silicon vendors and OEMs alike.
-- [5 Common Mistakes When Enabling Your Arm Device in the Automated Test Lab](https://www.linaro.org/blog/5-common-mistakes-when-enabling-your-arm-device-in-the-automated-test-lab/) - Mar 2026.
-  Bringing up a new hardware platform in an automated test environment is rarely
-  simple. For many engineers working with Arm development boards, the first
-  experience with automated testing infrastructure quickly turns into a debugging
-  session - silent serial consoles, misconfigured USB ports, unexpected voltage
-  levels, and devices that refuse to boot. A real-world debugging journey while
-  enabling a new device on a Linaro Automation Appliance (LAA), used by ONELab,
-  Linaro's automated testing service for Arm platforms.
-- [Enabling Standard Linux on Arm: How ONELab Accelerates Interoperability and SystemReady Continuous Compliance](https://www.linaro.org/blog/enabling-standard-linux-on-arm-how-onelab-accelerates-interoperability-and-systemready-continuous-compliance/) - Mar 2026.
-  Most Arm embedded platforms still struggle to boot standard Linux distributions
-  due to fragmented firmware implementations and non-standard boot flows. ONELab
-  by Linaro addresses this by providing fully automated testing infrastructure
-  that validates firmware compliance and OS interoperability on real hardware,
-  aligned with Arm SystemReady requirements. Reduces what traditionally required
-  12-24 weeks of manual validation to an automated 6-12 week compliance cycle.
+- [From Replace It with Intel to Upstream: Bringing MediaTek Bluetooth/WiFi 7 to Linux](https://www.linaro.org/blog/from-replace-it-with-intel-to-upstream-bringing-mediatek-bluetooth-wifi-7-to-linux/) - Mar 2026
+- [5 Common Mistakes When Enabling Your Arm Device in the Automated Test Lab](https://www.linaro.org/blog/5-common-mistakes-when-enabling-your-arm-device-in-the-automated-test-lab/) - Mar 2026
+- [Enabling Standard Linux on Arm: How ONELab Accelerates Interoperability and SystemReady Continuous Compliance](https://www.linaro.org/blog/enabling-standard-linux-on-arm-how-onelab-accelerates-interoperability-and-systemready-continuous-compliance/) - Mar 2026
 
 **Personal Blog** - [jetm.github.io/blog](https://jetm.github.io/blog)
-
-In-depth articles on Linux kernel driver development, Yocto, UEFI, and systems
-engineering. Series covering the 15-month MT7927 upstream journey (4 posts), Intel
-IPU6 mainline migration, DKMS packaging, and UEFI/QEMU workflows. Articles average
-1,000–4,500 words with working code and patch series.

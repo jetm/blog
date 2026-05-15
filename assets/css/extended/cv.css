@@ -83,7 +83,8 @@
 }
 
 .cv-sep {
-  color: var(--border);
+  color: var(--secondary);
+  opacity: 0.6;
 }
 
 /* CV Body - markdown rendered content */
@@ -248,6 +249,11 @@
     text-decoration: none;
   }
 
+  .cv-sep {
+    color: #777 !important;
+    opacity: 1 !important;
+  }
+
   .cv-header {
     padding-bottom: 0.75rem;
     border-bottom: 1px solid #ccc;
@@ -293,10 +299,40 @@
   /* Avoid breaking sections across pages */
   h2, h3 {
     page-break-after: avoid;
+    break-after: avoid;
   }
 
-  ul, table {
+  /* Keep role title together with its date line and intro paragraph */
+  .cv-body h3 + p,
+  .cv-body h3 + p + p {
+    page-break-before: avoid;
+    break-before: avoid;
+  }
+
+  /* Keep bold subsection paragraphs (**Upstream Kernel & Firmware**) with
+     the list that follows them */
+  .cv-body p:has(> strong:only-child) {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  ul, ol, table {
     page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Individual bullets must not split mid-bullet across pages */
+  li {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* Body text: avoid leaving 1-2 lines orphaned at top/bottom of page */
+  .cv-body p {
+    orphans: 3;
+    widows: 3;
   }
 
   /* Section dividers - visible in print like reference PDF */

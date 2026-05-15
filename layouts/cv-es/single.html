@@ -1,0 +1,46 @@
+{{- define "main" }}
+<div class="cv-page">
+
+  {{/* Print / Download button - hidden in print */}}
+  <div class="cv-actions no-print">
+    <button onclick="(function(){var t=document.title,d=new Date(),y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0');document.title='Javier_Tia_CV_ES_'+y+m;window.print();document.title=t;})()" class="cv-print-btn">
+      ↓ Guardar como PDF
+    </button>
+    <span class="cv-hint">Selecciona "Guardar como PDF" como destino al imprimir</span>
+  </div>
+
+  {{/* Print-only generation date - hidden on screen, visible in PDF */}}
+  <div class="cv-print-meta print-only">
+    Generado el <span id="cv-print-date"></span> · <a href="https://jetm.github.io/blog/cv-es/">jetm.github.io/blog/cv-es/</a>
+  </div>
+
+  <script>
+    document.getElementById('cv-print-date').textContent = new Date().toLocaleDateString('es', {
+      year: 'numeric', month: 'long', day: 'numeric'
+    });
+  </script>
+
+  {{/* CV Header */}}
+  <header class="cv-header">
+    <h1 class="cv-name">Javier Tia</h1>
+    <p class="cv-title">Ingeniero de Sistemas Senior · Kernel Linux · Linux Embebido · CI/CD</p>
+    <div class="cv-contact">
+      <a href="mailto:javier@jetm.me">javier@jetm.me</a>
+      <span class="cv-sep">·</span>
+      <a href="https://github.com/jetm">github.com/jetm</a>
+      <span class="cv-sep">·</span>
+      <a href="https://jetm.github.io/blog">jetm.github.io/blog</a>
+      <span class="cv-sep">·</span>
+      <a href="https://www.linkedin.com/in/javiertia/">linkedin.com/in/javiertia</a>
+      <span class="cv-sep">·</span>
+      <span>Costa Rica (Remoto)</span>
+    </div>
+  </header>
+
+  {{/* CV Body - rendered from Markdown content */}}
+  <div class="cv-body">
+    {{ .Content }}
+  </div>
+
+</div>
+{{- end }}
