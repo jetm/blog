@@ -52,9 +52,8 @@ cross-compilation, UART/I2C/SPI, systemd, udev, initramfs
 ### Open Source Developer (Independent)
 **Jan 2014 – Present | Remote**
 
-After leaving Linaro, continuing upstream Linux kernel, libcamera, and
-Yocto/OE patches. Maintaining open-source tooling work and writing
-technical articles.
+Upstreaming Linux kernel, libcamera, and Yocto/OE patches. Maintaining
+open-source tooling work and writing technical articles.
 
 - Built shipcheck tool, an EU Cyber Resilience Act (CRA) compliance auditor
   for embedded Linux and Yocto builds. It reads what a Yocto build emits -
