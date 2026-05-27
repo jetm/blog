@@ -2,7 +2,7 @@
 title: "bspctl: the wrapper Yocto teams keep writing by hand"
 date: 2026-05-23T00:00:00-06:00
 draft: false
-description: "Every embedded team ends up writing the same Makefile around kas and repo. bspctl replaces it: pre-flight checks before the build starts, curated build tuning applied at run time without touching your YAML, structured per-run observability, and vendor manifest translation for NXP and TI BSPs. Builds run in a kas-container when KAS_CONTAINER_IMAGE is set, or directly on the host otherwise."
+description: "Every embedded team ends up writing the same Makefile around kas and repo. bspctl replaces it: pre-flight checks before the build starts, curated build tuning applied at run time without touching your YAML, structured per-run observability, vendor manifest translation for NXP and TI BSPs, and bitbake-setup workspace support for Yocto 5.3+ projects. Builds run in a kas-container when KAS_CONTAINER_IMAGE is set, or directly on the host otherwise."
 ShowToc: true
 ShowReadingTime: true
 tags:
@@ -18,7 +18,7 @@ categories:
   - "tooling"
 ---
 
-**TL;DR**: bspctl is a Python CLI that wraps `kas` and `kas-container` for Yocto Board Support Package (BSP) builds. It defaults to container builds via `kas-container` when `KAS_CONTAINER_IMAGE` is set, and falls back to plain `kas` on the host when it is not. Pass `--host` to any subcommand to force host mode. On top of kas, bspctl adds pre-flight environment checks before the build starts, applies a curated tuning overlay (ccache, fetch mirrors, reproducibility knobs) without modifying your YAML on disk, writes structured per-run logs, and provides `bspctl triage` to locate the failing recipe after a crash. For vendor BSPs that ship as repo manifests (NXP i.MX) or oe-layertool configs (TI Sitara), it translates those to kas YAMLs automatically. Install: `uv tool install bspctl`.
+**TL;DR**: bspctl is a Python CLI that wraps `kas` and `kas-container` for Yocto Board Support Package (BSP) builds. It defaults to container builds via `kas-container` when `KAS_CONTAINER_IMAGE` is set, and falls back to plain `kas` on the host when it is not. Pass `--host` to any subcommand to force host mode. On top of kas, bspctl adds pre-flight environment checks before the build starts, applies a curated tuning overlay (ccache, fetch mirrors, reproducibility knobs) without modifying your YAML on disk, writes structured per-run logs, and provides `bspctl triage` to locate the failing recipe after a crash. For vendor BSPs that ship as repo manifests (NXP i.MX) or oe-layertool configs (TI Sitara), it translates those to kas YAMLs automatically. For projects initialized with bitbake-setup (the official Yocto 5.3+ workspace tool), bspctl detects the workspace automatically, translates the JSON layer config to a kas YAML, and drives the same pipeline. Install: `uv tool install bspctl`.
 
 ---
 
@@ -162,9 +162,29 @@ Vendor entries are matched against the manifest filename before the built-in pat
 
 My goal is for bspctl to be extensible enough to eventually replace the proprietary build wrappers that embedded teams maintain internally. Those tools exist - they do the same job - but they are tied to specific internal infrastructure and are not shareable. bspctl is the attempt to close that gap with something open.
 
+## bitbake-setup workspace support
+
+As of Yocto 5.3 (Whinlatter), [bitbake-setup](https://docs.yoctoproject.org/bitbake/bitbake-user-manual/bitbake-user-manual-environment-setup.html) is the official setup tool for new Yocto builds. The Poky monorepo's master branch was deprecated in 5.3 in its favour. bitbake-setup uses a registry-based JSON config to fetch layers and write build configuration - a different model from the kas YAML approach.
+
+bspctl v0.4.0 adds support for building inside an existing bitbake-setup workspace. After `bitbake-setup init` populates the workspace, `bspctl build` from that directory auto-detects it and drives the build:
+
+```bash
+# Initialize the workspace (ships in the bitbake repo)
+bitbake-setup init
+
+# Build from the initialized workspace
+bspctl build
+```
+
+Detection looks for `config/config-upstream.json` with the expected layer topology and `build/init-build-env`. When both are present, bspctl reads the JSON config - each source, its git remote, branch or pinned SHA, and the bitbake layers it contributes - and translates it into a kas v3 YAML written as `kas-bbsetup.yml`. That file is a build artifact regenerated each run, not for version control. kas then drives the build against that YAML plus the standard bspctl tuning overlay.
+
+Machine and distro are inferred from `oe-fragment-choices` in the config. Pass `--machine`, `--distro`, or `--image` to override them; `--image` sets the bitbake target and defaults to `core-image-minimal`.
+
+One constraint: `bspctl sync` does not apply to bitbake-setup workspaces - layer fetching is done by `bitbake-setup init`. To regenerate `kas-bbsetup.yml` after changing the workspace config without rebuilding, use `bspctl gen-kas -w <workspace-dir>`.
+
 ## Current limitations
 
-bspctl is at v0.2.0 and has only been tested on Arch Linux-based distributions. Debian, Ubuntu, and Fedora host systems are untested - corner cases almost certainly exist.
+bspctl is at v0.4.0 and has only been tested on Arch Linux-based distributions. Debian, Ubuntu, and Fedora host systems are untested - corner cases almost certainly exist.
 
 **SSTATE_DIR and DL_DIR.** bspctl does not configure these for you. Set them as environment variables before running `bspctl build` if you want a shared sstate cache or download mirror. The `cache-dirs` doctor check validates that the paths exist and are writable when the vars are set; it does not create them.
 
@@ -172,11 +192,9 @@ bspctl is at v0.2.0 and has only been tested on Arch Linux-based distributions. 
 
 **QEMU.** `bspctl run` - the command that boots a QEMU image - is currently limited to meta-avocado builds. Building a generic QEMU image via `bspctl build my-qemu.yml` works fine; only the launcher is constrained.
 
-**bitbake-setup.** As of Yocto 5.3 (Whinlatter), [bitbake-setup](https://docs.yoctoproject.org/bitbake/bitbake-user-manual/bitbake-user-manual-environment-setup.html) is the official setup tool for new Yocto builds. The Poky monorepo's master branch was deprecated in 5.3 in its favour - the migration guide explicitly directs users to `bitbake-setup init`. Unlike kas, bitbake-setup uses JSON config files with a registry-based layer model and ships inside the bitbake repository itself. It does not provide host isolation; there is no `kas-container` equivalent. bspctl has no support for bitbake-setup configs and is built entirely on kas. That gap is real: if your project starts from a 5.3+ bitbake-setup workspace, bspctl cannot drive the build without a separate kas YAML describing the same stack. Adding bitbake-setup support is planned.
-
 ## Why publish now
 
-v0.2.0 works for me on Arch Linux, but that is a sample size of one. I am publishing now to widen that sample. The goal is to find the corner cases I have not hit - different host distros, container images I have not tested, manifest patterns outside the NXP and TI defaults, vendor TOML configs that expose gaps in the dispatch logic.
+v0.4.0 works for me on Arch Linux, but that is a sample size of one. I am publishing now to widen that sample. The goal is to find the corner cases I have not hit - different host distros, container images I have not tested, manifest patterns outside the NXP and TI defaults, vendor TOML configs that expose gaps in the dispatch logic.
 
 The other goal is to hear whether the problem is real for other people. My assumption is that every Yocto team maintaining a wrapper script around kas or repo has the same pain. If that is not your experience - or if your pain is different from what bspctl addresses - I want to know. That feedback shapes what gets built next.
 
