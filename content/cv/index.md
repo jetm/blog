@@ -49,8 +49,8 @@ cross-compilation, UART/I2C/SPI, systemd, udev, initramfs
 
 ## Experience
 
-### Open Source Engineer (Independent)
-**Mar 2026 – Present | Remote**
+### Open Source Developer (Independent)
+**Jan 2014 – Present | Remote**
 
 After leaving Linaro, continuing upstream Linux kernel, libcamera, and
 Yocto/OE patches. Maintaining open-source tooling work and writing
@@ -68,6 +68,8 @@ technical articles.
 - Published technical writing on Yocto build performance, CRA compliance,
   libcamera sensor calibration, and the experience of navigating a job
   search as a senior engineer.
+- Maintains Arch Linux (AUR) packages for upstream kernel drivers and
+  developer tooling.
 
 ---
 
