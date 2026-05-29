@@ -24,7 +24,7 @@ categories:
 > **Note (updated):** This project has been migrated to
 > [bakar](https://github.com/jetm/bakar).
 > The original repository is archived at
-> [github.com/jetm/bakar](https://github.com/jetm/bakar).
+> [github.com/jetm/bspctl](https://github.com/jetm/bspctl).
 
 ---
 
