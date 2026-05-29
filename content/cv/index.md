@@ -60,7 +60,7 @@ open-source tooling work and writing technical articles.
   SBOMs, CVE scan output, signing artifacts, and license manifests - and
   produces a readiness score and multi-file CRA evidence dossier. Published
   on PyPI.
-- Built bspctl, a Python CLI wrapping kas and kas-container for reproducible
+- Built bakar, a Python CLI wrapping kas and kas-container for reproducible
   Yocto BSP builds. Adds pre-flight environment checks, run-time tuning
   without modifying build YAMLs, vendor manifest translation (NXP i.MX,
   TI Sitara, bitbake-setup workspaces), and structured per-run logs for
@@ -171,7 +171,7 @@ Selected upstream patches and 200+ merged PRs/MRs: [jetm.github.io/blog/projects
 - [mediatek-mt7927-dkms](https://github.com/jetm/mediatek-mt7927-dkms)
 - [jig](https://github.com/jetm/jig)
 - [glpkg](https://github.com/jetm/glpkg)
-- [bspctl](https://github.com/jetm/bspctl)
+- [bakar](https://github.com/jetm/bakar)
 
 Full descriptions: [jetm.github.io/blog/projects](https://jetm.github.io/blog/projects/)
 

@@ -1,8 +1,8 @@
 ---
-title: "bspctl: the wrapper Yocto teams keep writing by hand"
+title: "bakar: the wrapper Yocto teams keep writing by hand"
 date: 2026-05-23T00:00:00-06:00
 draft: false
-description: "Every embedded team ends up writing the same Makefile around kas and repo. bspctl replaces it: pre-flight checks before the build starts, curated build tuning applied at run time without touching your YAML, structured per-run observability, vendor manifest translation for NXP and TI BSPs, and bitbake-setup workspace support for Yocto 5.3+ projects. Builds run in a kas-container when KAS_CONTAINER_IMAGE is set, or directly on the host otherwise."
+description: "Every embedded team ends up writing the same Makefile around kas and repo. bakar replaces it: pre-flight checks before the build starts, curated build tuning applied at run time without touching your YAML, structured per-run observability, vendor manifest translation for NXP and TI BSPs, and bitbake-setup workspace support for Yocto 5.3+ projects. Builds run in a kas-container when KAS_CONTAINER_IMAGE is set, or directly on the host otherwise."
 ShowToc: true
 ShowReadingTime: true
 tags:
@@ -24,7 +24,7 @@ categories:
 > **Note (updated):** This project has been migrated to
 > [bakar](https://github.com/jetm/bakar).
 > The original repository is archived at
-> [github.com/jetm/bspctl](https://github.com/jetm/bspctl).
+> [github.com/jetm/bakar](https://github.com/jetm/bakar).
 
 ---
 
@@ -47,21 +47,21 @@ bakar fills those gaps. It defaults to `kas-container` when `KAS_CONTAINER_IMAGE
 Install:
 
 ```bash
-uv tool install bspctl
+uv tool install bakar
 # or
-pip install bspctl
+pip install bakar
 ```
 
 The Bring Your Own (BYO) path works with any kas YAML - including a QEMU target:
 
 ```bash
-bspctl build examples/kas-qemux86-64-wrynose.yml
+bakar build examples/kas-qemux86-64-wrynose.yml
 ```
 
 ```text
-:: bspctl build  BYO examples/kas-qemux86-64-wrynose.yml
+:: bakar build  BYO examples/kas-qemux86-64-wrynose.yml
 INFO     build mode=byo bsp=generic yaml=examples/kas-qemux86-64-wrynose.yml
-         overlay=bspctl/overlays/bspctl-tuning-generic.yml
+         overlay=bakar/overlays/bakar-tuning-generic.yml
 INFO     → doctor
                                                          Pre-flight diagnosis
  Check             ┃ Sev   ┃ Status ┃ Detail
@@ -82,7 +82,7 @@ INFO     ✓ doctor
 INFO     ↷ bitbake_override (generic mode)
 INFO     → kas_build
 INFO     exec: kas-container --runtime-args -v examples/ccache:/work/ccache:rw build \
-         kas-qemux86-64-wrynose.yml:.bspctl/overlays/bspctl-tuning-generic.yml
+         kas-qemux86-64-wrynose.yml:.bakar/overlays/bakar-tuning-generic.yml
 kas_build ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╸ 5190/5191 tasks core-image-minimal.bb:do_create_image_sbom_spdx live 1s  +453M 0:23:10
 INFO     ✓ kas_build
 build succeeded
@@ -104,7 +104,7 @@ Every `bakar build` invocation opens with the doctor table, then hands off to `k
 Running doctor standalone:
 
 ```bash
-bspctl doctor
+bakar doctor
 ```
 
 ## Finding what broke
@@ -112,7 +112,7 @@ bspctl doctor
 After a failed build:
 
 ```bash
-bspctl triage
+bakar triage
 ```
 
 Every build writes structured event logs to `build/runs/<YYYYMMDD-HHMMSS>/`. The directory contains `events.jsonl` (one JSON object per pipeline step), `kas.log` (raw kas-container output), `console.log`, an environment snapshot, timing data, and a disk usage trace sampled every 30 seconds. `triage` reads the latest run, finds the `step_fail` event, tails the relevant section of `kas.log`, and locates the bitbake recipe log that triggered the failure. It also matches the combined output against a table of known error patterns - fetch failures, parser deadlocks, OOM, GitHub flakes, stale bitbake cache.
@@ -122,7 +122,7 @@ The alternative is navigating several levels of `build/tmp/work/.../temp/log.do_
 To follow a build's output live without waiting for failure:
 
 ```bash
-bspctl log
+bakar log
 ```
 
 ## Build tuning without touching your YAML
@@ -146,14 +146,14 @@ The NXP and TI overlays add `ACCEPT_FSL_EULA`, BSP-specific vendor fork PREMIRRO
 To add your own knobs without modifying the built-in overlay:
 
 ```bash
-bspctl build my-build.yml:my-tuning.yml
+bakar build my-build.yml:my-tuning.yml
 ```
 
 kas merges the three files - your YAML, the bakar overlay, and your extra tuning - at build time.
 
 ## Vendor extensibility
 
-The NXP i.MX and TI Sitara presets are the batteries-included path. If you work with a different board vendor, `~/.config/bspctl/vendors.toml` lets you register a custom BSP family:
+The NXP i.MX and TI Sitara presets are the batteries-included path. If you work with a different board vendor, `~/.config/bakar/vendors.toml` lets you register a custom BSP family:
 
 ```toml
 [[vendors]]
@@ -179,7 +179,7 @@ bakar v0.4.0 adds support for building inside an existing bitbake-setup workspac
 bitbake-setup init
 
 # Build from the initialized workspace
-bspctl build
+bakar build
 ```
 
 Detection looks for `config/config-upstream.json` with the expected layer topology and `build/init-build-env`. When both are present, bakar reads the JSON config - each source, its git remote, branch or pinned SHA, and the bitbake layers it contributes - and translates it into a kas v3 YAML written as `kas-bbsetup.yml`. That file is a build artifact regenerated each run, not for version control. kas then drives the build against that YAML plus the standard bakar tuning overlay.

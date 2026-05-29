@@ -62,7 +62,7 @@ artículos técnicos.
   un build de Yocto - SBOMs, salida de escaneo CVE, artefactos de firma y
   manifiestos de licencias - y genera una puntuación de preparación y un
   expediente CRA multi-fichero. Publicado en PyPI.
-- Desarrollé bspctl, una CLI Python que envuelve kas y kas-container para
+- Desarrollé bakar, una CLI Python que envuelve kas y kas-container para
   builds reproducibles de Yocto BSP. Agrega verificaciones pre-build del
   entorno, tuning en tiempo de ejecución sin modificar los YAMLs de build,
   traducción de manifiestos de vendor (NXP i.MX, TI Sitara, workspaces de
@@ -184,7 +184,7 @@ Parches upstream seleccionados y más de 200 PRs/MRs fusionados: [jetm.github.io
 - [mediatek-mt7927-dkms](https://github.com/jetm/mediatek-mt7927-dkms)
 - [jig](https://github.com/jetm/jig)
 - [glpkg](https://github.com/jetm/glpkg)
-- [bspctl](https://github.com/jetm/bspctl)
+- [bakar](https://github.com/jetm/bakar)
 
 Descripciones completas: [jetm.github.io/blog/projects](https://jetm.github.io/blog/projects/)
 
