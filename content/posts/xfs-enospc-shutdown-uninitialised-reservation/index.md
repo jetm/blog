@@ -42,6 +42,10 @@ It needs parent pointers (`parent=1`) plus an inode with many hard links,
 which is why a Yocto `do_package` run reproduces it and nothing else on this
 machine does.
 
+The fix is one line. It reproduces deterministically in about 0.2 seconds on a
+512 MiB scratch filesystem, there is an xfstests case that fails without the
+fix and passes with it, and the patch is going upstream.
+
 ## The machine
 
 | | |
