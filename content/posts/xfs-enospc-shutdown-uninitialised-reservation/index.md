@@ -1,7 +1,7 @@
 ---
 title: "XFS shut down with -ENOSPC and 862 GiB free. The reservation was never initialised."
 date: 2026-08-08T17:12:00-06:00
-draft: true
+draft: false
 description: "Six XFS shutdowns, six falsified hypotheses, and a filesystem that took itself down for lack of space on a half-empty disk. The evidence was destroyed by the crash that produced it, until I mapped a trace buffer across the reboot. The bug is one missing assignment in xfs_parent_da_args_init()."
 ShowToc: true
 ShowReadingTime: true
@@ -44,7 +44,9 @@ machine does.
 
 The fix is one line. It reproduces deterministically in about 0.2 seconds on a
 512 MiB scratch filesystem, there is an xfstests case that fails without the
-fix and passes with it, and the patch is going upstream.
+fix and passes with it, and the series is
+[on linux-xfs](https://lore.kernel.org/linux-xfs/20260808234016.246054-7-floss@jetm.me/)
+awaiting review.
 
 ## The same thing without the jargon
 
@@ -503,7 +505,16 @@ The error-injection machinery that would have been the obvious tool for this
 whole investigation is compiled out of every distribution kernel, for the same
 reason the two `ASSERT`s guarding this bug are.
 
-I have not sent any of this upstream yet.
+The series went to `linux-xfs` on 2026-08-08 as
+[`[PATCH 0/5] xfs: fix filesystem shutdown from parent pointer reservation
+underflow`](https://lore.kernel.org/linux-xfs/20260808234016.246054-7-floss@jetm.me/).
+Five patches: the fix, an unrelated bug found while reading the same code, one
+change that makes this class of failure diagnosable in seconds rather than
+days, and two corrections.
+
+It is submitted, not merged. Upstream review takes as long as it takes and the
+maintainers may well want it done differently; I will update this post if the
+shape of the fix changes.
 ## A variant I have not proven
 
 While reading the gate I noticed a second path through it that is worse than
@@ -643,6 +654,9 @@ developer builds is documentation, not a guard.
 
 ## References
 
+- [The series on lore](https://lore.kernel.org/linux-xfs/20260808234016.246054-7-floss@jetm.me/)
+  - `[PATCH 0/5] xfs: fix filesystem shutdown from parent pointer reservation
+  underflow`, posted 2026-08-08
 - `fs/xfs/libxfs/xfs_parent.c` - `xfs_parent_da_args_init()`
 - `fs/xfs/libxfs/xfs_da_btree.c:2357` - the underflowing subtraction
 - `fs/xfs/libxfs/xfs_alloc.c:2523-2535` - `xfs_alloc_space_available()`
