@@ -46,6 +46,36 @@ The fix is one line. It reproduces deterministically in about 0.2 seconds on a
 512 MiB scratch filesystem, there is an xfstests case that fails without the
 fix and passes with it, and the patch is going upstream.
 
+## The same thing without the jargon
+
+If you do not carry XFS internals around in your head, here is the shape of it.
+The rest of the post assumes you have read this much and no more.
+
+There is a counter that means "how many blocks may this operation still use."
+One path forgot to set it before using it, so it started at zero. The code then
+subtracted from it.
+
+Subtracting one from zero in that counter does not give minus one. It is
+unsigned, so it rolls over to the largest value it can hold, about 4.3 billion,
+the way an odometer wound backwards past zero reads 999999 rather than -1.
+
+Everything after that behaved correctly and arrived somewhere absurd. A safety
+check read 4.3 billion, concluded there was effectively unlimited room, and
+waved the request through. The next layer did its own arithmetic on the same
+poisoned value and decided the operation could use **zero** blocks. Then a
+third check compared "needs at least one block" against "may use zero blocks",
+found that impossible, and returned "out of disk space."
+
+Nothing was out of disk space. The disk was half empty. The filesystem could
+not distinguish "this request is impossible because the disk is full" from
+"this request is impossible because I computed nonsense," so it assumed its own
+in-memory state was corrupt and shut down to avoid writing damage to disk. That
+is the correct thing to do when your bookkeeping contradicts itself. It was
+just reasoning from one bad number.
+
+Two assertions exist in the source specifically to catch this, and both are
+compiled out of every kernel anyone actually runs.
+
 ## The machine
 
 | | |
