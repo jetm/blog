@@ -51,9 +51,19 @@ fix and passes with it, and the patch is going upstream.
 If you do not carry XFS internals around in your head, here is the shape of it.
 The rest of the post assumes you have read this much and no more.
 
-There is a counter that means "how many blocks may this operation still use."
-One path forgot to set it before using it, so it started at zero. The code then
-subtracted from it.
+First, the error message is a red herring. The kernel log says "Corruption of
+in-memory data", and nothing was corrupt. That string is a generic label
+attached to one exit path, not a diagnosis, and it cost me half a day of
+chasing memory faults that were never there.
+
+What actually happens: there is a counter meaning "how many blocks may this
+operation still use." One path forgot to set it before using it, so it started
+at zero. The code then subtracted from it.
+
+The path in question writes a parent pointer, which is the record that a file
+belongs to a directory. One gets written on every hardlink, which is why a
+packaging step that hardlinks the same file into dozens of staging directories
+is what found this.
 
 Subtracting one from zero in that counter does not give minus one. It is
 unsigned, so it rolls over to the largest value it can hold, about 4.3 billion,
@@ -299,6 +309,15 @@ args->total = xfs_attr_calc_size(args, &local);
 ```
 
 One line, in `xfs_parent_da_args_init()`.
+
+The reason to write it exactly that way, rather than clamping the subtraction
+or picking a safe constant, is that XFS already does this correctly somewhere
+else. When the filesystem replays a parent-pointer insert from the log after a
+crash, `xfs_attri_recover_work()` sets the same field from the same function
+(`xfs_attr_item.c:706`). So replaying the operation from the log was always
+right, and performing it live was always wrong. The fix makes the normal path
+behave like the recovery path instead of contradicting it, which is a much
+easier thing to defend than "I added a missing line."
 
 I argued to myself that this is both necessary and sufficient before
 building anything, because "the patch makes the symptom go away" is a weak
