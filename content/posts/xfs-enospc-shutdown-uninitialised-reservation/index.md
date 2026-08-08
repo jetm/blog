@@ -389,13 +389,60 @@ the desktop applications contributed something causal, because the stressor
 alone never reproduced anything. They did not. They were one way of producing
 N2, and a nearly-full 512 MiB image is a better one.
 
+### A regression test that fails without the fix
+
+The reproducer above is a shell script that lives on my machine. The version
+that belongs upstream is an xfstests case, and writing one turned out to be
+mostly a matter of stating the two conditions in the harness's own vocabulary:
+
+```bash
+_scratch_mkfs_sized $((512 * 1024 * 1024))    # two AGs, parent=1
+# ballast to leave ~460 free blocks
+# per step: punch one 4 KiB hole, then 64 long-named hardlinks
+```
+
+It needs no explicit assertion. xfstests runs `_check_dmesg` and
+`_check_xfs_filesystem` after every test, so a shutdown fails it automatically.
+
+The part that matters is that I ran it on both kernels:
+
+| kernel | result |
+|---|---|
+| unpatched | **fails** - dirty log, filesystem inconsistent, `xfs_defer.c:721` in dmesg, dead by step 2 |
+| patched | **passes** - 400 steps, 25,024 links, 25 seconds |
+
+Until that first row existed the test was worthless. A regression test that has
+only ever been observed passing tells you nothing, and I nearly shipped one:
+my first version left 128 free blocks and swept up to 192, entirely below the
+band where the bug fires. It passed on a patched kernel for the wrong reason.
+
+One trap worth repeating, because it will cost someone a machine. If
+`fs.xfs.panic_mask` is non-zero, the shutdown becomes a `BUG()`, kdump fires,
+and the host reboots instead of reporting a failure. XFS defaults to 0. Mine
+was set to 16 for crash capture, which is exactly the configuration a person
+debugging this bug would have.
+
 ### Regression coverage
 
 `./check -g parent -g attr` on the patched kernel: 53 of 55 passing. The two
 failures are environmental, a `setfattr` deprecation warning newer than the
 golden output and an `O_TMPFILE` `EOVERFLOW` inside the test harness. Neither
 mentions parent pointers, allocation or ENOSPC, and no XFS shutdown appeared in
-`dmesg` for the duration.
+`dmesg` for the duration. I have not run those two on an unpatched kernel, so
+"environmental" is an inference from what they say, not a demonstration.
+
+### Eight days
+
+The patched kernel has since carried ordinary Yocto build load for eight days
+with no filesystem shutdown and no crash dump. The longest single uptime in
+that window was three days. Before the patch the same machine died within five
+to seven minutes once the conditions coincided.
+
+I am wary of that number carrying more weight than it deserves, which is why it
+comes last. Eight days of not-crashing is consistent with a fix and also
+consistent with luck; the argument that does the work is still the one in the
+table above, where the underflow is present 8 times on one kernel and 0 times
+on the other under an identical script.
 
 Nineteen tests did not run. Several skipped for a reason that is its own small
 lesson: `xfs/433` and `xfs/532` report `[not run] requires CONFIG_XFS_DEBUG`.
@@ -435,7 +482,26 @@ rescue USB.
 
 The crash that produced the trace above had the clean XFS bug and none of
 these. So the XFS bug happens without the corruption. Whether the corruption
-happens without the XFS bug is exactly what the current soak will tell me.
+happens without the XFS bug was the open question, and eight days on the
+patched kernel have now answered it as far as I can:
+
+```text
+Jul 20 - Jul 30, unpatched   journald error 15 / RSVD faults: 2 (a floor;
+                             several crashes destroyed their own logs)
+Jul 30 - Aug 7,  patched     journald error 15 / RSVD faults: 0
+```
+
+Twelve segfaults did occur in that window, all of them `ld-linux` probe
+failures from the build and one `virsh`. None carried `error 15`, a
+reserved-bit fault, or journald.
+
+So the likeliest reading is now that those faults were downstream of the
+filesystem dying rather than a second, independent problem. I am not calling it
+settled. The pre-patch rate was low enough that eight clean days is suggestive
+rather than conclusive, and it does not explain the thing that made me suspect
+independence in the first place: in dmesg the segfaults *preceded* the
+shutdown. Either the ordering is misleading or there is still something here I
+have not understood.
 
 ## Why you never see the panic
 
@@ -474,9 +540,13 @@ default.
    request.** Unproven. Confirmed by a trace showing `maxlen 4294967295`
    passing `check_args`; refuted by a source argument showing `available`
    cannot reach `-1` on this path.
-4. **The journald reserved-bit faults are independent of the XFS bug.**
-   Still open, and the one I like least. Falsified if they disappear across
-   patched-kernel use comparable to the runs that produced them.
+4. **The journald reserved-bit faults were downstream of the filesystem
+   shutdown, not independent of it.** I claimed the opposite for a fortnight.
+   Revised on eight days of patched-kernel build load producing zero of them
+   against a pre-patch floor of two. Falsified by a single `error 15`
+   reserved-bit fault on a patched kernel, which would put independence back on
+   the table; also weakened by anyone explaining why, in dmesg, the segfaults
+   appear *before* the shutdown they are supposedly caused by.
 5. **`available == 0` is a necessary condition, and the value is exactly
    zero rather than a range.** Supported by the reproducer firing within one
    or two single-block steps of the sweep and not before. Falsified by a
@@ -497,6 +567,9 @@ default.
    of the same version, since that would make the patch the only difference.
    I have not run that comparison; the argument so far is only that neither
    failure mentions parent pointers, allocation or ENOSPC.
+9. **`tests/xfs/842` reproduces this bug and only this bug.** Falsified by the
+   test failing on a kernel carrying patch 5, or by it passing on an unpatched
+   kernel in a configuration where the standalone reproducer still fires.
 
 ## What I would do differently
 
