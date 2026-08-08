@@ -1,6 +1,6 @@
 ---
 title: "XFS shut down with -ENOSPC and 862 GiB free. The reservation was never initialised."
-date: 2026-07-30T09:30:00-06:00
+date: 2026-08-08T17:12:00-06:00
 draft: true
 description: "Six XFS shutdowns, six falsified hypotheses, and a filesystem that took itself down for lack of space on a half-empty disk. The evidence was destroyed by the crash that produced it, until I mapped a trace buffer across the reboot. The bug is one missing assignment in xfs_parent_da_args_init()."
 ShowToc: true
