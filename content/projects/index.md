@@ -201,6 +201,14 @@ across the public repos below; a comparable volume of work sits in
 Peridio's private company repos and is not listed here. Selected
 highlights below; full public history is on GitHub.
 
+### NXP i.MX93 FRDM board bring-up
+
+- [meta-avocado#259](https://github.com/avocado-linux/meta-avocado/pull/259) - imx93-frdm: move to the NXP wrynose-6.18.20-2.0.0 BSP
+- [meta-avocado#299](https://github.com/avocado-linux/meta-avocado/pull/299) - Pin u-boot-imx and disable unused vendor defaults on avocado-imx93-frdm
+- [meta-avocado#320](https://github.com/avocado-linux/meta-avocado/pull/320) - Drop the layer-wide u-boot-imx 2025.04 pin, keep the fragment
+- [meta-avocado#301](https://github.com/avocado-linux/meta-avocado/pull/301) - Add a bootloader-only fwup task for avocado-imx
+- [meta-avocado#327](https://github.com/avocado-linux/meta-avocado/pull/327) - Fix rootdev in the imx93-frdm compiled-in boot env
+
 ### Secure and verified boot
 
 - [meta-avocado#302](https://github.com/avocado-linux/meta-avocado/pull/302) - Add fuse-free FIT verified boot for avocado-imx93-frdm

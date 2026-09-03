@@ -93,6 +93,10 @@ fleets. Contributing to Avocado Linux, Peridio's open-source Yocto/OpenEmbedded
 distro for embedded Linux devices (meta-avocado, avocado-cli, avocadoctl),
 plus Peridio's documentation site and internal tooling.
 
+- Brought up the NXP i.MX93 FRDM board on Avocado Linux: moved the BSP to
+  NXP's wrynose 6.18.20-2.0.0 release, pinned and later trimmed the
+  layer-wide u-boot-imx pin down to a board fragment, added a
+  bootloader-only fwup task, and fixed the compiled-in boot env's rootdev.
 - Added fuse-free FIT-based verified boot for i.MX93 (avocado-imx93-frdm) and
   LUKS2-encrypted `/var` unified across board targets.
 - Built SBOM and CVE-tracking coverage into the image pipeline: rootfs builds
