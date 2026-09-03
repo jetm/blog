@@ -1,6 +1,6 @@
 ---
 title: "Projects & Contributions"
-description: "Upstream kernel patches, open source tools, 200+ merged PRs/MRs across GitHub and GitLab, and published writing on Linux internals"
+description: "Upstream kernel patches, open source tools, 250+ merged PRs/MRs across GitHub and GitLab, and published writing on Linux internals"
 ShowToc: true
 ShowWordCount: false
 ShowReadingTime: false
@@ -8,7 +8,7 @@ TocOpen: true
 ---
 
 Linux kernel patches under active upstream review, open source tools
-used in production, 200+ merged pull requests and merge requests
+used in production, 250+ merged pull requests and merge requests
 across GitHub and GitLab, and published technical writing on systems
 engineering. Everything listed here is public and verifiable.
 
@@ -91,6 +91,24 @@ platforms with multiple /dev/teepriv* devices.
 
 ---
 
+### XFS filesystem shutdown fix - linux-xfs@
+
+6-patch series fixing an XFS filesystem shutdown triggered by an
+uninitialised block reservation in `xfs_parent_da_args_init()`: the
+`args->total` field is never set, underflows to `0xFFFFFFFF` on the
+parent-pointer growth path, and defeats a downstream `-ENOSPC` guard.
+Root-caused via a persistent, boot-mapped ftrace buffer that survives
+the resulting kexec/reboot, with a deterministic reproducer and an
+xfstests regression case. Applied to for-next by XFS maintainer Carlos
+Maiolino.
+
+- **Status:** Applied to for-next (Sep 2026)
+- **Mailing list:** [linux-xfs v3 series](https://lore.kernel.org/linux-xfs/20260810230611.2859909-8-floss@jetm.me/)
+- **Blog post:** [XFS shut down with -ENOSPC and 862 GiB free](/blog/posts/xfs-enospc-shutdown-uninitialised-reservation/)
+- **Language:** C
+
+---
+
 ## Open Source Tools
 
 ### mediatek-mt7927-dkms
@@ -146,6 +164,63 @@ released May 2026.
 - **Repository:** [github.com/jetm/shipcheck](https://github.com/jetm/shipcheck)
 - **PyPI:** [shipcheck](https://pypi.org/project/shipcheck/)
 - **Language:** Python
+
+---
+
+### pkgtrack
+
+Tracks which explicitly-installed Arch Linux packages are actually used, via
+eBPF execution tracing. A systemd service runs `execsnoop` continuously,
+logging every `execve()` to journald; `pkgtrack analyze` cross-references
+executed paths against pacman's package database and reports installed-but-
+never-run packages sorted by size.
+
+- **Repository:** [github.com/jetm/pkgtrack](https://github.com/jetm/pkgtrack)
+- **AUR:** [pkgtrack](https://aur.archlinux.org/packages/pkgtrack)
+- **Language:** Python
+
+---
+
+### rehunk.nvim
+
+A Neovim plugin that recalculates diff hunk header line numbers when you
+edit a hunk during `git add -p` interactive staging, so the patch stays
+applicable after manual edits.
+
+- **Repository:** [github.com/jetm/rehunk.nvim](https://github.com/jetm/rehunk.nvim)
+- **Language:** Lua
+
+---
+
+## Peridio - Avocado Linux
+
+Contributions to [Avocado Linux](https://www.avocadolinux.org), Peridio's
+open-source Yocto/OpenEmbedded distro for embedded Linux devices. 80+ merged
+pull requests since June 2026 across `meta-avocado`, `avocado-cli`,
+`avocadoctl`, `avocado-desktop`, and Peridio's documentation site. Selected
+highlights below; full history is on GitHub.
+
+### Secure and verified boot
+
+- [meta-avocado#302](https://github.com/avocado-linux/meta-avocado/pull/302) - Add fuse-free FIT verified boot for avocado-imx93-frdm
+- [meta-avocado#271](https://github.com/avocado-linux/meta-avocado/pull/271) - Secure boot and LUKS2-encrypted /var, unified on wrynose
+- [meta-avocado#298](https://github.com/avocado-linux/meta-avocado/pull/298) - Drop unused efitools-native DEPENDS from sb-keys
+
+### SBOM and CVE tracking
+
+- [meta-avocado#323](https://github.com/avocado-linux/meta-avocado/pull/323) - Build the rootfs image far enough to emit its SBOM
+- [meta-avocado#313](https://github.com/avocado-linux/meta-avocado/pull/313) - Add a qemux86-64 kas wrapper that inherits SBOM and cve-check
+- [meta-avocado#312](https://github.com/avocado-linux/meta-avocado/pull/312) - Delete the runtime SPDX task oe-core's nospdx misses
+
+### Device provisioning (NXP i.MX, NVIDIA Jetson)
+
+- [avocado-cli#183](https://github.com/avocado-linux/avocado-cli/pull/183) - Provision and build declared device-tree overlays
+- [meta-avocado#292](https://github.com/avocado-linux/meta-avocado/pull/292) - Deliver device-tree overlays on Jetson
+- [meta-avocado#291](https://github.com/avocado-linux/meta-avocado/pull/291) - Fix five silent failures in Jetson provisioning
+- [meta-avocado#318](https://github.com/avocado-linux/meta-avocado/pull/318) - avocado-flash: refuse a payload older than the build it should carry
+
+- **Repository:** [github.com/avocado-linux/meta-avocado](https://github.com/avocado-linux/meta-avocado)
+- **Language:** BitBake, Shell, Python
 
 ---
 
@@ -459,6 +534,7 @@ soafee/ namespace.
 In-depth articles on Linux kernel development, Yocto, embedded
 security, and systems engineering.
 
+- [XFS shut down with -ENOSPC and 862 GiB free](/blog/posts/xfs-enospc-shutdown-uninitialised-reservation/) - Aug 2026
 - [Extracting Sensor Calibration from Intel's AIQB Binary for libcamera](/blog/posts/ipu6-aiqb-calibration/) - May 2026
 - [Yocto build tunables and their hidden costs](/blog/posts/yocto-build-tunables-and-their-hidden-costs/) - May 2026
 - [When You're Fired, Your Next Job Is Finding a Job](/blog/posts/when-youre-fired-your-next-job-is-finding-a-job/) - Apr 2026

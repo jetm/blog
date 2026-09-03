@@ -17,15 +17,15 @@ Senior Systems Engineer with 15+ years of production embedded software
 experience, specializing in upstream Linux kernel development,
 Yocto/OpenEmbedded, embedded security (UEFI Secure Boot, OP-TEE), and CI/CD
 infrastructure for hardware. Active upstream contributor with recent merges
-into mainline Linux (Bluetooth, libcamera) and active patch series under
-review on linux-wireless@, linux-firmware, and Yocto. Open to consulting
-engagements and full-time remote roles.
+into mainline Linux (Bluetooth, libcamera), an XFS filesystem fix applied to
+the for-next branch, and active patch series under review on linux-wireless@
+and linux-firmware. Currently Principal Embedded Linux Engineer at Peridio.
 
 ## Technical Skills
 
-**Kernel & firmware:** Linux kernel development, DKMS, U-Boot, UEFI/Secure Boot,
-OP-TEE, device drivers (WiFi/mac80211/cfg80211, Bluetooth/btusb/btmtk, PCIe,
-camera/libcamera)
+**Kernel & firmware:** Linux kernel development, filesystems (XFS), DKMS,
+U-Boot, UEFI/Secure Boot, OP-TEE, device drivers (WiFi/mac80211/cfg80211,
+Bluetooth/btusb/btmtk, PCIe, camera/libcamera)
 
 **Build systems:** Yocto/OpenEmbedded, BitBake, kas, (meta-arm, meta-openembedded,
 meta-secure-core), Make, CMake, Meson, Autotools, repo tool
@@ -69,11 +69,40 @@ open-source tooling work and writing technical articles.
   series.
 - Authored a libcamera follow-up patch series for OV2740 sensor tuning
   calibrated from Intel's AIQB binary.
+- Diagnosed and fixed an XFS filesystem shutdown caused by an uninitialised
+  block reservation in the parent-pointer code path; 6-patch series applied
+  to for-next by the XFS maintainer.
 - Published technical writing on Yocto build performance, CRA compliance,
-  libcamera sensor calibration, and the experience of navigating a job
-  search as a senior engineer.
+  libcamera sensor calibration, kernel debugging with persistent ftrace
+  buffers, and the experience of navigating a job search as a senior
+  engineer.
+- Built pkgtrack, an eBPF-based tool that traces `execve()` via `execsnoop`
+  to identify explicitly-installed Arch packages whose binaries are never
+  run. Built rehunk.nvim, a Neovim plugin that recalculates diff hunk
+  headers during `git add -p` interactive staging.
 - Maintains Arch Linux (AUR) packages for upstream kernel drivers and
   developer tooling.
+
+---
+
+### Peridio - Principal Embedded Linux Engineer
+**Jun 2026 – Present | Remote**
+
+Peridio builds device management and OTA infrastructure for embedded Linux
+fleets. Contributing to Avocado Linux, Peridio's open-source Yocto/OpenEmbedded
+distro for embedded Linux devices (meta-avocado, avocado-cli, avocadoctl,
+avocado-desktop), plus supporting tooling and documentation.
+
+- Added fuse-free FIT-based verified boot for i.MX93 (avocado-imx93-frdm) and
+  LUKS2-encrypted `/var` unified across board targets.
+- Built SBOM and CVE-tracking coverage into the image pipeline: rootfs builds
+  now run far enough to emit their SPDX SBOM, and a qemux86-64 kas wrapper
+  inherits SBOM and cve-check by default.
+- Fixed device provisioning across NXP i.MX and NVIDIA Jetson targets:
+  device-tree overlay delivery, `avocado-flash` payload-version guards
+  against downgrade, and five silent provisioning failures on Jetson.
+- 80+ merged pull requests since joining, across meta-avocado, avocado-cli,
+  avocadoctl, avocado-desktop, and Peridio's documentation site.
 
 ---
 
@@ -164,7 +193,7 @@ enterprise networking hardware.
 
 ## Upstream Contributions
 
-Selected upstream patches and 200+ merged PRs/MRs: [jetm.github.io/blog/projects](https://jetm.github.io/blog/projects/)
+Selected upstream patches and 250+ merged PRs/MRs: [jetm.github.io/blog/projects](https://jetm.github.io/blog/projects/)
 
 ## Projects & Tooling
 
@@ -172,6 +201,8 @@ Selected upstream patches and 200+ merged PRs/MRs: [jetm.github.io/blog/projects
 - [jig](https://github.com/jetm/jig)
 - [glpkg](https://github.com/jetm/glpkg)
 - [bakar](https://github.com/jetm/bakar)
+- [pkgtrack](https://github.com/jetm/pkgtrack)
+- [rehunk.nvim](https://github.com/jetm/rehunk.nvim)
 
 Full descriptions: [jetm.github.io/blog/projects](https://jetm.github.io/blog/projects/)
 
