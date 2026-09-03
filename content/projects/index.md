@@ -196,10 +196,11 @@ applicable after manual edits.
 
 Contributions to [Avocado Linux](https://www.avocadolinux.org), Peridio's
 open-source Yocto/OpenEmbedded distro for embedded Linux devices, plus
-Peridio's documentation site. 100+ merged pull requests since June 2026
-across the public repos below; a comparable volume of work sits in
-Peridio's private company repos and is not listed here. Selected
-highlights below; full public history is on GitHub.
+Peridio's documentation site.
+[100+ merged pull requests](https://github.com/search?q=org%3Aavocado-linux+org%3Aperidio+author%3Ajetm+is%3Apr+is%3Amerged&type=pullrequests)
+since June 2026 across the public repos below; a comparable volume of
+work sits in Peridio's private company repos and is not listed here.
+Selected highlights below; the link above is the full public history.
 
 ### NXP i.MX93 FRDM board bring-up
 

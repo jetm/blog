@@ -109,9 +109,10 @@ plus Peridio's documentation site and internal tooling.
 - Fixed deploy, connect, and VM tooling reliability in avocado-cli: a
   repo-server startup race, abandoned build-volume cleanup, QEMU q35 NIC
   and tpm2 boot stalls, and Container Dev Mode's host CLI and push path.
-- 100+ merged pull requests since joining across public and private Peridio
-  repos, including meta-avocado, avocado-cli, avocadoctl, vendor-bitbake,
-  and Peridio's documentation site.
+- [100+ merged pull requests](https://github.com/search?q=org%3Aavocado-linux+org%3Aperidio+author%3Ajetm+is%3Apr+is%3Amerged&type=pullrequests)
+  since joining across public and private Peridio repos, including
+  meta-avocado, avocado-cli, avocadoctl, vendor-bitbake, and Peridio's
+  documentation site (the link shows the public subset only).
 
 ---
 
@@ -153,15 +154,16 @@ reference stacks used by Linaro member companies.
 - Built GPIT - end-to-end GitLab CI/CD for Yocto Trusted Substrate images with
   automated LAVA hardware testing, OEQA result parsing, two-pass log analysis, and
   email reporting across ARM targets (KV260, RockPi4, Synquacer, AVA,
-  genericarm64) - 19 merged MRs
+  genericarm64) - [19 merged MRs](https://gitlab.com/Linaro/trustedsubstrate/gpit/-/merge_requests?scope=all&state=merged&author_username=jetm)
 - Built and maintained LAVA-based CI/CD for embedded Linux testing across ARM
   hardware (Synquacer, RockPi4, KV260, AVA): test plans, capsule update pipelines,
-  image merging scripts, GitLab CI integration - 40+ merged MRs
+  image merging scripts, GitLab CI integration -
+  [40+ merged MRs](https://gitlab.com/Linaro/blueprints/ci/-/merge_requests?scope=all&state=merged&author_username=jetm)
 - Integrated ARM development boards into LAVA, SQUAD, and TuxSuite pipelines,
   increasing automated hardware test coverage and reducing manual validation cycles
 - Built SOAFEE test framework: container engine, k3s, Xen virtualization, OpenAD
   Kit, and Linux ABI compliance testing with TAP reporting and LAVA integration -
-  30+ merged MRs
+  [30+ merged MRs](https://gitlab.com/soafee/soafee-test-suite/-/merge_requests?scope=all&state=merged&author_username=jetm)
 
 **Yocto/OpenEmbedded**
 - Owned the Yocto/OE build system delivering all software and kernels for
