@@ -8,7 +8,7 @@ Hugo supports **page bundles**, which are directories containing an `index.md` f
 
 ### Directory Structure
 
-```
+```text
 content/posts/my-post/
 ├── index.md          # Post content and front matter
 ├── featured.jpg      # Cover image
@@ -78,7 +78,7 @@ hugo new posts/getting-started-with-hugo/index.md
 ```
 
 This creates:
-```
+```text
 content/posts/getting-started-with-hugo/
 └── index.md
 ```
@@ -98,7 +98,7 @@ Open the generated `index.md` and update the front matter:
 
 Place images in the same directory as `index.md`:
 
-```
+```text
 content/posts/getting-started-with-hugo/
 ├── index.md
 ├── featured.jpg      # Cover image
@@ -141,7 +141,7 @@ def hello():
 ```
 
 ![Diagram showing the architecture](diagram.svg)
-```
+```text
 
 **Tips:**
 - Use `##` and `###` headings for TOC generation

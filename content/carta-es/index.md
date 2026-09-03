@@ -12,7 +12,7 @@ outputs:
 ---
 
 **Javier Tia**
-javier@jetm.me · github.com/jetm · linkedin.com/in/javiertia · Costa Rica
+[javier@jetm.me](mailto:javier@jetm.me) · github.com/jetm · linkedin.com/in/javiertia · Costa Rica
 
 14 de mayo de 2026
 

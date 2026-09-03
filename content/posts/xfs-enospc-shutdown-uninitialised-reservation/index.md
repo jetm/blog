@@ -507,8 +507,7 @@ reason the two `ASSERT`s guarding this bug are.
 
 The series went to `linux-xfs` on 2026-08-08 as `[PATCH 0/5]`, grew a sixth
 patch in review, and went out as
-[`[PATCH v3 0/6] xfs: fix filesystem shutdown from parent pointer reservation
-underflow`](https://lore.kernel.org/linux-xfs/20260810230611.2859909-8-floss@jetm.me/)
+[`[PATCH v3 0/6] xfs: fix filesystem shutdown from parent pointer reservation underflow`](https://lore.kernel.org/linux-xfs/20260810230611.2859909-8-floss@jetm.me/)
 on 2026-08-10. Six patches: the fix (`args->total` in
 `xfs_parent_da_args_init()`), an unrelated uninitialised-`error` bug found
 while reading the same code, an assert that catches this class of failure at
@@ -661,8 +660,7 @@ developer builds is documentation, not a guard.
 ## References
 
 - [The v3 series on lore](https://lore.kernel.org/linux-xfs/20260810230611.2859909-8-floss@jetm.me/)
-  - `[PATCH v3 0/6] xfs: fix filesystem shutdown from parent pointer
-  reservation underflow`, posted 2026-08-10, applied to for-next 2026-09-03
+  - `[PATCH v3 0/6] xfs: fix filesystem shutdown from parent pointer reservation underflow`, posted 2026-08-10, applied to for-next 2026-09-03
 - Applied commits (for-next):
   - `08e6a7587c0a` - xfs: initialise error in xfs_defer_finish_one()
   - `6c81238928c1` - xfs: give the deferred barrier op type a name

@@ -20,7 +20,6 @@ categories:
 
 **TL;DR**: bakar is a Python CLI that wraps `kas` and `kas-container` for Yocto Board Support Package (BSP) builds. It defaults to container builds via `kas-container` when `KAS_CONTAINER_IMAGE` is set, and falls back to plain `kas` on the host when it is not. Pass `--host` to any subcommand to force host mode. On top of kas, bakar adds pre-flight environment checks before the build starts, applies a curated tuning overlay (ccache, fetch mirrors, reproducibility knobs) without modifying your YAML on disk, writes structured per-run logs, and provides `bakar triage` to locate the failing recipe after a crash. For vendor BSPs that ship as repo manifests (NXP i.MX) or oe-layertool configs (TI Sitara), it translates those to kas YAMLs automatically. For projects initialized with bitbake-setup (the official Yocto 5.3+ workspace tool), bakar detects the workspace automatically, translates the JSON layer config to a kas YAML, and drives the same pipeline. Install: `uv tool install bakar`.
 
-
 > **Note (updated):** This project has been migrated to
 > [bakar](https://github.com/jetm/bakar).
 > The original repository is archived at

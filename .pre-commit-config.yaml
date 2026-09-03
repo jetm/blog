@@ -4,6 +4,19 @@ default_language_version:
 fail_fast: false
 
 repos:
+  # Markdown linting
+  - repo: local
+    hooks:
+      - id: mado
+        name: mado
+        entry: mado check
+        language: system
+        types: [markdown]
+        # Path exclusions live in mado.toml, not here. This hook is handed a
+        # changed-file list, but `mado check .` walks the tree, and a pattern
+        # written only here would not apply to it.
+        exclude: ^(public/|resources/|themes/)
+
   # Local hooks - TOML formatting and linting
   - repo: local
     hooks:

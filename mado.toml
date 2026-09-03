@@ -1,0 +1,71 @@
+[lint]
+# CLAUDE.md is a symlink into devtool/generated/, so it is neither authored nor
+# fixable here. Excluded by path rather than by disabling rules, so the rules
+# keep their teeth on the posts this repo does own.
+#
+# public/ and resources/ are Hugo build output and themes/ is vendored, none of
+# which anyone edits by hand.
+exclude = [
+  "**/generated/**",
+  "CLAUDE.md",
+  "public/**",
+  "resources/**",
+  "themes/**",
+]
+rules = [
+  "MD001",
+  "MD003",
+  "MD004",
+  "MD009",
+  "MD012",
+  "MD014",
+  "MD018",
+  "MD019",
+  "MD020",
+  "MD021",
+  "MD023",
+  "MD024",
+  "MD025",
+  "MD026",
+  "MD027",
+  "MD028",
+  "MD029",
+  "MD033",
+  "MD034",
+  "MD035",
+  "MD037",
+  "MD038",
+  "MD039",
+  "MD040",
+  "MD046",
+  "MD047",
+]
+
+# Kept in step with devtool, devspec and bakar. Change them together: the rule
+# set is shared so a file cannot pass in one repo and fail in another.
+#
+# MD002/MD005/MD006/MD007/MD010/MD030 dropped: mado bugs/false positives.
+#   MD010 has no code_blocks=false option.
+#   MD030 fires on every two-digit ordered marker - "10. **Ten**" with one space
+#   is flagged where the same item numbered "9." passes. THIS ONE EXPIRES: fixed
+#   upstream by akiomik/mado#363, merged 2026-08-05, after the 0.3.1 release we
+#   run. Re-enable it on the first release past 0.3.1.
+# MD013/MD022/MD031/MD032/MD036/MD041 dropped: intentional style (see markdown.md)
+#
+# MD038 stays ENABLED, with one known false positive (akiomik/mado#391): any
+# code span delimited by two or more backticks is reported even with no padding,
+# so a span that must CONTAIN a backtick cannot satisfy it. Write those as a
+# single span with no inner backticks.
+#
+# MD009 stays enabled here, as in bakar. It is dropped in devtool and devspec
+# over the trailing space in RFC 3676 "-- " signature delimiters inside
+# email-reply templates; this repo has no such templates.
+
+[lint.md024]
+allow-different-nesting = true
+
+[lint.md026]
+punctuation = ".,;:!"
+
+[lint.md029]
+style = "ordered"
