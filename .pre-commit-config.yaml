@@ -12,10 +12,11 @@ repos:
         entry: mado check
         language: system
         types: [markdown]
-        # Path exclusions live in mado.toml, not here. This hook is handed a
-        # changed-file list, but `mado check .` walks the tree, and a pattern
-        # written only here would not apply to it.
-        exclude: ^(public/|resources/|themes/)
+        # No exclude here on purpose. pre-commit only ever hands this hook
+        # tracked, non-ignored files, so public/, resources/ and the themes
+        # submodule cannot reach it; and a pattern written here would not apply
+        # to `mado check .`, which walks the tree. mado.toml is the one place
+        # that covers both callers.
 
   # Local hooks - TOML formatting and linting
   - repo: local

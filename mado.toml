@@ -1,12 +1,24 @@
 [lint]
-# CLAUDE.md is a symlink into devtool/generated/, so it is neither authored nor
-# fixable here. Excluded by path rather than by disabling rules, so the rules
-# keep their teeth on the posts this repo does own.
+# None of these are load-bearing TODAY, and that is recorded rather than hidden.
+# mado honours .gitignore, and all four paths are already ignored or sit inside
+# a submodule it does not descend, so removing this list changes nothing right
+# now. Measured by dropping a file with four known findings into each path: it
+# is reported at docs/ and not reported at any path below.
 #
-# public/ and resources/ are Hugo build output and themes/ is vendored, none of
-# which anyone edits by hand.
+# They stay because the gitignore behaviour they lean on is unsettled upstream -
+# akiomik/mado#346 is open on whether .gitignore should apply without a real git
+# repository - and because `mado check` run over an export or a worktree with no
+# git context would see these files with nothing else to stop it.
+#
+#   CLAUDE.md    symlink into devtool/generated/, not authored or fixable here
+#   public/      Hugo build output
+#   resources/   Hugo build cache
+#   themes/      the PaperMod submodule, vendored
+#
+# There is no generated/ directory in this repository, so no entry for one. The
+# sibling configs in devtool carry that pattern because devtool actually has the
+# directory; copying it here would name a path that does not exist.
 exclude = [
-  "**/generated/**",
   "CLAUDE.md",
   "public/**",
   "resources/**",
