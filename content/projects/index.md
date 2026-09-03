@@ -195,10 +195,11 @@ applicable after manual edits.
 ## Peridio - Avocado Linux
 
 Contributions to [Avocado Linux](https://www.avocadolinux.org), Peridio's
-open-source Yocto/OpenEmbedded distro for embedded Linux devices. 80+ merged
-pull requests since June 2026 across `meta-avocado`, `avocado-cli`,
-`avocadoctl`, `avocado-desktop`, and Peridio's documentation site. Selected
-highlights below; full history is on GitHub.
+open-source Yocto/OpenEmbedded distro for embedded Linux devices, plus
+Peridio's documentation site. 100+ merged pull requests since June 2026
+across the public repos below; a comparable volume of work sits in
+Peridio's private company repos and is not listed here. Selected
+highlights below; full public history is on GitHub.
 
 ### Secure and verified boot
 
@@ -219,8 +220,31 @@ highlights below; full history is on GitHub.
 - [meta-avocado#291](https://github.com/avocado-linux/meta-avocado/pull/291) - Fix five silent failures in Jetson provisioning
 - [meta-avocado#318](https://github.com/avocado-linux/meta-avocado/pull/318) - avocado-flash: refuse a payload older than the build it should carry
 
-- **Repository:** [github.com/avocado-linux/meta-avocado](https://github.com/avocado-linux/meta-avocado)
-- **Language:** BitBake, Shell, Python
+### Deploy and connect tooling reliability
+
+- [avocado-cli#158](https://github.com/avocado-linux/avocado-cli/pull/158) - Add --connect-sign flag to avocado deploy
+- [avocado-cli#169](https://github.com/avocado-linux/avocado-cli/pull/169) - Fix avocado deploy repo-server startup race (getfqdn hang)
+- [avocado-cli#178](https://github.com/avocado-linux/avocado-cli/pull/178) - Reap abandoned build volumes and clarify stale-volume errors
+- [avocado-cli#184](https://github.com/avocado-linux/avocado-cli/pull/184) - Container Dev Mode: host CLI, embedded registry, and VM push path
+- [avocado-cli#182](https://github.com/avocado-linux/avocado-cli/pull/182) - connect/auth: honor --org before the zero-orgs shortcut
+
+### QEMU and build-system reliability
+
+- [vendor-bitbake#1](https://github.com/avocado-linux/vendor-bitbake/pull/1) - Fix cross-node build wedge: asyncrpc connect timeout + mkdirhier NFS retries
+- [avocado-cli#164](https://github.com/avocado-linux/avocado-cli/pull/164) - vm: Fix q35 guest NIC binding and tpm2 boot stall
+- [meta-avocado#219](https://github.com/avocado-linux/meta-avocado/pull/219) - meta-avocado-qemu: simplify swtpm setup and add qemu-provision overlay
+- [meta-avocado#262](https://github.com/avocado-linux/meta-avocado/pull/262) - Stop cmake-native and rust-native picking up host libraries
+- [meta-avocado#322](https://github.com/avocado-linux/meta-avocado/pull/322) - Fix two buildtools host-build failures
+
+### Documentation: hardware bring-up and security corrections
+
+- [docs#475](https://github.com/peridio/docs/pull/475) - Add a getting-started guide for the NXP FRDM i.MX 93, and fix its console device
+- [docs#477](https://github.com/peridio/docs/pull/477) - Correct the verification claims in the hardened-boot i.MX93 note
+- [docs#453](https://github.com/peridio/docs/pull/453) - Document stale-volume build recovery in the QEMU guide
+- [docs#480](https://github.com/peridio/docs/pull/480) - deps: advance the security overrides onto their patched versions
+
+- **Repositories:** [meta-avocado](https://github.com/avocado-linux/meta-avocado), [avocado-cli](https://github.com/avocado-linux/avocado-cli), [peridio/docs](https://github.com/peridio/docs)
+- **Language:** BitBake, Shell, Rust, MDX
 
 ---
 

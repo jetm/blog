@@ -90,8 +90,8 @@ open-source tooling work and writing technical articles.
 
 Peridio builds device management and OTA infrastructure for embedded Linux
 fleets. Contributing to Avocado Linux, Peridio's open-source Yocto/OpenEmbedded
-distro for embedded Linux devices (meta-avocado, avocado-cli, avocadoctl,
-avocado-desktop), plus supporting tooling and documentation.
+distro for embedded Linux devices (meta-avocado, avocado-cli, avocadoctl),
+plus Peridio's documentation site and internal tooling.
 
 - Added fuse-free FIT-based verified boot for i.MX93 (avocado-imx93-frdm) and
   LUKS2-encrypted `/var` unified across board targets.
@@ -101,8 +101,12 @@ avocado-desktop), plus supporting tooling and documentation.
 - Fixed device provisioning across NXP i.MX and NVIDIA Jetson targets:
   device-tree overlay delivery, `avocado-flash` payload-version guards
   against downgrade, and five silent provisioning failures on Jetson.
-- 80+ merged pull requests since joining, across meta-avocado, avocado-cli,
-  avocadoctl, avocado-desktop, and Peridio's documentation site.
+- Fixed deploy, connect, and VM tooling reliability in avocado-cli: a
+  repo-server startup race, abandoned build-volume cleanup, QEMU q35 NIC
+  and tpm2 boot stalls, and Container Dev Mode's host CLI and push path.
+- 100+ merged pull requests since joining across public and private Peridio
+  repos, including meta-avocado, avocado-cli, avocadoctl, vendor-bitbake,
+  and Peridio's documentation site.
 
 ---
 
