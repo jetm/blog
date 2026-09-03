@@ -48,14 +48,6 @@ fix and passes with it, and the series has been
 [applied to for-next](https://lore.kernel.org/linux-xfs/20260810230611.2859909-8-floss@jetm.me/)
 by XFS maintainer Carlos Maiolino.
 
-{{< update date="September 3, 2026" >}}
-Carlos Maiolino applied the full v3 series to for-next. The fix landed as
-`47531ec00c81` (`xfs: initialise args->total for parent pointer updates`).
-See the
-[applied series on lore](https://lore.kernel.org/linux-xfs/20260810230611.2859909-8-floss@jetm.me/)
-and the commit list in References.
-{{< /update >}}
-
 ## The same thing without the jargon
 
 If you do not carry XFS internals around in your head, here is the shape of it.
@@ -528,6 +520,7 @@ Carlos Maiolino applied all six to for-next on 2026-09-03. The fix landed as
 [`47531ec00c81`](https://lore.kernel.org/linux-xfs/20260810230611.2859909-8-floss@jetm.me/)
 (`xfs: initialise args->total for parent pointer updates`); the full commit
 list is in the References section below.
+
 ## A variant I have not proven
 
 While reading the gate I noticed a second path through it that is worse than
