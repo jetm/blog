@@ -209,11 +209,15 @@ highlights below; full public history is on GitHub.
 - [meta-avocado#301](https://github.com/avocado-linux/meta-avocado/pull/301) - Add a bootloader-only fwup task for avocado-imx
 - [meta-avocado#327](https://github.com/avocado-linux/meta-avocado/pull/327) - Fix rootdev in the imx93-frdm compiled-in boot env
 
+*[More merged PRs matching this theme →](https://github.com/avocado-linux/meta-avocado/pulls?q=is%3Apr+is%3Amerged+author%3Ajetm+in%3Atitle+imx93-frdm+OR+avocado-imx+OR+u-boot-imx)*
+
 ### Secure and verified boot
 
 - [meta-avocado#302](https://github.com/avocado-linux/meta-avocado/pull/302) - Add fuse-free FIT verified boot for avocado-imx93-frdm
 - [meta-avocado#271](https://github.com/avocado-linux/meta-avocado/pull/271) - Secure boot and LUKS2-encrypted /var, unified on wrynose
 - [meta-avocado#298](https://github.com/avocado-linux/meta-avocado/pull/298) - Drop unused efitools-native DEPENDS from sb-keys
+
+*[More merged PRs matching this theme →](https://github.com/avocado-linux/meta-avocado/pulls?q=is%3Apr+is%3Amerged+author%3Ajetm+in%3Atitle+%22secure+boot%22+OR+%22verified+boot%22+OR+sb-keys)*
 
 ### SBOM and CVE tracking
 
@@ -221,12 +225,16 @@ highlights below; full public history is on GitHub.
 - [meta-avocado#313](https://github.com/avocado-linux/meta-avocado/pull/313) - Add a qemux86-64 kas wrapper that inherits SBOM and cve-check
 - [meta-avocado#312](https://github.com/avocado-linux/meta-avocado/pull/312) - Delete the runtime SPDX task oe-core's nospdx misses
 
-### Device provisioning (NXP i.MX, NVIDIA Jetson)
+*[More merged PRs matching this theme →](https://github.com/avocado-linux/meta-avocado/pulls?q=is%3Apr+is%3Amerged+author%3Ajetm+in%3Atitle+sbom+OR+spdx+OR+cve-check)*
+
+### Device provisioning (NXP i.MX, NVIDIA Jetson Orin)
 
 - [avocado-cli#183](https://github.com/avocado-linux/avocado-cli/pull/183) - Provision and build declared device-tree overlays
 - [meta-avocado#292](https://github.com/avocado-linux/meta-avocado/pull/292) - Deliver device-tree overlays on Jetson
-- [meta-avocado#291](https://github.com/avocado-linux/meta-avocado/pull/291) - Fix five silent failures in Jetson provisioning
+- [meta-avocado#291](https://github.com/avocado-linux/meta-avocado/pull/291) - Fix five silent failures provisioning a Jetson Orin Nano Developer Kit
 - [meta-avocado#318](https://github.com/avocado-linux/meta-avocado/pull/318) - avocado-flash: refuse a payload older than the build it should carry
+
+*[More merged PRs matching this theme →](https://github.com/search?q=org%3Aavocado-linux+is%3Apr+is%3Amerged+author%3Ajetm+in%3Atitle+jetson+OR+device-tree+OR+avocado-flash+OR+provision&type=pullrequests)*
 
 ### Deploy and connect tooling reliability
 
@@ -236,6 +244,8 @@ highlights below; full public history is on GitHub.
 - [avocado-cli#184](https://github.com/avocado-linux/avocado-cli/pull/184) - Container Dev Mode: host CLI, embedded registry, and VM push path
 - [avocado-cli#182](https://github.com/avocado-linux/avocado-cli/pull/182) - connect/auth: honor --org before the zero-orgs shortcut
 
+*[More merged PRs matching this theme →](https://github.com/avocado-linux/avocado-cli/pulls?q=is%3Apr+is%3Amerged+author%3Ajetm+in%3Atitle+deploy+OR+connect+OR+%22dev+mode%22+OR+vm)*
+
 ### QEMU and build-system reliability
 
 - [vendor-bitbake#1](https://github.com/avocado-linux/vendor-bitbake/pull/1) - Fix cross-node build wedge: asyncrpc connect timeout + mkdirhier NFS retries
@@ -244,12 +254,16 @@ highlights below; full public history is on GitHub.
 - [meta-avocado#262](https://github.com/avocado-linux/meta-avocado/pull/262) - Stop cmake-native and rust-native picking up host libraries
 - [meta-avocado#322](https://github.com/avocado-linux/meta-avocado/pull/322) - Fix two buildtools host-build failures
 
+*[More merged PRs matching this theme →](https://github.com/search?q=org%3Aavocado-linux+is%3Apr+is%3Amerged+author%3Ajetm+in%3Atitle+qemu+OR+buildtools+OR+cmake-native+OR+rust-native+OR+wedge&type=pullrequests)*
+
 ### Documentation: hardware bring-up and security corrections
 
 - [docs#475](https://github.com/peridio/docs/pull/475) - Add a getting-started guide for the NXP FRDM i.MX 93, and fix its console device
 - [docs#477](https://github.com/peridio/docs/pull/477) - Correct the verification claims in the hardened-boot i.MX93 note
 - [docs#453](https://github.com/peridio/docs/pull/453) - Document stale-volume build recovery in the QEMU guide
 - [docs#480](https://github.com/peridio/docs/pull/480) - deps: advance the security overrides onto their patched versions
+
+*[More merged PRs matching this theme →](https://github.com/peridio/docs/pulls?q=is%3Apr+is%3Amerged+author%3Ajetm+in%3Atitle+imx93+OR+%22hardened-boot%22+OR+security+OR+deps)*
 
 - **Repositories:** [meta-avocado](https://github.com/avocado-linux/meta-avocado), [avocado-cli](https://github.com/avocado-linux/avocado-cli), [peridio/docs](https://github.com/peridio/docs)
 - **Language:** BitBake, Shell, Rust, MDX

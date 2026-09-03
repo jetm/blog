@@ -41,8 +41,8 @@ management (libefivar)
 
 **Wireless:** mac80211, cfg80211, mt76 driver family, btusb/btmtk Bluetooth stack
 
-**Platforms:** ARM/AArch64/ARMv8, x86-64, RISC-V, QEMU, Raspberry Pi, NXP i.MX,
-Qualcomm, MediaTek, Xilinx/AMD KV260, Synquacer
+**Platforms:** ARM/AArch64/ARMv8, x86-64, RISC-V, QEMU, Raspberry Pi 5, NXP
+i.MX, NVIDIA Jetson Orin, Qualcomm, MediaTek, Xilinx/AMD KV260, Synquacer
 
 **Embedded:** BSP development, board bring-up, device tree (DTS/DTB),
 cross-compilation, UART/I2C/SPI, systemd, udev, initramfs
@@ -102,9 +102,10 @@ plus Peridio's documentation site and internal tooling.
 - Built SBOM and CVE-tracking coverage into the image pipeline: rootfs builds
   now run far enough to emit their SPDX SBOM, and a qemux86-64 kas wrapper
   inherits SBOM and cve-check by default.
-- Fixed device provisioning across NXP i.MX and NVIDIA Jetson targets:
+- Fixed device provisioning across NXP i.MX and NVIDIA Jetson Orin targets:
   device-tree overlay delivery, `avocado-flash` payload-version guards
-  against downgrade, and five silent provisioning failures on Jetson.
+  against downgrade, and five silent failures provisioning a Jetson Orin
+  Nano Developer Kit.
 - Fixed deploy, connect, and VM tooling reliability in avocado-cli: a
   repo-server startup race, abandoned build-volume cleanup, QEMU q35 NIC
   and tpm2 boot stalls, and Container Dev Mode's host CLI and push path.
