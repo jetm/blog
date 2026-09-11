@@ -45,6 +45,20 @@ Closing it meant treating it as two separate failures rather than one:
 | Symptom | Builds behave differently machine to machine, or run to run, with no recipe change | `uninative` silently disables itself: one `bb.warn` line, then native sstate stops being shareable |
 | Fix | `buildtools-extended`, enforced so a build refuses to start without it | `yocto-uninative-tarball`, rebuilt from Arch's own glibc commit |
 
+## Why I stay on Arch anyway
+
+Everything above reads like an argument against the platform I chose to build on. It's fair to ask why I didn't just install Debian in a VM and call it done.
+
+I've maintained Arch packages for fourteen years now. That's not a badge, it's the reason I know exactly what I'm trading away by staying, and I don't think the trade is close.
+
+The same rolling-release model that puts a moving glibc under `uninative`'s feet is the one thing a fixed-release distro can't give a working developer: currency. A [longitudinal study of package freshness across six distributions](https://arxiv.org/pdf/2103.09066) found 5% to 17% of Arch's package versions outdated at any given time, against 78% to 87% on CentOS 7, with Arch's mean lag behind upstream under 52 days versus roughly ten times that on CentOS. Fewer than 10% of Arch or Fedora packages sit more than three months behind; 30% of Debian Stable's do. That's not a compiler flag or a backport PPA away from newer, it's the whole distribution staying close to what upstream actually shipped, continuously, instead of freezing a snapshot and patching around it for years.
+
+For a developer that's not an abstraction. It's not needing a toolchain-in-a-container just to try a language feature that landed in `gcc` or `rustc` last month, not maintaining a personal PPA of backports, not weighing whether a debugger fix is worth the update-manager fight. On Ubuntu or Debian Stable, that gap is exactly what PPAs, Flatpak, and, on Fedora, COPR exist to paper over. On Arch, if it's not fresh enough in the official repos, it's very likely already in the AUR: as of this writing the AUR indexes [119,214 packages across 93,659 projects](https://repology.org/repository/aur), maintained by over 22,000 people. One honest caveat: about 15% of those AUR packages are themselves flagged outdated on Repology, because the AUR is unofficial and community-maintained, with none of the freshness guarantee the official repos carry. It's still the widest net of any Arch-family package source I've used; one comparison of Fedora's COPR against it put it plainly: ["Especially in the case of Arch's AUR, one of the biggest treasure troves in the Linux ecosystem, COPR falls significantly short in the amount of software it offers."](https://linuxiac.com/how-to-use-fedora-linux-copr-repositories/)
+
+The Arch Wiki is the other half of this. I go there for Arch-specific configuration, obviously, but I've watched the same page get cited for problems that had nothing to do with Arch. One thread I ran across put it better than I would have: ["Arch makes few changes from upstream so the wiki instructions are often applicable on any distro,"](https://news.ycombinator.com/item?id=44899196) with the same commenter describing using it for Ubuntu boxes and "custom Yocto-built systems." That's one engineer's account in a forum thread, not a study, so take it as an anecdote rather than a fact, but it matches my own experience closely enough that I don't discount it.
+
+None of this is in tension with everything above it. Yocto wants a host it can pin down to a specific, tested glibc and toolchain, because reproducibility is the whole point of the exercise. A developer's own machine wants the opposite: the newest compiler, the newest debugger, the shortest possible distance to whatever upstream just shipped. Arch is bad at being the first thing and good at being the second, on purpose, and the fix in this post exists because I'd rather close the gap once than give up the second to get the first for free.
+
 ## Living with the container
 
 `kas-container` works, and that is why I never filed this as a bug anywhere. It is also not how I want to spend a working day.
@@ -150,6 +164,10 @@ Andrew Murray's writeup on uninative and native sstate reuse is where I went to 
 - [Yocto Project system requirements: sanity-tested distributions and buildtools-extended](https://docs.yoctoproject.org/ref-manual/system-requirements.html)
 - [Container performance benchmark between Docker, LXD, Podman and Buildah (diva-portal thesis, Firefox compile benchmark)](https://www.diva-portal.org/smash/get/diva2:1450777/FULLTEXT01.pdf)
 - [Performance Evaluation of Container-based Virtualization for High Performance Computing Environments (arXiv:1709.10140)](https://arxiv.org/pdf/1709.10140)
+- [A Quantitative Assessment of Package Freshness in Linux Distributions (arXiv:2103.09066)](https://arxiv.org/pdf/2103.09066)
+- [AUR package/project/maintainer counts, Repology](https://repology.org/repository/aur)
+- [Fedora COPR vs. Arch's AUR, package breadth comparison, Linuxiac](https://linuxiac.com/how-to-use-fedora-linux-copr-repositories/)
+- [Hacker News thread on the Arch Wiki's utility to non-Arch users](https://news.ycombinator.com/item?id=44899196)
 - [`uninative.bbclass`, openembedded-core, Wrynose release, commit `552e037b`](https://git.openembedded.org/openembedded-core/tree/meta/classes-global/uninative.bbclass?id=552e037bf598ac523f35b69d2dafc99e5ba59c5f) ([GitHub mirror](https://github.com/openembedded/openembedded-core/blob/552e037bf598ac523f35b69d2dafc99e5ba59c5f/meta/classes-global/uninative.bbclass), if the cgit link hits a bot check)
 - [How uninative keeps native sstate reusable across hosts, Andrew Murray](https://www.thegoodpenguin.co.uk/blog/improving-yocto-build-time/)
 - [`yocto-uninative-tarball`, AUR package source](https://github.com/jetm/aur-packages/tree/main/packages/yocto-uninative-tarball)
