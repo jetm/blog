@@ -50,7 +50,7 @@ cross-compilation, UART/I2C/SPI, systemd, udev, initramfs
 ## Experience
 
 ### Open Source Developer (Independent)
-**Jan 2014 – Present | Remote**
+**Jan 2012 – Present | Remote**
 
 Upstreaming Linux kernel, libcamera, and Yocto/OE patches. Maintaining
 open-source tooling work and writing technical articles.
