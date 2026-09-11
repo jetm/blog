@@ -1,5 +1,5 @@
 ---
-title: "Uninative silently disables itself when your host glibc outruns its ceiling"
+title: "What It Actually Takes to Build Yocto Properly on Arch Linux"
 date: 2026-09-11T10:02:47-06:00
 draft: false
 description: "A Yocto build on Arch Linux fails with glibc mismatches that no recipe explains. The cause: uninative.bbclass catches its own ceiling check and downgrades it to one bb.warn line, after which native sstate silently stops being shareable. Closing it took buildtools-extended plus a uninative tarball rebuilt from Arch's own glibc commit."
